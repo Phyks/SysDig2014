@@ -16,6 +16,7 @@
 \usepackage{wasysym}
 \usepackage{amssymb}
 \usepackage{hyperref}
+\usepackage[a4paper, margin=1cm]{geometry}
 \author{Corentin Cadiou, Aymeric Fromherz, Lucas Verney}
 \date{\today}
 \title{Système digital, rapport de projet}
@@ -39,108 +40,145 @@ Chaque instruction est codée sur 16 bits. […]
 % Flags
 
 \subsection{\emph{Instruction set} complet}
+\tiny
 \noindent\begin{center}
-\begin{longtable}{|l|l| p{0.2\textwidth}|l|r|l|}
+\begin{longtable}{|c|c|c|c|c|c|c|}
 \hline
-Mnemo. & Operands & Description & \#Clocks & PC & Opcode\\
+Mnemo. & Operation & Description & \#Clocks & PC & Flags & Opcode\\
 \hline\hline
 \endhead
 
 \hline\hline
-Mnemo. & Operands & Description & \#Clocks & PC & Opcode\\
+Mnemo. & Operation & Description & \#Clocks & PC & Flags & Opcode\\
 \hline
 \endfoot
 
-\multicolumn{6}{|c|}{Arithmetic} \\\hline
-ADD & Rd, Rr & Add without carry & 1 & 1 & \texttt{0000 11rd dddd rrrr}\\
-ADC & Rd, Rr & Add with carry & 1 & 1 & \texttt{0001 11rd dddd rrrr}\\
-SUB & Rd, Rr &  & 1 & 1 & \texttt{0001 10rd dddd rrrr}\\
-SUBI & Rd, K &  & 1 & 1 & \texttt{0101 KKKK dddd KKKK}\\
-SBC & Rd, Rr &  & 1 & 1 & \texttt{0000 10rd dddd rrrr}\\
-SBCI & Rd, K &  & 1 & 1 & \texttt{0100 KKKK dddd KKKK}\\
-AND & Rd, Rr &  & 1 & 1 & \texttt{0010 00rd dddd rrrr}\\
-ANDI & Rd, K &  & 1 & 1 & \texttt{0111 KKKK dddd KKKK}\\
-OR & Rd, Rr &  & 1 & 1 & \texttt{0010 10rd dddd rrrr}\\
-ORI & Rd, K &  & 1 & 1 & \texttt{0110 KKKK dddd KKKK}\\
-EOR & Rd, Rr &  & 1 & 1 & \texttt{0010 01rd dddd rrrr}\\
-COM & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0000}\\
-NEG & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0001}\\
-SBR & Rd, K &  & 1 & 1 & \texttt{0110 KKKK dddd KKKK}\\
-CBR & Rd, K &  & 1 & 1 & \texttt{0111 }$\overline{\texttt{KKKK}}$\texttt{ dddd }$\mathtt{\overline{KKKK}}$\\
-INC & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0011}\\
-DEC & Rd &  & 1 & 1 & \texttt{1001 010d dddd 1010}\\
-TST & Rd &  & 1 & 1 & \texttt{0010 00dd dddd dddd}\\
-CLR & Rd &  & 1 & 1 & \texttt{0010 01dd dddd dddd}\\
-SER & Rd &  & 1 & 1 & \texttt{1110 1111 dddd 1111}\\
+\multicolumn{7}{|c|}{Arithmetic} \\\hline
+ADD & $R_d \leftarrow R_d + R_r$ & Add without carry & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0000 11rd dddd rrrr}\\
+ADC & $R_d \leftarrow R_d + R_r + C$ & Add with carry & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0001 11rd dddd rrrr}\\
+SUB & $R_d \leftarrow R_d - R_r$ & Subtract without carry & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0001 10rd dddd rrrr}\\
+SUBI & $R_d \leftarrow R_d - K$ & Subtract immediate & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0101 KKKK dddd KKKK}\\
+SBC & $R_d \leftarrow R_d - R_r - C$ & Subtract with carry & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0000 10rd dddd rrrr}\\
+SBCI & $R_d \leftarrow R_d - K - C$ & Subtract immediate with carry & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0100 KKKK dddd KKKK}\\
+AND & $R_d \leftarrow R_d \text{ \& } R_r$ & Logical AND & 1 & 1 & $Z, N, V, S$ & \texttt{0010 00rd dddd rrrr}\\
+ANDI & $R_d \leftarrow R_d \text{ \& } K$ & Logical AND with immediate & 1 & 1 & $Z, N, V, S$ & \texttt{0111 KKKK dddd KKKK}\\
+OR & $R_d \leftarrow R_d \text{ | } R_r$ & Logical OR & 1 & 1 & $Z, N, V, S$ & \texttt{0010 10rd dddd rrrr}\\
+ORI & $R_d \leftarrow R_d \text{ | } K$ & Logical OR with immediate & 1 & 1 & $Z, N, V, S$ & \texttt{0110 KKKK dddd KKKK}\\
+EOR & $R_d \leftarrow R_d \text{ xor } R_r$ & Exclusive OR & 1 & 1 & $Z, N, V, S$ & \texttt{0010 01rd dddd rrrr}\\
+COM & $R_d \leftarrow 0xFF - R_d$ & One's complement & 1 & 1 & $Z, C, N, V, S$ & \texttt{1001 010d dddd 0000}\\
+NEG & $R_d \leftarrow 0x00 - R_d$ & Two's complement & 1 & 1 & $Z, C, N, V, S$, H & \texttt{1001 010d dddd 0001}\\
+SBR & $R_d \leftarrow R_d \text{ | } K$ & Set bits in register & 1 & 1 & $Z, N, V, S$ & \texttt{0110 KKKK dddd KKKK}\\
+CBR & $R_d \leftarrow R_d \text{ \& } (0xFFh - K)$ & Clear bits in register & 1 & 1 & $Z, N, V, S$ & \texttt{0111 }$\overline{\texttt{KKKK}}$\texttt{ dddd }$\mathtt{\overline{KKKK}}$\\ % TODO
+INC & $R_d \leftarrow R_d + 1$ & Increment & 1 & 1 & $Z, N, V, S$ & \texttt{1001 010d dddd 0011}\\
+DEC & $R_d \leftarrow R_d - 1$ & Decrement & 1 & 1 & $Z, N, V, S$ & \texttt{1001 010d dddd 1010}\\
+TST & $R_d \leftarrow R_d \text{ \& } R_d$ & Test for zero or minus & 1 & 1 & $Z, N, V, S$ & \texttt{0010 00dd dddd dddd}\\
+CLR & $R_d \leftarrow R_d \text{ xor } R_d$ & Clear register & 1 & 1 & $Z, N, V, S$ & \texttt{0010 01dd dddd dddd}\\
+SER & $R_d \leftarrow 0xFF$ & Set all bits in register & 1 & 1 & None & \texttt{1110 1111 dddd 1111}\\
 \hline\hline
-\multicolumn{6}{|c|}{Bit-wise} \\
+\multicolumn{7}{|c|}{Branching} \\
 \hline
-LSL & Rd &  & 1 & 1 & \texttt{0000 11dd dddd dddd}\\
-LSR & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0110}\\
-ROL & Rd &  & 1 & 1 & \texttt{0001 11dd dddd dddd}\\
-ROR & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0111}\\
-ASR & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0101}\\
-SWAP & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0010}\\
-BSET & s &  & 1 & 1 & \texttt{1001 0100 0sss 1000}\\
-BCLR & s &  & 1 & 1 & \texttt{1001 0100 1sss 1000}\\
-SBI & A, b &  & 1 & 1 & \texttt{1001 1010 AAAA Abbb}\\
-CBI & A, b &  & 1 & 1 & \texttt{1001 1000 AAAA Abbb}\\
-BST & Rr, d &  & 1 & 1 & \texttt{1111 101d dddd 0bbb}\\
-BLD & Rd, b &  & 1 & 1 & \texttt{1111 100d dddd 0bbb}\\
-SEC &  &  & 1 & 1 & \texttt{1001 0100 0000 1000}\\
-CLC &  &  & 1 & 1 & \texttt{1001 0100 1000 1000}\\
-SEN &  &  & 1 & 1 & \texttt{1001 0100 0010 1000}\\
-CLN &  &  & 1 & 1 & \texttt{1001 0100 1010 1000}\\
-SEZ &  &  & 1 & 1 & \texttt{1001 0100 0001 1000}\\
-CLZ &  &  & 1 & 1 & \texttt{1001 0100 1001 1000}\\
-SEI &  &  & 1 & 1 & \texttt{1001 0100 0111 1000}\\
-CLI &  &  & 1 & 1 & \texttt{1001 0100 1111 1000}\\
-SES &  &  & 1 & 1 & \texttt{1001 0100 0100 1000}\\
-CLS &  &  & 1 & 1 & \texttt{1001 0100 1100 1000}\\
-SEV &  &  & 1 & 1 & \texttt{1001 0100 0011 1000}\\
-CLV &  &  & 1 & 1 & \texttt{1001 0100 1011 1000}\\
-SET &  &  & 1 & 1 & \texttt{1001 0100 0110 1000}\\
-CLT &  &  & 1 & 1 & \texttt{1001 0100 1110 1000}\\
-SEH &  &  & 1 & 1 & \texttt{1001 0100 0101 1000}\\
-CLH &  &  & 1 & 1 & \texttt{1001 0100 1101 1000}\\
+RJMP & $PC \leftarrow PC + k + 1$ & Relative jump & 2 &  & None & \\
+IJMP & $PC(15:0) \leftarrow Z, PC(21:16) \leftarrow 0$ & Indirect jump to $(Z)$ & 2 &  & None & \\
+RCALL & $PC \leftarrow PC + k + 1$ & Relative subroutine call & 3/4 &  & None & \\
+ICALL & $PC(15:0) \leftarrow Z, PC(21:16) \leftarrow 0$ & Indirect call to $(Z)$ & 3/4 &  & None & \\
+RET & $PC \leftarrow STACK$ & Subroutine return & 4/5 &  & None & \\
+RETI & $PC \leftarrow STACK$ & Interrupt return & 4/5 &  & $I$ & \\
+CPSE & $if(R_d = R_r) PC \leftarrow PC + 2 \text{ or } 3$ & Compare, skip if equal & 1/2/3 &  & None & \\
+CP & $R_d - R_r$ & Compare & 1 &  & $Z, C, N, V, S, H$ & \\
+CPC & $ R_d - R_r - C$ & Compare with carry & $Z, C, N, V, S, H$ &  & None & \\
+CPI & $R_d - K$ & Compare with immediate & 1 & $Z, C, N, V, S, H$ & None & \\
+SBRC & $if(R_r(b) = 0) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in register cleared & 1/2/3 &  & None & \\
+SBRS & $if(R_r(b) = 1) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in register set & 1/2/3 &  & None & \\
+SBIC & $if(I/O(A, b) = 0) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in $I/O$ register cleared & 1/2/3 &  & None & \\
+SBIS & $if(I/O(A, b) = 1) PC \leftarrow PC +2 \text{ or } 3$ & Skip if bit in $I/O$ register set & 1/2/3 &  & None & \\
+BRBS & $if(SREG(s) = 1) PC \leftarrow PC + k + 1$ & Branch if status flag set & 1/2 &  & None & \\
+BRBC & $if(SREG(s) = 0) PC \leftarrow PC + k + 1$ & Branch if status flag cleared & 1/2 &  & None & \\
+BREQ & $if(Z = 1) PC \leftarrow PC + k + 1$ & Branch if equal & 1/2 &  & None & \\
+BRNE & $if(Z = 0) PC \leftarrow PC + k + 1$ & Branch if not equal & 1/2 &  & None & \\
+BRCS & $if(C = 1) PC \leftarrow PC + k + 1$ & Branch if carry set & 1/2 &  & None & \\
+BRCC & $if(C = 0) PC \leftarrow PC + k + 1$ & Branch if carry cleared & 1/2 &  & None & \\
+BRSH & $if(C = 0) PC \leftarrow PC + k + 1$ & Branch if same or higher & 1/2 &  & None & \\
+BRLO & $if(C = 1) PC \leftarrow PC + k + 1$ & Branch if lower & 1/2 &  & None & \\
+BRMI & $if(N = 1) PC \leftarrow PC + k + 1$ & Branch if minus & 1/2 &  & None & \\
+BRPL & $if(N = 0) PC \leftarrow PC + k + 1$ & Branch if plus & 1/2 &  & None & \\
+BRGE & $if(N \text{ xor } V = 0) PC \leftarrow PC + k + 1$ & Branch if greater or equal, signed & 1/2 &  & None & \\
+BRLT & $if(N \text{ xor } V = 1) PC \leftarrow PC + k + 1$ & Branch if less than zero, signed & 1/2 &  & None & \\
+BRHS & $if(H = 1) PC \leftarrow PC + k + 1$ & Branch if half carry flag set & 1/2 &  & None & \\
+BRHC & $if(H = 0) PC \leftarrow PC + k + 1$ & Branch if half carry flag cleared & 1/2 &  & None & \\
+BRTS & $if(T = 1) PC \leftarrow PC + k + 1$ & Branch if $T$ flag set & 1/2 &  & None & \\
+BRTC & $if(T = 0) PC \leftarrow PC + k + 1$ & Branch if $T$ flag cleared & 1/2 &  & None & \\
+BRVS & $if(V = 1) PC \leftarrow PC + k + 1$ & Branch if overflow flag set & 1/2 &  & None & \\
+BRVC & $if(V = 0) PC \leftarrow PC + k + 1$ & Branch if overflow flag cleared & 1/2 &  & None & \\
+BRIE & $if(I = 1) PC \leftarrow PC + k + 1$ & Branch if interrupt enabled & 1/2 &  & None & \\
+BRID & $if(I = 0) PC \leftarrow PC + k + 1$ & Branch if interrupt disabled & 1/2 &  & None & \\
 \hline\hline
-\multicolumn{6}{|c|}{Transfers} \\
+\multicolumn{7}{|c|}{Bit-wise} \\
 \hline
-MOV & Rd, Rr &  & 1 & 1 & \texttt{0010 11rd dddd rrrr}\\
-LDI & Rd, K &  & 1 & 1 & \texttt{1110 KKKK dddd KKKK}\\
-LD & Rd, X &  & 1 & 1 & \texttt{1001 000d dddd 1100}\\
-LD & Rd, X+ &  & 2 & 1 & \texttt{1001 000d dddd 1101}\\
-LD & Rd, -X &  & 3 & 1 & \texttt{1001 000d dddd 1110}\\
-LD & Rd, Y &  & 1 & 1 & \texttt{1000 000d dddd 1000}\\
-LD & Rd, Y+ &  & 2 & 1 & \texttt{1001 000d dddd 1001}\\
-LD & Rd, -Y &  & 3 & 1 & \texttt{1001 000d dddd 1010}\\
-LD & Rd, Z &  & 1 & 1 & \texttt{1000 000d dddd 0000}\\
-LD & Rd, Z+ &  & 2 & 1 & \texttt{1001 000d dddd 0001}\\
-LD & Rd, -Z &  & 3 & 1 & \texttt{1001 000d dddd 0010}\\
-LDS & Rd, k &  & 1 & 1 & \texttt{1010 0kkk dddd kkkk}\\
-ST & X, Rr &  & 1 & 1 & \texttt{1001 001r rrrr 1100}\\
-ST & X+, Rr &  & 1 & 1 & \texttt{1001 001r rrrr 1101}\\
-ST & -X, Rr &  & 2 & 1 & \texttt{1001 001r rrrr 1110}\\
-ST & Y, Rr &  & 1 & 1 & \texttt{1000 001r rrrr 1000}\\
-ST & Y+, Rr &  & 1 & 1 & \texttt{1001 001r rrrr 1001}\\
-ST & -Y, Rr &  & 2 & 1 & \texttt{1001 001r rrrr 1010}\\
-ST & Z, Rr &  & 1 & 1 & \texttt{1000 001r rrrr 0000}\\
-ST & Z+, Rr &  & 1 & 1 & \texttt{1001 001r rrrr 0001}\\
-ST & -Z, Rr &  & 2 & 1 & \texttt{1001 001r rrrr 0010}\\
-STS & k, Rr & Store direct to data space & 1 & 1 & \texttt{1010 1kkk dddd kkkk}\\
-IN & Rd, A &  & 1 & 1 & \texttt{1011 0AAd dddd AAAA}\\
-OUT & A, Rr &  & 1 & 1 & \texttt{1011 1AAr rrrr AAAA}\\
-PUSH & Rr & Sp-- & 2 & 1 & \texttt{1001 001d dddd 1111}\\
-POP & Rd & Sp++ & 2 & 1 & \texttt{1001 000d dddd 1111}\\
+LSL & $R_d(n+1) \leftarrow R_d(n), R_d(0) \leftarrow 0$ & Logical shift left & 1 & 1 & $Z, C, N, V H$ & \texttt{0000 11dd dddd dddd}\\
+LSR & $R_d(n) \leftarrow R_d(n+1), R_d(7) \leftarrow 0$ & Logical shift right & 1 & 1 & $Z, C, N, V$ & \texttt{1001 010d dddd 0110}\\
+ROL & $R_d(0) \leftarrow C, R_d(n+1) \leftarrow R_d(n), C \leftarrow R_d(7)$ & Rotate left through carry & 1 & 1 & $Z, C, N, V, H$ & \texttt{0001 11dd dddd dddd}\\
+ROR & $R_d(7) \leftarrow C, R_d(n) \leftarrow R_d(n+1), C \leftarrow R_d(0)$ & Rotate right through carry & 1 & 1 & $Z, C, N, V$ & \texttt{1001 010d dddd 0111}\\
+ASR & $R_d(n) \leftarrow R_d(n+1), n=0..6$ & Arithmetic shift right & 1 & 1 & $Z, C, N, V$ & \texttt{1001 010d dddd 0101}\\
+SWAP & $R_d(3..0) \leftarrow R_d(7..4), R_d(7..4) \leftarrow R_d(3..0)$ & Swap nibbles & 1 & 1 & None & \texttt{1001 010d dddd 0010}\\
+BSET & $SREG(s) \leftarrow 1$ & Flag set & 1 & 1 & $SREG(s)$ & \texttt{1001 0100 0sss 1000}\\
+BCLR & $SREG(s) \leftarrow 0$ & Flag clear & 1 & 1 & $SREG(s)$ & \texttt{1001 0100 1sss 1000}\\
+SBI & $I/O(A, b) \leftarrow 1$ & Set bit in $I/O$ register & 1 & 1 & None & \texttt{1001 1010 AAAA Abbb}\\
+CBI & $I/0(A, b) \leftarrow 0$ & Clear bit in $I/O$ register & 1 & 1 & None & \texttt{1001 1000 AAAA Abbb}\\
+BST & $T \leftarrow R_d(b)$ & Bit store from register to $T$ & 1 & 1 & $T$ & \texttt{1111 101d dddd 0bbb}\\
+BLD & $R_d(b) \leftarrow T$ & Bit load from $T$ to register & 1 & 1 & $T$ & \texttt{1111 100d dddd 0bbb}\\
+SEC & $C \leftarrow 1$ & Set carry & 1 & 1 & $C$ & \texttt{1001 0100 0000 1000}\\
+CLC & $C \leftarrow 0$ & Clear carry & 1 & 1 & $C$ & \texttt{1001 0100 1000 1000}\\
+SEN & $N \leftarrow 1$ & Set negative flag & 1 & 1 & $N$ & \texttt{1001 0100 0010 1000}\\
+CLN & $N \leftarrow 0$ & Clear negative flag & 1 & 1 & $N$ & \texttt{1001 0100 1010 1000}\\
+SEZ & $Z \leftarrow 1$ & Set zero flag & 1 & 1 & $Z$ & \texttt{1001 0100 0001 1000}\\
+CLZ & $Z \leftarrow 0$ & Clear zero flag & 1 & 1 & $Z$ & \texttt{1001 0100 1001 1000}\\
+SEI & $I \leftarrow 1$ & Global interrupt enable & 1 & 1 & $I$ & \texttt{1001 0100 0111 1000}\\
+CLI & $I \leftarrow 0$ & Global interrupt disable & 1 & 1 & $I$ & \texttt{1001 0100 1111 1000}\\
+SES & $S \leftarrow 1$ & Set signed test flag & 1 & 1 & $S$ & \texttt{1001 0100 0100 1000}\\
+CLS & $S \leftarrow 0$ & Clear signed test flag & 1 & 1 & $S$ & \texttt{1001 0100 1100 1000}\\
+SEV & $V \leftarrow 1$ & Set two's complement overflow & 1 & 1 & $V$ & \texttt{1001 0100 0011 1000}\\
+CLV & $V \leftarrow 0$ & Clear two's complement overflow & 1 & 1 & $V$ & \texttt{1001 0100 1011 1000}\\
+SET & $T \leftarrow 1$ & Set $T$ in $SREG$ & 1 & 1 & $T$ & \texttt{1001 0100 0110 1000}\\
+CLT & $T \leftarrow 0$ & Clear $T$ in $SREG$ & 1 & 1 & $T$ & \texttt{1001 0100 1110 1000}\\
+SEH & $H \leftarrow 1$ & Set half carry in $SREG$ & 1 & 1 & $H$ & \texttt{1001 0100 0101 1000}\\
+CLH & $H \leftarrow 0$ & Clear half carry in $SREG$ & 1 & 1 & $H$ & \texttt{1001 0100 1101 1000}\\
 \hline\hline
-\multicolumn{6}{|c|}{Other} \\
+\multicolumn{7}{|c|}{Transfers} \\
 \hline
-NOP &  &  & 1 & 1 & \texttt{0000 0000 0000 0000}\\
-BREAK &  &  & 1 & 1 & \texttt{1001 0101 1001 1000}\\
-SLEEP &  & Set in sleep mode (osef) & 1 & 1 & \texttt{1001 0101 1000 1000}\\
-WDR &  & Watchdog reset (osef) & 1 & 1 & \texttt{1001 0101 1010 1000}\\
+MOV & $R_d \leftarrow R_r$ & Copy register & 1 & 1 & None & \texttt{0010 11rd dddd rrrr}\\
+LDI & $R_d \leftarrow K$ & Load immediate & 1 & 1 & None & \texttt{1110 KKKK dddd KKKK}\\
+LD & $R_d \leftarrow (X)$ & Load indirect & 1 & 1 & None & \texttt{1001 000d dddd 1100}\\
+LD & $R_d \leftarrow (X), X \leftarrow X + 1$ & Load indirect and post-increment & 2 & 1 & None & \texttt{1001 000d dddd 1101}\\
+LD & $X \leftarrow X - 1, R_d \leftarrow (X)$ & Load indirect and pre-decrement & 3 & 1 & None & \texttt{1001 000d dddd 1110}\\
+LD & $R_d \leftarrow (Y)$ & Load indirect & 1 & 1 & None & \texttt{1000 000d dddd 1000}\\
+LD & $R_d \leftarrow (Y), Y \leftarrow Y + 1$ & Load indirect and post-increment & 2 & 1 & None & \texttt{1001 000d dddd 1001}\\
+LD & $Y \leftarrow Y - 1, R_d \leftarrow (Y)$ & Load indirect and pre-decrement & 3 & 1 & None & \texttt{1001 000d dddd 1010}\\
+LD & $R_d \leftarrow (Z)$ & Load indirect & 1 & 1 & None & \texttt{1000 000d dddd 0000}\\
+LD & $R_d \leftarrow (Z), Z \leftarrow Z + 1$ & Load indirect and post-increment & 2 & 1 & None & \texttt{1001 000d dddd 0001}\\
+LD & $Z \leftarrow Z - 1, R_d \leftarrow (Z)$ & Load indirect and pre-decrement & 3 & 1 & None & \texttt{1001 000d dddd 0010}\\
+LDS & $R_d \leftarrow (k)$ & Load direct from SRAM & 1 & 1 & None & \texttt{1010 0kkk dddd kkkk}\\
+ST & $(X) \leftarrow R_r$ & Store indirect & 1 & 1 & None & \texttt{1001 001r rrrr 1100}\\
+ST & $(X) \leftarrow R_r, X \leftarrow X + 1$ & Store indirect and post-increment & 1 & 1 & None & \texttt{1001 001r rrrr 1101}\\
+ST & $X \leftarrow X - 1, (X) \leftarrow R_r$ & Store indirect and pre-decrement & 2 & 1 & None & \texttt{1001 001r rrrr 1110}\\
+ST & $(Y) \leftarrow R_r$ & Store indirect & 1 & 1 & None & \texttt{1000 001r rrrr 1000}\\
+ST & $(Y) \leftarrow R_r, Y \leftarrow Y + 1$ & Store indirect and post-increment & 1 & 1 & None & \texttt{1001 001r rrrr 1001}\\
+ST & $Y \leftarrow Y - 1, (Y) \leftarrow R_r$ & Store indirect and pre-decrement & 2 & 1 & None & \texttt{1001 001r rrrr 1010}\\
+ST & $(Z) \leftarrow R_r$ & Store indirect & 1 & 1 & None & \texttt{1000 001r rrrr 0000}\\
+ST & $(Z) \leftarrow R_r, Z \leftarrow Z + 1$ & Store indirect and post-increment & 1 & 1 & None & \texttt{1001 001r rrrr 0001}\\
+ST & $Z \leftarrow Z - 1, (Z) \leftarrow R_r$ & Store indirect and pre-decrement & 2 & 1 & None & \texttt{1001 001r rrrr 0010}\\
+STS & $(k) \leftarrow R_r$ & Store direct to SRAM & 1 & 1 & None & \texttt{1010 1kkk dddd kkkk}\\
+IN & $R_d \leftarrow I/O(A)$ & In from $I/O$ location & 1 & 1 & None & \texttt{1011 0AAd dddd AAAA}\\
+OUT & $I/O(A) \leftarrow R_r$ & Out from $I/O$ location & 1 & 1 & None & \texttt{1011 1AAr rrrr AAAA}\\
+PUSH & $STACK \leftarrow R_r$ & Push register on stack & 2 & 1 & None & \texttt{1001 001d dddd 1111}\\
+POP & $R_d \leftarrow STACK$ & Pop register from stack & 2 & 1 & None & \texttt{1001 000d dddd 1111}\\
+\hline\hline
+\multicolumn{7}{|c|}{Other} \\
+\hline
+BREAK &  &  Break & 1 & 1 & None & \texttt{1001 0101 1001 1000}\\
+NOP &  &  No operation & 1 & 1 & None & \texttt{0000 0000 0000 0000}\\
+SLEEP &  & Sleep (not implemented) & 1 & 1 & None & \texttt{1001 0101 1000 1000}\\
+WDR &  & Watchdog reset (not implemented) & 1 & 1 & None & \texttt{1001 0101 1010 1000}\\
 \hline
 \end{longtable}
 \end{center}
-% Emacs 24.4.1 (Org mode 8.2.10)
 \end{document}
