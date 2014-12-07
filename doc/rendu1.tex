@@ -77,40 +77,40 @@ SER & $R_d \leftarrow 0xFF$ & Set all bits in register & 1 & 1 & None & \texttt{
 \hline\hline
 \multicolumn{7}{|c|}{Branching} \\
 \hline
-RJMP & $PC \leftarrow PC + k + 1$ & Relative jump & 2 &  & None & \\
-IJMP & $PC(15:0) \leftarrow Z, PC(21:16) \leftarrow 0$ & Indirect jump to $(Z)$ & 2 &  & None & \\
-RCALL & $PC \leftarrow PC + k + 1$ & Relative subroutine call & 3/4 &  & None & \\
-ICALL & $PC(15:0) \leftarrow Z, PC(21:16) \leftarrow 0$ & Indirect call to $(Z)$ & 3/4 &  & None & \\
-RET & $PC \leftarrow STACK$ & Subroutine return & 4/5 &  & None & \\
-RETI & $PC \leftarrow STACK$ & Interrupt return & 4/5 &  & $I$ & \\
-CPSE & $if(R_d = R_r) PC \leftarrow PC + 2 \text{ or } 3$ & Compare, skip if equal & 1/2/3 &  & None & \\
-CP & $R_d - R_r$ & Compare & 1 &  & $Z, C, N, V, S, H$ & \\
-CPC & $ R_d - R_r - C$ & Compare with carry & $Z, C, N, V, S, H$ &  & None & \\
-CPI & $R_d - K$ & Compare with immediate & 1 & $Z, C, N, V, S, H$ & None & \\
-SBRC & $if(R_r(b) = 0) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in register cleared & 1/2/3 &  & None & \\
-SBRS & $if(R_r(b) = 1) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in register set & 1/2/3 &  & None & \\
-SBIC & $if(I/O(A, b) = 0) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in $I/O$ register cleared & 1/2/3 &  & None & \\
-SBIS & $if(I/O(A, b) = 1) PC \leftarrow PC +2 \text{ or } 3$ & Skip if bit in $I/O$ register set & 1/2/3 &  & None & \\
-BRBS & $if(SREG(s) = 1) PC \leftarrow PC + k + 1$ & Branch if status flag set & 1/2 &  & None & \\
-BRBC & $if(SREG(s) = 0) PC \leftarrow PC + k + 1$ & Branch if status flag cleared & 1/2 &  & None & \\
-BREQ & $if(Z = 1) PC \leftarrow PC + k + 1$ & Branch if equal & 1/2 &  & None & \\
-BRNE & $if(Z = 0) PC \leftarrow PC + k + 1$ & Branch if not equal & 1/2 &  & None & \\
-BRCS & $if(C = 1) PC \leftarrow PC + k + 1$ & Branch if carry set & 1/2 &  & None & \\
-BRCC & $if(C = 0) PC \leftarrow PC + k + 1$ & Branch if carry cleared & 1/2 &  & None & \\
-BRSH & $if(C = 0) PC \leftarrow PC + k + 1$ & Branch if same or higher & 1/2 &  & None & \\
-BRLO & $if(C = 1) PC \leftarrow PC + k + 1$ & Branch if lower & 1/2 &  & None & \\
-BRMI & $if(N = 1) PC \leftarrow PC + k + 1$ & Branch if minus & 1/2 &  & None & \\
-BRPL & $if(N = 0) PC \leftarrow PC + k + 1$ & Branch if plus & 1/2 &  & None & \\
-BRGE & $if(N \text{ xor } V = 0) PC \leftarrow PC + k + 1$ & Branch if greater or equal, signed & 1/2 &  & None & \\
-BRLT & $if(N \text{ xor } V = 1) PC \leftarrow PC + k + 1$ & Branch if less than zero, signed & 1/2 &  & None & \\
-BRHS & $if(H = 1) PC \leftarrow PC + k + 1$ & Branch if half carry flag set & 1/2 &  & None & \\
-BRHC & $if(H = 0) PC \leftarrow PC + k + 1$ & Branch if half carry flag cleared & 1/2 &  & None & \\
-BRTS & $if(T = 1) PC \leftarrow PC + k + 1$ & Branch if $T$ flag set & 1/2 &  & None & \\
-BRTC & $if(T = 0) PC \leftarrow PC + k + 1$ & Branch if $T$ flag cleared & 1/2 &  & None & \\
-BRVS & $if(V = 1) PC \leftarrow PC + k + 1$ & Branch if overflow flag set & 1/2 &  & None & \\
-BRVC & $if(V = 0) PC \leftarrow PC + k + 1$ & Branch if overflow flag cleared & 1/2 &  & None & \\
-BRIE & $if(I = 1) PC \leftarrow PC + k + 1$ & Branch if interrupt enabled & 1/2 &  & None & \\
-BRID & $if(I = 0) PC \leftarrow PC + k + 1$ & Branch if interrupt disabled & 1/2 &  & None & \\
+RJMP & $PC \leftarrow PC + k + 1, STACK \leftarrow PC + 1, SP \leftarrow SP - 2$ & Relative jump & 2 & $k + 1$ & None & \texttt{1100 kkkk kkkk kkkk}\\
+IJMP & $PC(15:0) \leftarrow Z, PC(21:16) \leftarrow 0$ & Indirect jump to $(Z)$ & 2 & See operation & None & \texttt{1001 0100 0000 1001}\\
+RCALL & $PC \leftarrow PC + k + 1, STACK \leftarrow PC + 1, SP \leftarrow SP - 2$ & Relative subroutine call & 3 & $k + 1$ & None & \texttt{1101 kkkk kkkk kkkk}\\
+ICALL & $PC(15:0) \leftarrow Z, PC(21:16) \leftarrow 0, STACK \leftarrow PC + 1, SP \leftarrow SP - 2$ & Indirect call to $(Z)$ & 3 & See operation & None & \texttt{1001 0101 0000 1001}\\
+RET & $PC \leftarrow STACK, SP \leftarrow SP + 2$ & Subroutine return & 4 & See operation & None & \texttt{1001 0101 0000 1000}\\
+RETI & $PC \leftarrow STACK, SP \leftarrow SP + 2$ & Interrupt return & 4 & See operation & $I$ & \texttt{1001 0101 0001 1000}\\
+CPSE & $if(R_d = R_r) PC \leftarrow PC + 2 \text{ or } 3$ & Compare, skip if equal & 1 (false) / 2 (true) & 1 (false) / 2 (true) & None & \texttt{0001 00rd dddd rrrr}\\
+CP & $R_d - R_r$ & Compare & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0001 01rd dddd rrrr}\\
+CPC & $ R_d - R_r - C$ & Compare with carry & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0000 01rd dddd rrrr}\\
+CPI & $R_d - K$ & Compare with immediate & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0011 KKKK dddd KKKK}\\
+SBRC & $if(R_r(b) = 0) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in register cleared & 1 (false) / 2 (true) & 1 (false) / 2 (true) & None & \texttt{1111 110r rrrr 0bbb}\\
+SBRS & $if(R_r(b) = 1) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in register set & 1 (false) / 2 (true) & 1 (false) / 2 (true) & None & \texttt{1111 110r rrrr 0bbb}\\
+SBIC & $if(I/O(A, b) = 0) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in $I/O$ register cleared & 1 (false) / 2 (true) & 1 (false) / 2 (true) & None & \texttt{1001 1001 AAAA Abbb}\\
+SBIS & $if(I/O(A, b) = 1) PC \leftarrow PC +2 \text{ or } 3$ & Skip if bit in $I/O$ register set & 1 (false) / 2 (true) & 1 (false) / 2 (true) & None & \texttt{1001 1011 AAAA Abbb}\\
+BRBS & $if(SREG(s) = 1) PC \leftarrow PC + k + 1$ & Branch if status flag set & 1 (false) / 2 (true) & 1 (false) / $k + 1$ (true) & None & \texttt{1111 00kk kkkk ksss}\\
+BRBC & $if(SREG(s) = 0) PC \leftarrow PC + k + 1$ & Branch if status flag cleared & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk ksss}\\
+BREQ & $if(Z = 1) PC \leftarrow PC + k + 1$ & Branch if equal & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k001}\\
+BRNE & $if(Z = 0) PC \leftarrow PC + k + 1$ & Branch if not equal & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k001}\\
+BRCS & $if(C = 1) PC \leftarrow PC + k + 1$ & Branch if carry set & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k000}\\
+BRCC & $if(C = 0) PC \leftarrow PC + k + 1$ & Branch if carry cleared & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k000}\\
+BRSH & $if(C = 0) PC \leftarrow PC + k + 1$ & Branch if same or higher & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k000}\\
+BRLO & $if(C = 1) PC \leftarrow PC + k + 1$ & Branch if lower & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k000}\\
+BRMI & $if(N = 1) PC \leftarrow PC + k + 1$ & Branch if minus & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k010}\\
+BRPL & $if(N = 0) PC \leftarrow PC + k + 1$ & Branch if plus & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k010}\\
+BRGE & $if(N \text{ xor } V = 0) PC \leftarrow PC + k + 1$ & Branch if greater or equal, signed & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k100}\\
+BRLT & $if(N \text{ xor } V = 1) PC \leftarrow PC + k + 1$ & Branch if less than zero, signed & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k100}\\
+BRHS & $if(H = 1) PC \leftarrow PC + k + 1$ & Branch if half carry flag set & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k101}\\
+BRHC & $if(H = 0) PC \leftarrow PC + k + 1$ & Branch if half carry flag cleared & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k101}\\
+BRTS & $if(T = 1) PC \leftarrow PC + k + 1$ & Branch if $T$ flag set & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k110}\\
+BRTC & $if(T = 0) PC \leftarrow PC + k + 1$ & Branch if $T$ flag cleared & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k110}\\
+BRVS & $if(V = 1) PC \leftarrow PC + k + 1$ & Branch if overflow flag set & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k011}\\
+BRVC & $if(V = 0) PC \leftarrow PC + k + 1$ & Branch if overflow flag cleared & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k011}\\
+BRIE & $if(I = 1) PC \leftarrow PC + k + 1$ & Branch if interrupt enabled & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k011}\\
+BRID & $if(I = 0) PC \leftarrow PC + k + 1$ & Branch if interrupt disabled & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k111}\\
 \hline\hline
 \multicolumn{7}{|c|}{Bit-wise} \\
 \hline
