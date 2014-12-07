@@ -1,0 +1,146 @@
+% Created 2014-12-02 Tue 16:56
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\author{Corentin Cadiou, Aymeric Fromherz, Lucas Verney}
+\date{\today}
+\title{Système digital, rapport de projet}
+\begin{document}
+
+\maketitle
+\section*{Introduction}
+Pour divers projets électroniques personnels, nous utilisons régulièrement des micro-contrôleurs 8 bits vendus par la marque \emph{Atmel} et utilisant une architecture et l'\emph{instruction set} AVR\footnote{\url{http://people.ece.cornell.edu/land/courses/ece4760/AtmelStuff/AVRinstr2002.PDF}}. Dans le cadre du projet du cours de ``Système digital'', nous avons décidé de simuler un tel micro-contrôleur, plutôt qu'un processeur MIPS standard.
+
+Il existe une très grande variété de micro-contrôleurs de ce type, et afin de réduire la complexité du projet, nous avons décidé de nous concentrer sur un ATTiny4\footnote{\url{http://www.atmel.com/images/atmel-8127-avr-8-bit-microcontroller-attiny4-attiny5-attiny9-attiny10_datasheet.pdf}}, qui supporte un jeu de 54 instructions, possède 16 registres 8 bits 512 octets de ROM et 32 octets de RAM.
+
+\section{Architecture}
+
+\section{\emph{Instruction set}}
+\subsection{Structure}
+Chaque instruction est codée sur 16 bits. […]
+
+\subsection{Modes d'adressage}
+
+\subsection{Registre de statut}
+% Flags
+
+\subsection{\emph{Instruction set} complet}
+\noindent\begin{center}
+\begin{longtable}{|l|l| p{0.2\textwidth}|l|r|l|}
+\hline
+Mnemo. & Operands & Description & \#Clocks & PC & Opcode\\
+\hline\hline
+\endhead
+
+\hline\hline
+Mnemo. & Operands & Description & \#Clocks & PC & Opcode\\
+\hline
+\endfoot
+
+\multicolumn{6}{|c|}{Arithmetic} \\\hline
+ADD & Rd, Rr & Add without carry & 1 & 1 & \texttt{0000 11rd dddd rrrr}\\
+ADC & Rd, Rr & Add with carry & 1 & 1 & \texttt{0001 11rd dddd rrrr}\\
+SUB & Rd, Rr &  & 1 & 1 & \texttt{0001 10rd dddd rrrr}\\
+SUBI & Rd, K &  & 1 & 1 & \texttt{0101 KKKK dddd KKKK}\\
+SBC & Rd, Rr &  & 1 & 1 & \texttt{0000 10rd dddd rrrr}\\
+SBCI & Rd, K &  & 1 & 1 & \texttt{0100 KKKK dddd KKKK}\\
+AND & Rd, Rr &  & 1 & 1 & \texttt{0010 00rd dddd rrrr}\\
+ANDI & Rd, K &  & 1 & 1 & \texttt{0111 KKKK dddd KKKK}\\
+OR & Rd, Rr &  & 1 & 1 & \texttt{0010 10rd dddd rrrr}\\
+ORI & Rd, K &  & 1 & 1 & \texttt{0110 KKKK dddd KKKK}\\
+EOR & Rd, Rr &  & 1 & 1 & \texttt{0010 01rd dddd rrrr}\\
+COM & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0000}\\
+NEG & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0001}\\
+SBR & Rd, K &  & 1 & 1 & \texttt{0110 KKKK dddd KKKK}\\
+CBR & Rd, K &  & 1 & 1 & \texttt{0111 }$\overline{\texttt{KKKK}}$\texttt{ dddd }$\mathtt{\overline{KKKK}}$\\
+INC & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0011}\\
+DEC & Rd &  & 1 & 1 & \texttt{1001 010d dddd 1010}\\
+TST & Rd &  & 1 & 1 & \texttt{0010 00dd dddd dddd}\\
+CLR & Rd &  & 1 & 1 & \texttt{0010 01dd dddd dddd}\\
+SER & Rd &  & 1 & 1 & \texttt{1110 1111 dddd 1111}\\
+\hline\hline
+\multicolumn{6}{|c|}{Bit-wise} \\
+\hline
+LSL & Rd &  & 1 & 1 & \texttt{0000 11dd dddd dddd}\\
+LSR & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0110}\\
+ROL & Rd &  & 1 & 1 & \texttt{0001 11dd dddd dddd}\\
+ROR & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0111}\\
+ASR & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0101}\\
+SWAP & Rd &  & 1 & 1 & \texttt{1001 010d dddd 0010}\\
+BSET & s &  & 1 & 1 & \texttt{1001 0100 0sss 1000}\\
+BCLR & s &  & 1 & 1 & \texttt{1001 0100 1sss 1000}\\
+SBI & A, b &  & 1 & 1 & \texttt{1001 1010 AAAA Abbb}\\
+CBI & A, b &  & 1 & 1 & \texttt{1001 1000 AAAA Abbb}\\
+BST & Rr, d &  & 1 & 1 & \texttt{1111 101d dddd 0bbb}\\
+BLD & Rd, b &  & 1 & 1 & \texttt{1111 100d dddd 0bbb}\\
+SEC &  &  & 1 & 1 & \texttt{1001 0100 0000 1000}\\
+CLC &  &  & 1 & 1 & \texttt{1001 0100 1000 1000}\\
+SEN &  &  & 1 & 1 & \texttt{1001 0100 0010 1000}\\
+CLN &  &  & 1 & 1 & \texttt{1001 0100 1010 1000}\\
+SEZ &  &  & 1 & 1 & \texttt{1001 0100 0001 1000}\\
+CLZ &  &  & 1 & 1 & \texttt{1001 0100 1001 1000}\\
+SEI &  &  & 1 & 1 & \texttt{1001 0100 0111 1000}\\
+CLI &  &  & 1 & 1 & \texttt{1001 0100 1111 1000}\\
+SES &  &  & 1 & 1 & \texttt{1001 0100 0100 1000}\\
+CLS &  &  & 1 & 1 & \texttt{1001 0100 1100 1000}\\
+SEV &  &  & 1 & 1 & \texttt{1001 0100 0011 1000}\\
+CLV &  &  & 1 & 1 & \texttt{1001 0100 1011 1000}\\
+SET &  &  & 1 & 1 & \texttt{1001 0100 0110 1000}\\
+CLT &  &  & 1 & 1 & \texttt{1001 0100 1110 1000}\\
+SEH &  &  & 1 & 1 & \texttt{1001 0100 0101 1000}\\
+CLH &  &  & 1 & 1 & \texttt{1001 0100 1101 1000}\\
+\hline\hline
+\multicolumn{6}{|c|}{Transfers} \\
+\hline
+MOV & Rd, Rr &  & 1 & 1 & \texttt{0010 11rd dddd rrrr}\\
+LDI & Rd, K &  & 1 & 1 & \texttt{1110 KKKK dddd KKKK}\\
+LD & Rd, X &  & 1 & 1 & \texttt{1001 000d dddd 1100}\\
+LD & Rd, X+ &  & 2 & 1 & \texttt{1001 000d dddd 1101}\\
+LD & Rd, -X &  & 3 & 1 & \texttt{1001 000d dddd 1110}\\
+LD & Rd, Y &  & 1 & 1 & \texttt{1000 000d dddd 1000}\\
+LD & Rd, Y+ &  & 2 & 1 & \texttt{1001 000d dddd 1001}\\
+LD & Rd, -Y &  & 3 & 1 & \texttt{1001 000d dddd 1010}\\
+LD & Rd, Z &  & 1 & 1 & \texttt{1000 000d dddd 0000}\\
+LD & Rd, Z+ &  & 2 & 1 & \texttt{1001 000d dddd 0001}\\
+LD & Rd, -Z &  & 3 & 1 & \texttt{1001 000d dddd 0010}\\
+LDS & Rd, k &  & 1 & 1 & \texttt{1010 0kkk dddd kkkk}\\
+ST & X, Rr &  & 1 & 1 & \texttt{1001 001r rrrr 1100}\\
+ST & X+, Rr &  & 1 & 1 & \texttt{1001 001r rrrr 1101}\\
+ST & -X, Rr &  & 2 & 1 & \texttt{1001 001r rrrr 1110}\\
+ST & Y, Rr &  & 1 & 1 & \texttt{1000 001r rrrr 1000}\\
+ST & Y+, Rr &  & 1 & 1 & \texttt{1001 001r rrrr 1001}\\
+ST & -Y, Rr &  & 2 & 1 & \texttt{1001 001r rrrr 1010}\\
+ST & Z, Rr &  & 1 & 1 & \texttt{1000 001r rrrr 0000}\\
+ST & Z+, Rr &  & 1 & 1 & \texttt{1001 001r rrrr 0001}\\
+ST & -Z, Rr &  & 2 & 1 & \texttt{1001 001r rrrr 0010}\\
+STS & k, Rr & Store direct to data space & 1 & 1 & \texttt{1010 1kkk dddd kkkk}\\
+IN & Rd, A &  & 1 & 1 & \texttt{1011 0AAd dddd AAAA}\\
+OUT & A, Rr &  & 1 & 1 & \texttt{1011 1AAr rrrr AAAA}\\
+PUSH & Rr & Sp-- & 2 & 1 & \texttt{1001 001d dddd 1111}\\
+POP & Rd & Sp++ & 2 & 1 & \texttt{1001 000d dddd 1111}\\
+\hline\hline
+\multicolumn{6}{|c|}{Other} \\
+\hline
+NOP &  &  & 1 & 1 & \texttt{0000 0000 0000 0000}\\
+BREAK &  &  & 1 & 1 & \texttt{1001 0101 1001 1000}\\
+SLEEP &  & Set in sleep mode (osef) & 1 & 1 & \texttt{1001 0101 1000 1000}\\
+WDR &  & Watchdog reset (osef) & 1 & 1 & \texttt{1001 0101 1010 1000}\\
+\hline
+\end{longtable}
+\end{center}
+% Emacs 24.4.1 (Org mode 8.2.10)
+\end{document}
