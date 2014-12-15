@@ -131,15 +131,37 @@ bits dans le registre de statut.
 Les instructions peuvent utiliser l'adressage suivant :
 \begin{itemize}
   \item Adressage direct d'un seul registre ;
-    %todo image
-  \item Adressage direct de deux registres ;
+   \begin{center}
+     \includegraphics[width=0.5\textwidth]{images/direct_adressing.png}
+   \end{center}
+ \item Adressage direct de deux registres ;
+   \begin{center}
+     \includegraphics[width=0.5\textwidth]{images/direct_adressing_double.png}
+   \end{center}
   \item Adressage direct d'I/O ;
+   \begin{center}
+     \includegraphics[width=0.5\textwidth]{images/direct_adressing_IO.png}
+   \end{center}
   \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
     ou \texttt{Z} ;
+   \begin{center}
+     \includegraphics[width=0.5\textwidth]{images/direct_data_adressing.png}
+   \end{center}
   \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
     ou \texttt{Z} avec déplacement ;
+   \begin{center}
+     \includegraphics[width=0.5\textwidth]{images/data_indirect_displacement.png}
+   \end{center}
   \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
-    ou \texttt{Z} avec pré- ou post-incrémentation ;
+    ou \texttt{Z} avec pré-incrémentation ;
+   \begin{center}
+     \includegraphics[width=0.5\textwidth]{images/data_indirect_postincrement.png}
+   \end{center}
+  \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
+    ou \texttt{Z} avec post-incrémentation ;
+   \begin{center}
+     \includegraphics[width=0.5\textwidth]{images/data_indirect_predecrement.png}
+   \end{center}
 \end{itemize}
 \subsection{\emph{Instruction set} complet}
 \tiny
