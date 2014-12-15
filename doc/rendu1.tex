@@ -17,7 +17,9 @@
 \usepackage{wasysym}
 \usepackage{amssymb}
 \usepackage{hyperref}
-\usepackage[a4paper, margin=1cm]{geometry}
+\usepackage[table]{xcolor} 
+
+\usepackage[a4paper, margin=1cm, bottom=3cm, top=3cm]{geometry}
 \author{Corentin Cadiou, Aymeric Fromherz, Lucas Verney}
 \date{\today}
 \title{Système digital, rapport de projet}
@@ -39,7 +41,8 @@ généraux, les ATTiny4 possèdent d'autres registres utiles à implémenter pou
   \item les \emph{input/output}(I/O) ;
   \item un registre de statut stockant par exemple les
     retenues ;
-  \item un pointeur de pile ;
+  \item un pointeur de pile (sur deux registres 8bits dans l'espace
+    I/O) ;
   \item un compteur d'instruction (sur 9 bits) ;
   \item un registre d'instruction (sur 16 bits) ;
 \end{itemize}
@@ -136,52 +139,56 @@ Les instructions peuvent utiliser les modes d'adressage suivant :
 \begin{itemize}
   \item Adressage direct d'un seul registre ;
    \begin{center}
-     \includegraphics[width=0.5\textwidth]{images/direct_adressing.png}
+     \includegraphics[width=0.8\textwidth]{images/direct_adressing.png}
    \end{center}
   \item Adressage direct de deux registres ;
    \begin{center}
-     \includegraphics[width=0.5\textwidth]{images/direct_adressing_double.png}
+     \includegraphics[width=0.8\textwidth]{images/direct_adressing_double.png}
    \end{center}
   \item Adressage direct d'I/O (première zone en mémoire) ;
    \begin{center}
-     \includegraphics[width=0.5\textwidth]{images/direct_adressing_IO.png}
+     \includegraphics[width=0.8\textwidth]{images/direct_adressing_IO.png}
    \end{center}
   \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
     ou \texttt{Z} ;
    \begin{center}
-     \includegraphics[width=0.5\textwidth]{images/direct_data_adressing.png}
+     \includegraphics[width=0.8\textwidth]{images/direct_data_adressing.png}
    \end{center}
   \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
     ou \texttt{Z} avec déplacement ;
    \begin{center}
-     \includegraphics[width=0.5\textwidth]{images/data_indirect_displacement.png}
+     \includegraphics[width=0.8\textwidth]{images/data_indirect_displacement.png}
    \end{center}
   \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
     ou \texttt{Z} avec pré-incrémentation ;
    \begin{center}
-     \includegraphics[width=0.5\textwidth]{images/data_indirect_postincrement.png}
+     \includegraphics[width=0.8\textwidth]{images/data_indirect_postincrement.png}
    \end{center}
   \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
     ou \texttt{Z} avec post-incrémentation ;
    \begin{center}
-     \includegraphics[width=0.5\textwidth]{images/data_indirect_predecrement.png}
+     \includegraphics[width=0.8\textwidth]{images/data_indirect_predecrement.png}
    \end{center}
 \end{itemize}
+\pagebreak
 \subsection{\emph{Instruction set} complet}
+
 \tiny
+  \rowcolors{2}{gray!25}{white}
 \noindent\begin{center}
-    \begin{longtable}{|c|m{12em}|c|c|c|c|c|}
-\hline
+    \begin{longtable}{|c|m{10em}|l|c|c|c|c|}
+\hline     \rowcolor{gray!10}
 Mnemo. & Operation & Description & \#Clocks & PC & Flags & Opcode\\
 \hline\hline
 \endhead
 
-\hline\hline
+\hline\hline \rowcolor{gray!10}
 Mnemo. & Operation & Description & \#Clocks & PC & Flags & Opcode\\
 \hline
 \endfoot
 
-\multicolumn{7}{|c|}{Arithmetic} \\\hline
+ \rowcolor{gray!10}
+\multicolumn{7}{|c|}{Arithmétique et logique} \\\hline
 ADD & $R_d \leftarrow R_d + R_r$ & Add without carry & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0000 11rd dddd rrrr}\\
 ADC & $R_d \leftarrow R_d + R_r + C$ & Add with carry & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0001 11rd dddd rrrr}\\
 SUB & $R_d \leftarrow R_d - R_r$ & Subtract without carry & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0001 10rd dddd rrrr}\\
@@ -203,7 +210,8 @@ TST & $R_d \leftarrow R_d \text{ \& } R_d$ & Test for zero or minus & 1 & 1 & $Z
 CLR & $R_d \leftarrow R_d \text{ xor } R_d$ & Clear register & 1 & 1 & $Z, N, V, S$ & \texttt{0010 01dd dddd dddd}\\
 SER & $R_d \leftarrow 0xFF$ & Set all bits in register & 1 & 1 & None & \texttt{1110 1111 dddd 1111}\\
 \hline\hline
-\multicolumn{7}{|c|}{Branching} \\
+      \rowcolor{gray!10}
+\multicolumn{7}{|c|}{Branchement} \\
 \hline
 RJMP & $PC \leftarrow PC + k + 1, STACK \leftarrow PC + 1, SP \leftarrow SP - 2$ & Relative jump & 2 & $k + 1$ & None & \texttt{1100 kkkk kkkk kkkk}\\
 IJMP & $PC(15:0) \leftarrow Z, PC(21:16) \leftarrow 0$ & Indirect jump to $(Z)$ & 2 & See operation & None & \texttt{1001 0100 0000 1001}\\
@@ -211,36 +219,37 @@ RCALL & $PC \leftarrow PC + k + 1, STACK \leftarrow PC + 1, SP \leftarrow SP - 2
 ICALL & $PC(15:0) \leftarrow Z, PC(21:16) \leftarrow 0, STACK \leftarrow PC + 1, SP \leftarrow SP - 2$ & Indirect call to $(Z)$ & 3 & See operation & None & \texttt{1001 0101 0000 1001}\\
 RET & $PC \leftarrow STACK, SP \leftarrow SP + 2$ & Subroutine return & 4 & See operation & None & \texttt{1001 0101 0000 1000}\\
 RETI & $PC \leftarrow STACK, SP \leftarrow SP + 2$ & Interrupt return & 4 & See operation & $I$ & \texttt{1001 0101 0001 1000}\\
-CPSE & $if(R_d = R_r) PC \leftarrow PC + 2 \text{ or } 3$ & Compare, skip if equal & 1 (false) / 2 (true) & 1 (false) / 2 (true) & None & \texttt{0001 00rd dddd rrrr}\\
+CPSE & $if(R_d = R_r) PC \leftarrow PC + 2 \text{ or } 3$ & Compare, skip if equal & 1 (false), 2 (true) & 1 (false), 2 (true) & None & \texttt{0001 00rd dddd rrrr}\\
 CP & $R_d - R_r$ & Compare & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0001 01rd dddd rrrr}\\
 CPC & $ R_d - R_r - C$ & Compare with carry & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0000 01rd dddd rrrr}\\
 CPI & $R_d - K$ & Compare with immediate & 1 & 1 & $Z, C, N, V, S, H$ & \texttt{0011 KKKK dddd KKKK}\\
-SBRC & $if(R_r(b) = 0) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in register cleared & 1 (false) / 2 (true) & 1 (false) / 2 (true) & None & \texttt{1111 110r rrrr 0bbb}\\
-SBRS & $if(R_r(b) = 1) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in register set & 1 (false) / 2 (true) & 1 (false) / 2 (true) & None & \texttt{1111 110r rrrr 0bbb}\\
-SBIC & $if(I/O(A, b) = 0) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in $I/O$ register cleared & 1 (false) / 2 (true) & 1 (false) / 2 (true) & None & \texttt{1001 1001 AAAA Abbb}\\
-SBIS & $if(I/O(A, b) = 1) PC \leftarrow PC +2 \text{ or } 3$ & Skip if bit in $I/O$ register set & 1 (false) / 2 (true) & 1 (false) / 2 (true) & None & \texttt{1001 1011 AAAA Abbb}\\
-BRBS & $if(SREG(s) = 1) PC \leftarrow PC + k + 1$ & Branch if status flag set & 1 (false) / 2 (true) & 1 (false) / $k + 1$ (true) & None & \texttt{1111 00kk kkkk ksss}\\
-BRBC & $if(SREG(s) = 0) PC \leftarrow PC + k + 1$ & Branch if status flag cleared & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk ksss}\\
-BREQ & $if(Z = 1) PC \leftarrow PC + k + 1$ & Branch if equal & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k001}\\
-BRNE & $if(Z = 0) PC \leftarrow PC + k + 1$ & Branch if not equal & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k001}\\
-BRCS & $if(C = 1) PC \leftarrow PC + k + 1$ & Branch if carry set & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k000}\\
-BRCC & $if(C = 0) PC \leftarrow PC + k + 1$ & Branch if carry cleared & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k000}\\
-BRSH & $if(C = 0) PC \leftarrow PC + k + 1$ & Branch if same or higher & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k000}\\
-BRLO & $if(C = 1) PC \leftarrow PC + k + 1$ & Branch if lower & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k000}\\
-BRMI & $if(N = 1) PC \leftarrow PC + k + 1$ & Branch if minus & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k010}\\
-BRPL & $if(N = 0) PC \leftarrow PC + k + 1$ & Branch if plus & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k010}\\
-BRGE & $if(N \text{ xor } V = 0) PC \leftarrow PC + k + 1$ & Branch if greater or equal, signed & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k100}\\
-BRLT & $if(N \text{ xor } V = 1) PC \leftarrow PC + k + 1$ & Branch if less than zero, signed & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k100}\\
-BRHS & $if(H = 1) PC \leftarrow PC + k + 1$ & Branch if half carry flag set & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k101}\\
-BRHC & $if(H = 0) PC \leftarrow PC + k + 1$ & Branch if half carry flag cleared & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k101}\\
-BRTS & $if(T = 1) PC \leftarrow PC + k + 1$ & Branch if $T$ flag set & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k110}\\
-BRTC & $if(T = 0) PC \leftarrow PC + k + 1$ & Branch if $T$ flag cleared & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k110}\\
-BRVS & $if(V = 1) PC \leftarrow PC + k + 1$ & Branch if overflow flag set & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 00kk kkkk k011}\\
-BRVC & $if(V = 0) PC \leftarrow PC + k + 1$ & Branch if overflow flag cleared & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k011}\\
-BRIE & $if(I = 1) PC \leftarrow PC + k + 1$ & Branch if interrupt enabled & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k011}\\
-BRID & $if(I = 0) PC \leftarrow PC + k + 1$ & Branch if interrupt disabled & 1 (false) / 2 (true) & 1 (false) / $k+1$ (true) & None & \texttt{1111 01kk kkkk k111}\\
+SBRC & $if(R_r(b) = 0) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in register cleared & 1 (false), 2 (true) & 1 (false), 2 (true) & None & \texttt{1111 110r rrrr 0bbb}\\
+SBRS & $if(R_r(b) = 1) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in register set & 1 (false), 2 (true) & 1 (false), 2 (true) & None & \texttt{1111 110r rrrr 0bbb}\\
+SBIC & $if(I/O(A, b) = 0) PC \leftarrow PC + 2 \text{ or } 3$ & Skip if bit in $I/O$ register cleared & 1 (false), 2 (true) & 1 (false), 2 (true) & None & \texttt{1001 1001 AAAA Abbb}\\
+SBIS & $if(I/O(A, b) = 1) PC \leftarrow PC +2 \text{ or } 3$ & Skip if bit in $I/O$ register set & 1 (false), 2 (true) & 1 (false), 2 (true) & None & \texttt{1001 1011 AAAA Abbb}\\
+BRBS & $if(SREG(s) = 1) PC \leftarrow PC + k + 1$ & Branch if status flag set & 1 (false), 2 (true) & 1 (false), $k + 1$ (true) & None & \texttt{1111 00kk kkkk ksss}\\
+BRBC & $if(SREG(s) = 0) PC \leftarrow PC + k + 1$ & Branch if status flag cleared & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk ksss}\\
+BREQ & $if(Z = 1) PC \leftarrow PC + k + 1$ & Branch if equal & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 00kk kkkk k001}\\
+BRNE & $if(Z = 0) PC \leftarrow PC + k + 1$ & Branch if not equal & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk k001}\\
+BRCS & $if(C = 1) PC \leftarrow PC + k + 1$ & Branch if carry set & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 00kk kkkk k000}\\
+BRCC & $if(C = 0) PC \leftarrow PC + k + 1$ & Branch if carry cleared & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk k000}\\
+BRSH & $if(C = 0) PC \leftarrow PC + k + 1$ & Branch if same or higher & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk k000}\\
+BRLO & $if(C = 1) PC \leftarrow PC + k + 1$ & Branch if lower & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 00kk kkkk k000}\\
+BRMI & $if(N = 1) PC \leftarrow PC + k + 1$ & Branch if minus & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 00kk kkkk k010}\\
+BRPL & $if(N = 0) PC \leftarrow PC + k + 1$ & Branch if plus & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk k010}\\
+BRGE & $if(N \text{ xor } V = 0) PC \leftarrow PC + k + 1$ & Branch if greater or equal, signed & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk k100}\\
+BRLT & $if(N \text{ xor } V = 1) PC \leftarrow PC + k + 1$ & Branch if less than zero, signed & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 00kk kkkk k100}\\
+BRHS & $if(H = 1) PC \leftarrow PC + k + 1$ & Branch if half carry flag set & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 00kk kkkk k101}\\
+BRHC & $if(H = 0) PC \leftarrow PC + k + 1$ & Branch if half carry flag cleared & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk k101}\\
+BRTS & $if(T = 1) PC \leftarrow PC + k + 1$ & Branch if $T$ flag set & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 00kk kkkk k110}\\
+BRTC & $if(T = 0) PC \leftarrow PC + k + 1$ & Branch if $T$ flag cleared & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk k110}\\
+BRVS & $if(V = 1) PC \leftarrow PC + k + 1$ & Branch if overflow flag set & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 00kk kkkk k011}\\
+BRVC & $if(V = 0) PC \leftarrow PC + k + 1$ & Branch if overflow flag cleared & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk k011}\\
+BRIE & $if(I = 1) PC \leftarrow PC + k + 1$ & Branch if interrupt enabled & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk k011}\\
+BRID & $if(I = 0) PC \leftarrow PC + k + 1$ & Branch if interrupt disabled & 1 (false), 2 (true) & 1 (false), $k+1$ (true) & None & \texttt{1111 01kk kkkk k111}\\
 \hline\hline
-\multicolumn{7}{|c|}{Bit-wise} \\
+ \rowcolor{gray!10}
+\multicolumn{7}{|c|}{Opérations bit à bit} \\
 \hline
 LSL & $R_d(n+1) \leftarrow R_d(n), R_d(0) \leftarrow 0$ & Logical shift left & 1 & 1 & $Z, C, N, V H$ & \texttt{0000 11dd dddd dddd}\\
 LSR & $R_d(n) \leftarrow R_d(n+1), R_d(7) \leftarrow 0$ & Logical shift right & 1 & 1 & $Z, C, N, V$ & \texttt{1001 010d dddd 0110}\\
@@ -271,7 +280,8 @@ CLT & $T \leftarrow 0$ & Clear $T$ in $SREG$ & 1 & 1 & $T$ & \texttt{1001 0100 1
 SEH & $H \leftarrow 1$ & Set half carry in $SREG$ & 1 & 1 & $H$ & \texttt{1001 0100 0101 1000}\\
 CLH & $H \leftarrow 0$ & Clear half carry in $SREG$ & 1 & 1 & $H$ & \texttt{1001 0100 1101 1000}\\
 \hline\hline
-\multicolumn{7}{|c|}{Transfers} \\
+ \rowcolor{gray!10}
+\multicolumn{7}{|c|}{Chargement et stockage} \\
 \hline
 MOV & $R_d \leftarrow R_r$ & Copy register & 1 & 1 & None & \texttt{0010 11rd dddd rrrr}\\
 LDI & $R_d \leftarrow K$ & Load immediate & 1 & 1 & None & \texttt{1110 KKKK dddd KKKK}\\
@@ -300,7 +310,8 @@ OUT & $I/O(A) \leftarrow R_r$ & Out from $I/O$ location & 1 & 1 & None & \texttt
 PUSH & $STACK \leftarrow R_r$ & Push register on stack & 2 & 1 & None & \texttt{1001 001d dddd 1111}\\
 POP & $R_d \leftarrow STACK$ & Pop register from stack & 2 & 1 & None & \texttt{1001 000d dddd 1111}\\
 \hline\hline
-\multicolumn{7}{|c|}{Other} \\
+ \rowcolor{gray!10}
+\multicolumn{7}{|c|}{Autre} \\
 \hline
 BREAK &  &  Break & 1 & 1 & None & \texttt{1001 0101 1001 1000}\\
 NOP &  &  No operation & 1 & 1 & None & \texttt{0000 0000 0000 0000}\\
