@@ -30,28 +30,27 @@ Pour divers projets électroniques personnels, nous utilisons régulièrement de
 Il existe une très grande variété de micro-contrôleurs de ce type, et afin de réduire la complexité du projet, nous avons décidé de nous concentrer sur un ATTiny4\footnote{\url{http://www.atmel.com/images/atmel-8127-avr-8-bit-microcontroller-attiny4-attiny5-attiny9-attiny10_datasheet.pdf}}, qui supporte un jeu de 54 instructions, possède 16 registres 8 bits, 512 octets de ROM et 32 octets de RAM. C'est le modèle de ce type le plus simple que nous ayons trouvé, et les modéles supérieurs n'apportent que peu de nouvelles fonctionnalités intéressantes pour cette simulation : \emph{ADC} (\emph{Analog Digital Converter}), \dots.
 
 \section{Architecture}
-Les microcontrolleurs ATTiny4 sont des microcontrolleurs 8bits avec un
-jeu de 54 instructions pour 16 registres 8bits, \emph{little-endian}, qui
+Les microcontrôleurs ATTiny4 sont des microcontrôleurs 8 bits avec un
+jeu de 54 instructions et 16 registres 8 bits, \emph{little-endian}, qui
 fonctionnent généralement à une dizaine de $MHz$. Ils possèdent en
 outre 512 octets de ROM et 32 octets de RAM. En plus des 16 registres
 généraux, les ATTiny4 possèdent d'autres registres utiles à implémenter pour :
 \begin{itemize}
   \item les \emph{input/output}(I/O) ;
-  \item un registre de statut (voir
-    Section~\ref{sec:registre-de-statut}) stockant par exemple les
+  \item un registre de statut stockant par exemple les
     retenues ;
   \item un pointeur de pile ;
   \item un compteur d'instruction (sur 9 bits) ;
   \item un registre d'instruction (sur 16 bits) ;
 \end{itemize}
 %todo: image
-Ces microcontrolleurs possèdent un oscillateur interne leur servant de
+Ces microcontrôleurs possèdent un oscillateur interne leur servant de
 référence temporelle pour leur \emph{timer}.
 \subsection{Registres}\label{sec:registres}
 Il y a 16 registres 8 bits, numérotés de \verb|R16| à \verb|R31|. Les
-six derniers (\verb|R26|-\verb|R31|) peuvent être utilisé pour faire
-de l'adressage indirect de la mémoire sur 16 bits grâce à 3 meta-registres \verb|X|, \verb|Y|
-et \verb|Z|. Se référer au tableau~\ref{tab:meta-registres}.
+six derniers (\verb|R26|-\verb|R31|) peuvent être utilisés pour faire
+de l'adressage indirect de la mémoire sur 16 bits grâce à 3 méta-registres \verb|X|, \verb|Y|
+et \verb|Z|. Se référer au tableau~\ref{tab:méta-registres}.
 \begin{table}[htbp]
   \centering
   \begin{tabular}{|c|c|c|}
@@ -66,7 +65,7 @@ et \verb|Z|. Se référer au tableau~\ref{tab:meta-registres}.
     \verb|Z| & \verb|R31| & \verb|R30| \\
 \hline
   \end{tabular}
-  \caption{\label{tab:meta-registres}Composition des meta-registres
+  \caption{\label{tab:méta-registres}Composition des méta-registres
     $\texttt{X}$, $\texttt{Y}$ et $\texttt{Z}$.}
 
 \end{table}
@@ -97,11 +96,11 @@ tableau~\ref{tab:status_register}).
 \subsection{Mémoire}\label{sec:memoire}
 L'ATTiny4 contient 512 octets de ROM. Le compteur d'instruction
 ayant 9 bits, il est bien capable d'adresser les 256
-emplacements mémoire en commencant à \texttt{0x000}. 
+emplacements mémoire en commencant à \texttt{0x000}.
 % todo : WTF magistral
 
-Les emplacements mapés en mémoire incluent les I/O, la RAM et la
-ROM. Le détail est donné dans le tableau
+Les emplacements adressés en mémoire incluent les I/O, la RAM et la
+ROM. Le détail est donné dans le tableau \ref{tab:memory-map}.
 \begin{table}[htbp]
   \centering
   \begin{tabular}{|c|l|}
@@ -123,17 +122,17 @@ ROM. Le détail est donné dans le tableau
 
 \section{\emph{Instruction set}}
 \subsection{Structure}
-Chaque instruction est codée sur 16 bits et peuvent groupés par
-instructions arithmétiques, logiques, de branchement, de chargement,
+Chaque instruction est codée sur 16 bits. Les instructions peuvent être groupées par
+fonction : instructions arithmétiques, logiques, de branchement, de chargement,
 de \emph{flag} et autres. Chacune des instructions peut altérer des
-bits dans le registre de statut.
+bits dans le registre de statut (colonne \emph{Flags} de l'\emph{instruction set}).
 \subsection{Modes d'adressage}
-Les instructions peuvent utiliser l'adressage suivant :
+Les instructions peuvent utiliser les modes d'adressage suivant :
 \begin{itemize}
   \item Adressage direct d'un seul registre ;
     %todo image
   \item Adressage direct de deux registres ;
-  \item Adressage direct d'I/O ;
+  \item Adressage direct d'I/O (première zone en mémoire) ;
   \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
     ou \texttt{Z} ;
   \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
