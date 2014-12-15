@@ -24,15 +24,15 @@
 
 \maketitle
 \section*{Introduction}
-Pour divers projets électroniques personnels, nous utilisons régulièrement des micro-contrôleurs 8 bits vendus par la marque \emph{Atmel} et utilisant une architecture et l'\emph{instruction set} AVR\footnote{\url{http://people.ece.cornell.edu/land/courses/ece4760/AtmelStuff/AVRinstr2002.PDF}}. Dans le cadre du projet du cours de ``Système digital'', nous avons décidé de simuler un tel micro-contrôleur, plutôt qu'un processeur MIPS standard.
+Pour divers projets électroniques personnels, nous utilisons régulièrement des micro-contrôleurs 8 bits vendus par la marque \emph{Atmel} et utilisant une architecture et l'\emph{instruction set} AVR\footnote{\url{http://people.ece.cornell.edu/land/courses/ece4760/AtmelStuff/AVRinstr2002.PDF}}, notamment ceux vendus avec des cartes de développement ``Arduino''. Dans le cadre du projet du cours de ``Système digital'', nous avons décidé de simuler un tel micro-contrôleur, plutôt qu'un processeur MIPS standard.
 
-Il existe une très grande variété de micro-contrôleurs de ce type, et afin de réduire la complexité du projet, nous avons décidé de nous concentrer sur un ATTiny4\footnote{\url{http://www.atmel.com/images/atmel-8127-avr-8-bit-microcontroller-attiny4-attiny5-attiny9-attiny10_datasheet.pdf}}, qui supporte un jeu de 54 instructions, possède 16 registres 8 bits 512 octets de ROM et 32 octets de RAM.
+Il existe une très grande variété de micro-contrôleurs de ce type, et afin de réduire la complexité du projet, nous avons décidé de nous concentrer sur un ATTiny4\footnote{\url{http://www.atmel.com/images/atmel-8127-avr-8-bit-microcontroller-attiny4-attiny5-attiny9-attiny10_datasheet.pdf}}, qui supporte un jeu de 54 instructions, possède 16 registres 8 bits, 512 octets de ROM et 32 octets de RAM. C'est le modèle de ce type le plus simple que nous ayons trouvé, et les modéles supérieurs n'apportent que peu de nouvelles fonctionnalités intéressantes pour cette simulation : \emph{ADC} (\emph{Analog Digital Converter}), \dots.
 
 \section{Architecture}
 
 \section{\emph{Instruction set}}
 \subsection{Structure}
-Chaque instruction est codée sur 16 bits. […]
+Chaque instruction est codée sur 16 bits.
 
 \subsection{Modes d'adressage}
 
@@ -42,7 +42,7 @@ Chaque instruction est codée sur 16 bits. […]
 \subsection{\emph{Instruction set} complet}
 \tiny
 \noindent\begin{center}
-\begin{longtable}{|c|c|c|c|c|c|c|}
+    \begin{longtable}{|c|m{12em}|c|c|c|c|c|}
 \hline
 Mnemo. & Operation & Description & \#Clocks & PC & Flags & Opcode\\
 \hline\hline
