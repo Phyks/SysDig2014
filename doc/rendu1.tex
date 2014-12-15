@@ -43,7 +43,12 @@ généraux, les ATTiny4 possèdent d'autres registres utiles à implémenter pou
   \item un compteur d'instruction (sur 9 bits) ;
   \item un registre d'instruction (sur 16 bits) ;
 \end{itemize}
-%todo: image
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/block_diagram.png}
+  \end{center}  
+\end{figure}
+
 Ces microcontrôleurs possèdent un oscillateur interne leur servant de
 référence temporelle pour leur \emph{timer}.
 \subsection{Registres}\label{sec:registres}
@@ -130,23 +135,17 @@ bits dans le registre de statut (colonne \emph{Flags} de l'\emph{instruction set
 Les instructions peuvent utiliser les modes d'adressage suivant :
 \begin{itemize}
   \item Adressage direct d'un seul registre ;
-<<<<<<< HEAD
    \begin{center}
      \includegraphics[width=0.5\textwidth]{images/direct_adressing.png}
    \end{center}
- \item Adressage direct de deux registres ;
+  \item Adressage direct de deux registres ;
    \begin{center}
      \includegraphics[width=0.5\textwidth]{images/direct_adressing_double.png}
    \end{center}
-  \item Adressage direct d'I/O ;
+  \item Adressage direct d'I/O (première zone en mémoire) ;
    \begin{center}
      \includegraphics[width=0.5\textwidth]{images/direct_adressing_IO.png}
    \end{center}
-=======
-    %todo image
-  \item Adressage direct de deux registres ;
-  \item Adressage direct d'I/O (première zone en mémoire) ;
->>>>>>> e7d25b7c498f076cfa557616c37bb3880c0018f3
   \item Adressage indirect grâce aux registres \texttt{X}, \texttt{Y}
     ou \texttt{Z} ;
    \begin{center}
