@@ -1,0 +1,3 @@
+const word = 8
+const reg_addr = 5
+const nb_registers = 16

@@ -1,0 +1,4 @@
+require constants.mj
+
+main() = (registers:[word]:[nb_registers]) where
+end where
