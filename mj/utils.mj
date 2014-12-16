@@ -1,0 +1,29 @@
+push_register(d:[reg_addr], w:[word]) = () where
+end where
+
+pop_register(r:[reg_addr]) = (w:[word]) where
+end where
+
+check_zero<n>(w:[n]) = (b) where
+  b = (w[0] = 0) and check_zero<n-1>(w[1..])
+end where
+
+set_zero(b) = (b) where
+  b = check_zero<word>(w)
+end where
+
+set_negative(w) = (n) where
+  n = w[7]
+end where
+
+set_overflow(wd:[word], wr:[word], w) = (v) where
+  v = (wd[7] and wr[7] and (not w[7])) or ((not wd[7]) and (not wr[7]) and w[7])
+end where
+
+set_sign(n, v) = (s) where
+  s = n xor v
+end where
+
+set_half_carry(wd:[word], wr:[word], w:[word]) = (h) where
+  h = (wd[3] and wr[3]) or (wr[3] and (not w[3])) or ((not w[3]) and wd[3])
+end where
