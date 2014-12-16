@@ -1,4 +1,240 @@
 require constants.mj
 
+route0(opcode) = () where
+  if opcode[1] = 0 then
+    route00(opcode)
+  else
+    route01(opcode)
+  endif
+end where
+
+route00(opcode) = () where
+  if opcode[2] = 0 then
+    route000(opcode)
+  else
+    route001(opcode)
+  endif
+end where
+
+route000(opcode) = () where
+  if opcode[3] = 0 then
+    route0000(opcode)
+  else
+    route0001(opcode)
+  endif
+end where
+
+route0000(opcode) = () where
+  if opcode[4] = 0 then
+    route00000(opcode)
+  else
+    route00001(opcode)
+  endif
+end where
+
+route00000(opcode) = () where
+  if opcode[5] = 0 then
+    nop()
+  else
+    cpc(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  endif
+end where
+
+route00001(opcode) = () where
+  if opcode[5] = 0 then
+    sbc(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  else
+    add(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  endif
+end where
+
+route0001(opcode) = () where
+  if opcode[4] = 0 then
+    route00010(opcode)
+  else
+    route00011(opcode)
+  endif
+end where
+
+route00010(opcode) = () where
+  if opcode[5] = 0 then
+    cpse(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  else
+    cp(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  endif
+end where
+
+route00011(opcode) = () where
+  if opcode[5] = 0 then
+    sub(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  else
+    adc(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  endif
+end where
+
+route001(opcode) = () where
+  if opcode[3] = 0 then
+    route0010(opcode)
+  else
+    route0011(opcode)
+  endif
+end where
+
+route0010(opcode) = () where
+  if opcode[4] = 0 then
+    route00100(opcode)
+  else
+    route00101(opcode)
+  endif
+end where
+
+route00100(opcode) = () where
+  if opcode[5] = 0 then
+    and(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  else
+    eor(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  endif
+end where
+
+route00101(opcode) = () where
+  if opcode[5] = 0 then
+    or(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  else
+    mov(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
+  endif
+end where
+
+route0011(opcode) = () where
+  cpi(opcode[4..7]..opcode[12..15], opcode[8..11])
+end where
+
+route01(opcode) = () where
+  if opcode[2] = 0 then
+    route010(opcode)
+  else
+    route011(opcode)
+  endif
+end where
+
+route010(opcode) = () where
+  if opcode[3] = 0 then
+    route0100(opcode)
+  else
+    route0101(opcode)
+  endif
+end where
+
+route0100(opcode) = () where
+  sbci(opcode[4..7]..opcode[12..15], opcode[8..11])
+end where
+
+route0101(opcode) = () where
+  subi(opcode[4..7]..opcode[12..15], opcode[8..11])
+end where
+
+route011(opcode) = () where
+  if opcode[3] = 0 then
+    route0110(opcode)
+  else
+    route0111(opcode)
+  endif
+end where
+
+route0110(opcode) = () where
+  sbr(opcode[4..7]..opcode[12..15], opcode[8..11])
+end where
+
+route0111(opcode) = () where
+  andi(opcode[4..7]..opcode[12..15], opcode[8..11])
+end where
+
+
+route1(opcode) = () where
+  if opcode[1] = 0 then
+    route10(opcode)
+  else
+    route11(opcode)
+  endif
+end where
+
+route10(opcode) = () where
+  if opcode[2] = 0 then
+    route100(opcode)
+  else
+    route101(opcode)
+  endif
+end where
+
+route100(opcode) = () where
+  if opcode[3] = 0 then
+    route1000(opcode)
+  else
+    route1001(opcode)
+  endif
+end where
+
+route1000(opcode) = () where
+end where
+
+route1001(opcode) = () where
+end where
+
+route101(opcode) = () where
+  if opcode[3] = 0 then
+    route1010(opcode)
+  else
+    route1011(opcode)
+  endif
+end where
+
+route1010(opcode) = () where
+end where
+
+route1011(opcode) = () where
+end where
+
+route11(opcode) = () where
+  if opcode[2] = 0 then
+    route110(opcode)
+  else
+    route111(opcode)
+  endif
+end where
+
+route110(opcode) = () where
+  if opcode[3] = 0 then
+    route1100(opcode)
+  else
+    route1101(opcode)
+  endif
+end where
+
+route1100(opcode) = () where
+end where
+
+route1101(opcode) = () where
+end where
+
+route111(opcode) = () where
+  if opcode[3] = 0 then
+    route1110(opcode)
+  else
+    route1111(opcode)
+  endif
+end where
+
+route1110(opcode) = () where
+end where
+
+route1111(opcode) = () where
+end where
+
+
 main() = (registers:[word]:[nb_registers]) where
+  opcode = TODO
+  if opcode[0] = 0 then
+    route0(opcode)
+  else opcode[0] = 1 then
+    route1(opcode)
+  endif
 end where
