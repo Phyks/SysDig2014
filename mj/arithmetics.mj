@@ -27,3 +27,73 @@ add(r:[reg_addr], d:[reg_addr]) = () where
 
   push_register(d, w)
 end where
+
+and_n<n>(a:[n], b:[n])=(o:[n]) where
+  if n = 0 then
+    o = []
+  else
+    o = (a[0] and b[0]) . (and_n<n-1>(a[1..],b[1..]))
+  end if
+end where
+
+and(d:[reg_addr], r:[reg_addr]) = () where
+  w1 = pop_register(d)
+  w2 = pop_register(r)
+
+  w = and_n<word>(w1, w2)
+
+  set_zero(w)
+  n = set_negative(w)
+  v = 0
+  set_sign(n,v)
+
+  push_register(d, w)
+end where
+
+andi(d:[reg_addr], K:[word]) = () where
+  w1 = pop_register(d)
+
+  w = and_n<word>(w1, K)
+
+  set_zero(w)
+  n = set_negative(w)
+  v = 0
+  set_sign(n,v)
+
+  push_register(d, w)
+end where
+
+or_n<n>(a:[n], b:[n]) = (o:[n]) where
+  if n = 0 then
+    o = []
+  else
+    o = (a[0] or b[0]) . (or_n<n-1>(a[1..], b[1..]))
+  end if
+end where
+
+or(d:[reg_addr], r:[reg_addr]) = () where
+  w1 = pop_register(d)
+  w2 = pop_register(r)
+
+  w = or_n(w1, w2)
+
+  set_zero(w)
+  n = set_negative(w)
+  v = 0
+  set_sign(n,v)
+
+  push_register(d, w)
+end where
+
+ori(d:[reg_addr], K:[word]) = () where
+  w1 = pop_register(d)
+
+  w = or_n(w1, K)
+ 
+  set_zero(w)
+  n = set_negative(w)
+  v = 0
+  set_sign(n, v)
+ 
+  push_register(d, w)
+end where
