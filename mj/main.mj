@@ -174,9 +174,15 @@ route100(opcode) = () where
 end where
 
 route1000(opcode) = () where
+# TODO
+  if opcode[6] = 0 then
+    ld(opcode[7..11], opcode[12..15])
+  else
+    st(opcode[7..11], opcode[12..15])
 end where
 
 route1001(opcode) = () where
+# TODO
 end where
 
 route101(opcode) = () where
@@ -188,9 +194,17 @@ route101(opcode) = () where
 end where
 
 route1010(opcode) = () where
+  if opcode[4] = 0 then
+    lds(opcode[5..7]..opcode[12..15], opcode[8..11])
+  else
+    sts(opcode[5..7]..opcode[12..15], opcode[8..11])
 end where
 
 route1011(opcode) = () where
+  if opcode[4] = 0 then
+    in(opcode[5..6]..opcode[12..15], opcode[7..11])
+  else
+    out(opcode[5..6]..opcode[12..15], opcode[7..11])
 end where
 
 route11(opcode) = () where
@@ -210,9 +224,11 @@ route110(opcode) = () where
 end where
 
 route1100(opcode) = () where
+  rjmp(opcode[4..15])
 end where
 
 route1101(opcode) = () where
+  rcall(opcode[4..15])
 end where
 
 route111(opcode) = () where
@@ -224,9 +240,73 @@ route111(opcode) = () where
 end where
 
 route1110(opcode) = () where
+  ldi(opcode[4..7]..opcode[12..15], opcode[8..11])
 end where
 
 route1111(opcode) = () where
+  if opcode[4] = 0 then
+    route11110(opcode)
+  else
+    route11111(opcode)
+end where
+
+route11110(opcode) = () where
+  if opcode[5] = 0 then
+    route111100(opcode)
+  else
+    route111101(opcode)
+end where
+
+route111100(opcode) = () where
+  if opcode[13] = 0 and opcode[14] = 0 and opcode[15] = 0 then
+    brlo(opcode[6..12])
+  elif opcode[13] = 0 and opcode[14] = 0 and opcode[15] = 1 then
+    breq(opcode[6..12])
+  elif opcode[13] = 0 and opcode[14] = 1 and opcode[15] = 0 then
+    brmi(opcode[6..12])
+  elif opcode[13] = 0 and opcode[14] = 1 and opcode[15] = 1 then
+    brvs(opcode[6..12])
+  elif opcode[13] = 1 and opcode[14] = 0 and opcode[15] = 0 then
+    brlt(opcode[6..12])
+  elif opcode[13] = 1 and opcode[14] = 0 and opcode[15] = 1 then
+    brhs(opcode[6..12])
+  elif opcode[13] = 1 and opcode[14] = 1 and opcode[15] = 0 then
+    brts(opcode[6..12])
+  elif opcode[13] = 1 and opcode[14] = 1 and opcode[15] = 1 then
+    # TODO ?
+end where
+
+route111101(opcode) = () where
+  if opcode[13] = 0 and opcode[14] = 0 and opcode[15] = 0 then
+    brsh(opcode[6..12])
+  elif opcode[13] = 0 and opcode[14] = 0 and opcode[15] = 1 then
+    brne(opcode[6..12])
+  elif opcode[13] = 0 and opcode[14] = 1 and opcode[15] = 0 then
+    brpl(opcode[6..12])
+  elif opcode[13] = 0 and opcode[14] = 1 and opcode[15] = 1 then
+    brie(opcode[6..12])
+  elif opcode[13] = 1 and opcode[14] = 0 and opcode[15] = 0 then
+    brge(opcode[6..12])
+  elif opcode[13] = 1 and opcode[14] = 0 and opcode[15] = 1 then
+    brhc(opcode[6..12])
+  elif opcode[13] = 1 and opcode[14] = 1 and opcode[15] = 0 then
+    brtc(opcode[6..12])
+  elif opcode[13] = 1 and opcode[14] = 1 and opcode[15] = 1 then
+    brid(opcode[6..12])
+end where
+
+route11111(opcode) = () where
+  if opcode[5] = 0 then
+    route111110(opcode)
+  else
+    sbrs(opcode[7..11], opcode[13..15])
+end where
+
+route111110(opcode) = () where
+  if opcode[6] = 0 then
+    bld(opcode[7..11], opcode[13..15])
+  else
+    bst(opcode[7..11], opcode[13..15])
 end where
 
 
