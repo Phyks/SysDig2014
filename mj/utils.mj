@@ -4,6 +4,24 @@ end where
 pop_register(r:[reg_addr]) = (w:[word]) where
 end where
 
+allone<n>() = (o:[n]) where
+  if n = 0 then
+    o = []
+  else
+    o = 1.allone<n-1>
+  end if
+end where
+
+one<n>() = (o:[n]) where
+  if n = 0 then
+    o = []
+  else if n = 1 then
+    o = 1
+  else 
+    o = 0.one<n-1>
+  end if
+end where
+
 check_zero<n>(w:[n]) = (b) where
   b = (w[0] = 0) and check_zero<n-1>(w[1..])
 end where
