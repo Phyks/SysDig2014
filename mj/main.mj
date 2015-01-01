@@ -174,7 +174,6 @@ route100(opcode) = () where
 end where
 
 route1000(opcode) = () where
-# TODO
   if opcode[6] = 0 then
     ld(opcode[7..11], opcode[12..15])
   else
@@ -182,7 +181,7 @@ route1000(opcode) = () where
 end where
 
 route1001(opcode) = () where
-# TODO
+  ld(opcode[7..11], opcode[12..15])
 end where
 
 route101(opcode) = () where
@@ -274,6 +273,7 @@ route111100(opcode) = () where
     brts(opcode[6..12])
   elif opcode[13] = 1 and opcode[14] = 1 and opcode[15] = 1 then
     # TODO ?
+    nop
 end where
 
 route111101(opcode) = () where
