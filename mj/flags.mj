@@ -3,10 +3,12 @@ check_zero<n>(w:[n]) = (b) where
 end where
 
 # Computes the bits of the status register
-
+# S = I T H S V N Z C
+# 
 cH(R3, Rd3, Rr3) = (H) where	# H = Rd3•Rr3+Rr3•R3+R3•Rd3
   H = (Rd3 and Rr3) or (Rr3 and (not R3)) or ((not R3 and Rd3))
 end where
+
 
 cS(N, V) = (S) where		# S = N ⊕ V
   S = N xor V
@@ -16,10 +18,53 @@ cV(R7, Rd7, Rr7) = (V) where	# V = Rd7•Rr7•R7+Rd7•Rr7•R7
   V = ((Rd7 and Rr7) and (not R7) ) or ((not Rd7) and (not Rr7)) and R7
 end where
 
-cC(R7, Rd7, Rr7) = (C) where	# C = Rd7•Rr7+Rr7•R7+R7•Rd7
-  C = (Rd7 and Rr7) or (Rr7 and (not R7)) or (not (R7) qnd Rd7)
+cV2(R:[word]) = (V) where
+  V = R[7] and ((not R[6]) and ((not R[5]) and ((not R[4]) and ((not R[3]) and ((not R[2]) and ((not R[1]) and ((not R[0]))))))))
+end where
+
+cV3(R:[word]) = (V) where
+  V = (not R[7]) and R[6] and R[5] and R[4] and R[3] and R[2] and R[1] and R[0]
 end where
 
 cZ(R) = (Z) where		# Z = R7• R6 •R5• R4 •R3 •R2 •R1 •R0
   Z = check_zero<word>(R)
 end where
+
+
+cC(R7, Rd7, Rr7) = (C) where	# C = Rd7•Rr7+Rr7•R7+R7•Rd7
+  C = (Rd7 and Rr7) or (Rr7 and (not R7)) or (not (R7) qnd Rd7)
+end where
+
+
+getI(S) = (I) where
+  I = S[0]
+end where
+
+getT(S) = (T) where
+  T = S[1]
+end where
+
+getH(S) = (H) where
+  H = S[2]
+end where
+
+getS(S) = (s) where
+  s = S[3]
+end where
+
+getV(S) = (V) where
+  V = S[4]
+end where
+
+getN(S) = (N) where
+  N = S[5]
+end where
+
+getZ(S) = (Z) where
+  Z = S[6]
+end where
+
+getC(S) = (C) where
+  C = S[7]
+end where
+
