@@ -48,3 +48,7 @@ end where
 set_half_carry(wd:[word], wr:[word], w:[word]) = (h) where
   h = (wd[3] and wr[3]) or (wr[3] and (not w[3])) or ((not w[3]) and wd[3])
 end where
+
+set_carry(wd:[word], wr:[word]) = (c) where
+  # TODO
+end where
