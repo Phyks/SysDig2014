@@ -1,0 +1,23 @@
+ld() = () where # TODO
+end where
+
+lds() = () where # TODO
+end where
+
+st() = () where # TODO
+end where
+
+sts() = () where # TODO
+end where
+
+in() = () where # TODO
+end where
+
+out() = () where # TODO
+end where
+
+push() = () where # TODO
+end where
+
+pop() = () where # TODO
+end where
