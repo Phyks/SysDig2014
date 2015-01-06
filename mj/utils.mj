@@ -1,40 +1,22 @@
-init_register() = (regs[16-31]) where
-  z = zero<word>
-
-  
-  regs0 = reg z
-  regs1 = reg z
-  regs2 = reg z
-  regs3 = reg z
-  regs4 = reg z
-  regs5 = reg z
-  regs6 = reg z
-  regs7 = reg z
-  regs8 = reg z
-  regs9 = reg z
-  regs10 = reg z
-  regs11 = reg z
-  regs12 = reg z
-  regs13 = reg z
-  regs14 = reg z
-  regs15 = reg z
-  regs16 = reg z
-  regs17 = reg z
-  regs18 = reg z
-  regs19 = reg z
-  regs20 = reg z
-  regs21 = reg z
-  regs22 = reg z
-  regs23 = reg z
-  regs24 = reg z
-  regs25 = reg z
-  regs26 = reg z
-  regs27 = reg z
-  regs28 = reg z
-  regs29 = reg z
-  regs30 = reg z
-  regs31 = reg z
-
+init_register(z:[word_size]) = (regs[16-31]) where
+			       
+  regs16 = reg (z);
+  regs17 = reg (z);
+  regs18 = reg (z);
+  regs19 = reg (z);
+  regs20 = reg (z);
+  regs21 = reg (z);
+  regs22 = reg (z);
+  regs23 = reg (z);
+  regs24 = reg (z);
+  regs25 = reg (z);
+  regs26 = reg (z);
+  regs27 = reg (z);
+  regs28 = reg (z);
+  regs29 = reg (z);
+  regs30 = reg (z);
+  regs31 = reg (z);
+end where
 
 pusher(r[0-4], w:[word], regs[16-31]) = () where
   # if r0 = 0 then 
@@ -104,29 +86,29 @@ pusher(r[0-4], w:[word], regs[16-31]) = () where
       if r2 = 0 then
         if r3 = 0 then
           if r4 = 0 then
-            regs16 = w
+            regs16 = w ;
           else
-            regs17 = w
+            regs17 = w ;
           end if #r4
         else
           if r4 = 0 then
-            regs18 = w
+            regs18 = w ;
           else
-            regs19 = w
+            regs19 = w ;
           end if #r4
         end if #r3
       else
         if r3 = 0 then
           if r4 = 0 then
-            regs20 = w
+            regs20 = w ;
           else
-            regs21 = w
+            regs21 = w ;
           end if # r4
         else
           if r4 = 0 then
-            regs22 = w
+            regs22 = w ;
           else
-            regs23 = w
+            regs23 = w ;
           end if #r4
         end if #r3
       end if #r2
@@ -134,23 +116,23 @@ pusher(r[0-4], w:[word], regs[16-31]) = () where
       if r2 = 0 then
         if r3 = 0 then
           if r4 = 0 then
-            regs24 = w
+            regs24 = w ;
           else
-            regs25 = w
+            regs25 = w ;
           end if #r4
         else
           if r4 = 0 then
-            regs26 = w
+            regs26 = w ;
           else
-            regs27 = w
+            regs27 = w ;
           end if #r4
         end if #r3
       else
         if r3 = 0 then
           if r4 = 0 then
-            regs28 = w
+            regs28 = w ;
           else
-            regs29 = w
+            regs29 = w ;
           end if # r4
         else
           if r4 = 0 then
@@ -161,17 +143,16 @@ pusher(r[0-4], w:[word], regs[16-31]) = () where
         end if #r3
       end if #r2
     end if #r1
-  end if #r0
 end where
 
-push_register(d:[reg_addr], w:[word]), regs[0,31]) = () where
-  r0 = raddr[0]
-  r1 = raddr[1]
-  r2 = raddr[2]
-  r3 = raddr[3]
-  r4 = raddr[4]
+push_register(d:[reg_addr], w:[word], regs[16-31]) = () where
+  r0 = raddr[0];
+  r1 = raddr[1];
+  r2 = raddr[2];
+  r3 = raddr[3];
+  r4 = raddr[4];
 
-  pusher(r[0-4], w, regs[16-31])	
+  trash = pusher(r[0-4], w, regs[16-31])	
 end where
 
 poper(r[0-4], regs[16-31]) = (w:[word]) where
@@ -303,23 +284,20 @@ poper(r[0-4], regs[16-31]) = (w:[word]) where
 end where
 
 pop_register(raddr:[reg_addr], regs[16-31]) = (w:[word]) where
-  r0 = raddr[0]
-  r1 = raddr[1]
-  r2 = raddr[2]
-  r3 = raddr[3]
-  r4 = raddr[4]
+  r0 = raddr[0];
+  r1 = raddr[1];
+  r2 = raddr[2];
+  r3 = raddr[3];
+  r4 = raddr[4];
   
   w = poper(r[0-4], regs[16-31])
-end where
-
-get_carry() = (c) where # TODO
 end where
 
 allone<n>() = (o:[n]) where
   if n = 0 then
     o = []
   else
-    o = 1.allone<n-1>
+    o = 1.allone<n-1>()
   end if
 end where
 
@@ -329,12 +307,9 @@ one<n>() = (o:[n]) where
   else if n = 1 then
     o = 1
   else
-    o = 0.one<n-1>
+    o = 0.one<n-1>()
   end if
-end where
-
-check_zero<n>(w:[n]) = (b) where
-  b = (w[0] = 0) and check_zero<n-1>(w[1..])
+  end if
 end where
 
 set_zero(b) = (b) where
@@ -359,4 +334,5 @@ end where
 
 set_carry(wd:[word], wr:[word]) = (c) where
   # TODO
+  c = 0
 end where
