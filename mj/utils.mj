@@ -6,6 +6,9 @@ pop_register(r:[reg_addr]) = (w:[word]) where
     # TODO
 end where
 
+get_carry() = (c) where
+end where
+
 allone<n>() = (o:[n]) where
   if n = 0 then
     o = []
