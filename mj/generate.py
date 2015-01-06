@@ -9,12 +9,15 @@ already_included = []
 def compute_includes(file):
     with open(file, 'r') as fh:
         generated = fh.readlines()
+    # remove comments
     generated = [re.sub(r"#.*", "", i) for i in generated]
+    # replace "foo[0-n]" by "foo0, foo1, …, foon"
     generated = [re.sub(r"(\w+)\[(\d+)-(\d+)\]",
                         lambda m: ", ".join([m.group(1) + str(i)
                                              for i in range(int(m.group(2)),
                                                             int(m.group(3)))]),
                         i) for i in generated]
+    # replace "foo[0..n]" by "foo[0], foo[1], …, foo[n]"
     generated = [re.sub(r"(\w+)\[(\d+)\.\.(\d+)\]",
                         lambda m: ", ".join([m.group(1) + "[" + str(i) + "]"
                                              for i in range(int(m.group(2)),
