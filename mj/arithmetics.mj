@@ -13,6 +13,7 @@ adder<n>(a:[n], b:[n], c_in) = (o:[n], c_out) where
 end where
 
 subtracter<n>(a:[n], b:[n]) = (o:[n], c_out) where
+  # b-a
   an = not(a)
   (o, c) = adder<n>(an, b, 1)
   c_out = c & 1
@@ -158,7 +159,6 @@ end where
 
 com(d:[reg_addr]) = () where
   Rd = pop_register(d)
-
   R = com_n<word>(Rd)
 
   set_carry(1)
@@ -239,12 +239,10 @@ sbci() = () where # TODO
 end where
 
 neg(d:[reg_addr]) = () where
-  # out = (1 complement of w0) + 1
-  w0 = pop_register(d)
-  o = zero<word>
+  Rd = pop_register(d)
+  zero = zero<word>
 
-  # $00 - Rd
-  (R, c) = subtracter(zero, w0, 0)
+  (R, c) = subtracter(zero, Rd, 0)
 
   set_carry(1)
   v = 0
@@ -254,5 +252,15 @@ neg(d:[reg_addr]) = () where
 
 end where
 
-dec() = () where # TODO
+dec(d:[reg_addr]) = () where
+  Rd = pop_register(d)
+  one = one<word>
+
+  (R, c) = subtracter(one, Rd, 0)
+
+  # TODO ↓
+  set_(V)
+  N = set_negative(R)
+  set_zero(R)
+  set_sign(N,V)
 end where
