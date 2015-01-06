@@ -32,7 +32,7 @@ end where
 
 
 cC(R7, Rd7, Rr7) = (C) where	# C = Rd7•Rr7+Rr7•R7+R7•Rd7
-  C = (Rd7 and Rr7) or (Rr7 and (not R7)) or (not (R7) qnd Rd7)
+  C = (Rd7 and Rr7) or (Rr7 and (not R7)) or ((not R7) and Rd7)
 end where
 
 
@@ -68,3 +68,6 @@ getC(S) = (C) where
   C = S[7]
 end where
 
+setStatus(S[0-7], S) = (S) where
+  S = S0.S1.S2.S3.S4.S5.S6.S7
+end where

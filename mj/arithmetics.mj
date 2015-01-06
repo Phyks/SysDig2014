@@ -87,7 +87,7 @@ and(d:[reg_addr], r:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word])
 
   S = setStatus(S[0-7], S);
 
-  regs[16-31] = push_register(d, R, regs[16-31])
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
 andi(d:[reg_addr], K:[word], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
