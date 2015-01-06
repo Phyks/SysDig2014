@@ -5,44 +5,51 @@ adder<n>(a:[n], b:[n], c_in) = (o:[n], c_out) where
   if n = 0 then
     o = [];
     c_out = 0
-  else(s_n1, c_n1)
+  else
     (s_n1, c_n1) = adder<n-1>(a[1..], b[1..], c_in);
-    (s_n, c_out) = fulladder(a[0], b[0], c_n1);
+    (s_n, c_out) = fulladder(a[0], b[0], c_n1)
     o = s_n . s_n1
   end if
 end where
 
-add(r:[reg_addr], d:[reg_addr]) = () where
-  w1 = pop_register(d)
-  w2 = pop_register(r)
+subtracter<n>(a:[n], b:[n]) = (o:[n], c_out) where
+  an = not(a)
+  (o, c) = adder<n>(an, b, 1)
+  c_out = c & 1
+end where
+  
 
-  (w, c) = adder<word>(w1, w2, 0)
+add(r:[reg_addr], d:[reg_addr]) = () where
+  Rd = pop_register(d)
+  Rr = pop_register(r)
+
+  (R, c) = adder<word>(Rd, Rr, 0)
 
   set_carry(c)
-  set_zero(w)
-  n = set_negative(w)
-  v = set_overflow(w1, w2, w)
+  set_zero(R)
+  n = set_negative(R)
+  v = set_overflow(Rd, Rr, R)
   set_sign(n, v)
-  set_half_carry(w1, w2, w)
+  set_half_carry(Rd, Rr, R)
 
-  push_register(d, w)
+  push_register(d, R)
 end where
 
 adc(r:[reg_addr], d:[reg_addr]) = () where
-  w1 = pop_register(d)
-  w2 = pop_register(r)
+  Rd = pop_register(d)
+  Rr = pop_register(r)
 
   c = get_carry()
-  (w, c) = adder<word>(w1, w2, c)
+  (R, c) = adder<word>(Rd, Rr, c)
 
   set_carry(c)
-  set_zero(w)
-  n = set_negative(w)
-  v = set_overflow(w1, w2, w)
+  set_zero(R)
+  n = set_negative(R)
+  v = set_overflow(Rd, Rr, R)
   set_sign(n, v)
-  set_half_carry(w1, w2, w)
+  set_half_carry(Rd, Rr, R)
 
-  push_register(d, w)
+  push_register(d, R)
 end where
 
 and_n<n>(a:[n], b:[n])=(o:[n]) where
@@ -54,30 +61,30 @@ and_n<n>(a:[n], b:[n])=(o:[n]) where
 end where
 
 and(d:[reg_addr], r:[reg_addr]) = () where
-  w1 = pop_register(d)
-  w2 = pop_register(r)
+  Rd = pop_register(d)
+  Rr = pop_register(r)
 
-  w = and_n<word>(w1, w2)
+  R = and_n<word>(Rd, Rr)
 
-  set_zero(w)
-  n = set_negative(w)
-  v = set_overflow(w1, w2, w)
+  set_zero(R)
+  n = set_negative(R)
+  v = set_overflow(Rd, Rr, R)
   set_sign(n,v)
 
-  push_register(d, w)
+  push_register(d, R)
 end where
 
 andi(d:[reg_addr], K:[word]) = () where
-  w1 = pop_register(d)
+  Rd = pop_register(d)
 
-  w = and_n<word>(w1, K)
+  R = and_n<word>(Rd, K)
 
-  set_zero(w)
-  n = set_negative(w)
-  v = set_overflow(w1, w2, w)
+  set_zero(R)
+  n = set_negative(R)
+  v = set_overflow(Rd, Rr, R)
   set_sign(n,v)
 
-  push_register(d, w)
+  push_register(d, R)
 end where
 
 or_n<n>(a:[n], b:[n]) = (o:[n]) where
@@ -89,30 +96,30 @@ or_n<n>(a:[n], b:[n]) = (o:[n]) where
 end where
 
 or(d:[reg_addr], r:[reg_addr]) = () where
-  w1 = pop_register(d)
-  w2 = pop_register(r)
+  Rd = pop_register(d)
+  Rr = pop_register(r)
 
-  w = or_n(w1, w2)
+  R = or_n(Rd, Rr)
 
-  set_zero(w)
-  n = set_negative(w)
+  set_zero(R)
+  n = set_negative(R)
   v = 0
   set_sign(n,v)
 
-  push_register(d, w)
+  push_register(d, R)
 end where
 
 ori(d:[reg_addr], K:[word]) = () where
-  w1 = pop_register(d)
+  Rd = pop_register(d)
 
-  w = or_n(w1, K)
+  R = or_n(Rd, K)
 
-  set_zero(w)
-  n = set_negative(w)
+  set_zero(R)
+  n = set_negative(R)
   v = 0
   set_sign(n, v)
 
-  push_register(d, w)
+  push_register(d, R)
 end where
 
 xor_n<n>(a:[n], b:[n]) = (o:[n]) where
@@ -124,17 +131,17 @@ xor_n<n>(a:[n], b:[n]) = (o:[n]) where
 end where
 
 eor(d:[reg_addr], r:[reg_addr]) = () where
-  w1 = pop_register(d)
-  w2 = pop_register(r)
+  Rd = pop_register(d)
+  Rr = pop_register(r)
 
-  w = xor_n<word>(w1, w2)
+  R = xor_n<word>(Rd, Rr)
 
-  n = set_negative(w)
-  v = set_overflow(w1, w2, w)
+  n = set_negative(R)
+  v = set_overflow(Rd, Rr, R)
   s = set_sign(n,v)
-  set_zero(w)
+  set_zero(R)
 
-  push_register(d, w)
+  push_register(d, R)
 end where
 
 com_n<n>(a:[n]) = (o:[n]) where
@@ -150,18 +157,18 @@ com_n<n>(a:[n]) = (o:[n]) where
 end where
 
 com(d:[reg_addr]) = () where
-  w1 = pop_register(d)
+  Rd = pop_register(d)
 
-  w = com_n<word>(w1)
+  R = com_n<word>(Rd)
 
   set_carry(1)
   v = 0
-  n = set_negative(w)
-  set_zero(w)
+  n = set_negative(R)
+  set_zero(R)
   s = set_sign(n,v)
 
-  push_register(d, w)
-end where
+  push_register(d, R)
+end where					
 
 sbr(d:[reg_addr], K:[word]) = () where
   ori(d, K)
@@ -174,15 +181,15 @@ cbr(d:[reg_addr], K:[word]) = () where
 end where
 
 inc(d:[reg_addr]) = () where
-  w1 = pop_register(d)
+  Rd = pop_register(d)
   o = one<word>
 
-  (w,c) = adder(w1, o, 0)
+  (R,c) = adder(Rd, o, 0)
 
-  n = set_negative(w)
-  v = set_overflow(w)
+  n = set_negative(R)
+  v = set_overflow(R)
   s = set_sign(n, v)
-  set_zero(w)
+  set_zero(R)
 end where
 
 tst(d:[reg_addr]) = () where
@@ -198,10 +205,31 @@ ser(d:[reg_addr]) = () where
   push_register(d, o)
 end where
 
-sub() = () where # TODO
+sub(r:[reg_addr], d:[reg_addr]) = () where
+  Rd = pop_register(d)
+  Rr = pop_register(r)
+
+  (R, c) = subtracter<word>(Rd, Rr, 0)
+
+  carry = (not(Rd[7]) and Rr[7]) or (Rr[7] and R[7]) or (R[7] and Rd[7])
+  
+  set_carry(carry)
+  set_zero(R)
+  n = set_negative(R)
+  v = set_overflow(Rd, Rr, R)
+  set_sign(n, v)
+  set_half_carry(Rd, Rr, R)
+
+  push_register(d, R)
 end where
 
-subi() = () where # TODO
+subi(d:[4], K[8]) = () where
+  Rd = pop_register(d)
+
+  (R, c) = subtracter<word>(Rd, K, 0)
+
+  push_register(d, R)
+  
 end where
 
 sbc() = () where # TODO
@@ -210,7 +238,20 @@ end where
 sbci() = () where # TODO
 end where
 
-neg() = () where # TODO
+neg(d:[reg_addr]) = () where
+  # out = (1 complement of w0) + 1
+  w0 = pop_register(d)
+  o = zero<word>
+
+  # $00 - Rd
+  (R, c) = subtracter(zero, w0, 0)
+
+  set_carry(1)
+  v = 0
+  n = set_negative(R)
+  set_zero(R)
+  s = set_sign(n,v)
+
 end where
 
 dec() = () where # TODO
