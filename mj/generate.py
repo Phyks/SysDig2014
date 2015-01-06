@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import re
 import sys
 
 already_included = []
@@ -8,6 +9,7 @@ already_included = []
 def compute_includes(file):
     with open(file, 'r') as fh:
         generated = fh.readlines()
+    generated = [re.sub(r"#.*", "", i) for i in generated]
     includes = {i: generated[i].replace('require', '').strip()
                 for i in range(len(generated))
                 if 'require' in generated[i]}
