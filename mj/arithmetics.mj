@@ -27,14 +27,16 @@ add(r:[reg_addr], d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word])
 
   (R, c) = adder<word>(Rd, Rr, 0);
 
-  # S[0] = 
-  # S[1] = 
-  S[2] = cH(R[3], Rd[3], Rr[3])
-  S[3] = cS(N, V)
-  S[4] = cV(R[7], Rd[7], Rr[7])
-  S[5] = R7
-  S[6] = cZ(R)
-  S[7] = cC(R[7], Rd[7], Rr[7])
+  S0 = S[0];
+  S1 = S[1];
+  S2 = cH(R[3], Rd[3], Rr[3]);
+  S3 = cS(N, V);
+  S4 = cV(R[7], Rd[7], Rr[7]);
+  S5 = R7;
+  S6 = cZ(R);
+  S7 = cC(R[7], Rd[7], Rr[7]);
+
+  S = setStatus(S[0-7], S);
   
   (regs[16-31]) = push_register(d, R)
 end where
@@ -46,25 +48,25 @@ adc(r:[reg_addr], d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word])
   c = getC(S);
   (R, c) = adder<word>(Rd, Rr, c);
 
-  # S[0] = 			# I
-  # S[1] = 			# T
-  S[2] = cH(R[3], Rd[3], Rr[3])	# H
-  S[3] = cS(N, V)		# S
-  S[4] = cV(R[7], Rd[7], Rr[7]) # V
-  S[5] = R7			# N
-  S[6] = cZ(R)			# Z
-  S[7] = cC(R[7], Rd[7], Rr[7])	# C
+  S0 = S[0];
+  S1 = S[1];
+  S2 = cH(R[3], Rd[3], Rr[3]);	# H
+  S3 = cS(N, V)	;	# S
+  S4 = cV(R[7], Rd[7], Rr[7]); # V
+  S5 = R7;			# N
+  S6 = cZ(R);			# Z
+  S7 = cC(R[7], Rd[7], Rr[7]);	# C
 
-  regs[16-31] = push_register(d, R, regs[16-31])
+  S = setStatus(S[0-7], S);
+
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
-and_n<n>(a:[n], b:[n])=(o:[n]) where
+and_n<n>(a:[n], b:[n]) = (o:[n]) where
   if n = 0 then
     o = []
   else
-    a0 = a[0];
-    b0 = b[0];
-    o = (a0 and b0) . (and_n<n-1>(a[1..],b[1..]))
+    o = (a[0] and b[0]) . (and_n<n-1>(a[1..], b[1..]))
   end if
 end where
 
@@ -74,15 +76,16 @@ and(d:[reg_addr], r:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word])
 
   R = and_n<word>(Rd, Rr);
 
-  # S[0] = 			# I
-  # S[1] = 			# T
-  # S[2] = 			# H
-  S[3] = cS(N, V)		# S
-  S[4] = 0			# V
-  S[5] = R7			# N
-  S[6] = cZ(R)			# Z
-  # S[7] = 			# C
-  set_sign(n,v);
+  S0 = S[0];
+  S1 = S[1];
+  S2 = S[2] ;			# H
+  S3 = cS(N, V);		# S
+  S4 = 0;			# V
+  S5 = R7;			# N
+  S6 = cZ(R);			# Z
+  S7 = S[7]; 			# C
+
+  S = setStatus(S[0-7], S);
 
   regs[16-31] = push_register(d, R, regs[16-31])
 end where
@@ -92,23 +95,25 @@ andi(d:[reg_addr], K:[word], regs[16-31], S:[word]) = (regs[16-31], S:[word]) wh
 
   R = and_n<word>(Rd, K);
 
-  # S[0] = 			# I
-  # S[1] = 			# T
-  # S[2] = 			# H
-  S[3] = cS(N, V)		# S
-  S[4] = 0			# V
-  S[5] = R7			# N
-  S[6] = cZ(R)			# Z
-  # S[7] =			# C
+  S0 = S[0];
+  S1 = S[1];
+  S2 = S[2]; 			# H
+  S3 = cS(N, V);		# S
+  S4 = 0;			# V
+  S5 = R7;			# N
+  S6 = cZ(R);			# Z
+  S7 = S[7];			# C
+
+  S = setStatus(S[0-7], S);
   
-  regs[16-31] = push_register(d, R, regs[16-31])
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
 or_n<n>(a:[n], b:[n]) = (o:[n]) where
   if n = 0 then
     o = []
   else
-    a0 = a[cH(R[3], Rd[3], Rr[3])0];
+    a0 = a[0];
     b0 = b[0];
     o = (a0 or b0) . (or_n<n-1>(a[1..], b[1..]))
   end if
@@ -118,16 +123,18 @@ or(d:[reg_addr], r:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) 
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
-  # S[0] = 			# I
-  # S[1] = 			# T
-  # S[2] = 			# H
-  S[3] = cS(N, V)		# S
-  S[4] = 0			# V
-  S[5] = R7			# N
-  S[6] = cZ(R)			# Z
-  # S[7] = 			# C
+  S0 = S[0];
+  S1 = S[1];
+  S2 = S[2]; 			# H
+  S3 = cS(N, V);		# S
+  S4 = 0;			# V
+  S5 = R7;			# N
+  S6 = cZ(R);			# Z
+  S7 = S[7];
+
+  S = setStatus(S[0-7], S);
   
-  regs[16-31] = push_register(d, R, regs[16-31])
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
 ori(d:[reg_addr], K:[word], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
@@ -135,16 +142,18 @@ ori(d:[reg_addr], K:[word], regs[16-31], S:[word]) = (regs[16-31], S:[word]) whe
 
   R = or_n(Rd, K);
 
-  # S[0] = 			# I
-  # S[1] = 			# T
-  # S[2] = 			# H
-  S[3] = cS(N, V)		# S
-  S[4] = 0			# V
-  S[5] = R7			# N
-  S[6] = cZ(R)			# Z
-  # S[7] = 			# C
+  S0 = S[0];
+  S1 = S[1];
+  S2 = S[2];
+  S3 = cS(N, V);		# S
+  S4 = 0;			# V
+  S5 = R7;			# N
+  S6 = cZ(R);			# Z
+  S7 = S[7];
 
-  regs[16-31] = push_register(d, R, regs[16-31])
+  S = setStatus(S[0-7], S);
+
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
 xor_n<n>(a:[n], b:[n]) = (o:[n]) where
@@ -163,19 +172,20 @@ eor(d:[reg_addr], r:[reg_addr], regs[16-31], S:[word]) = (regs[16-31, S:[word]])
 
   R = xor_n<word>(Rd, Rr);
 
-  # S[0] = 			# I
-  # S[1] = 			# T
-  # S[2] = 			# H
-  S[3] = cS(N, V)		# S
-  S[4] = 0			# V
-  S[5] = R7			# N
-  S[6] = cZ(R)			# Z
-  # S[7] = 			# C
+  S0 = S[0];
+  S1 = S[1];
+  S2 = S[2];			# H
+  S3 = cS(N, V);		# S
+  S4 = 0;			# V
+  S5 = R7;			# N
+  S6 = cZ(R);			# Z
+  S7 = S[7];			# C
 
-  regs[16-31] = push_register(d, R, regs[16-31])
+  S = setStatus(S[0-7], S);
+  
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
-com_n_annex
 com_n<n>(a:[n]) = (o:[n]) where
   if n = 0 then
     o = []
@@ -185,19 +195,21 @@ com_n<n>(a:[n]) = (o:[n]) where
 end where
 
 com(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  Rd = pop_register(d, regs[16-31])
-  R = com_n<word>(Rd)
+  Rd = pop_register(d, regs[16-31]);
+  R = com_n<word>(Rd);
 
-  # S[0] = 			# I
-  # S[1] = 			# T
-  # S[2] = 			# H
-  S[3] = cS(N, V)		# S
-  S[4] = 0			# V
-  S[5] = R7			# N
-  S[6] = cZ(R)			# Z
-  S[7] = 1			# C
+  S0 = S[0];
+  S1 = S[1];
+  S2 = S[2];
+  S3 = cS(N, V);		# S
+  S4 = 0;			# V
+  S5 = R7;			# N
+  S6 = cZ(R);			# Z
+  S7 = 1;			# C
+
+  S = setStatus(S[0-7], S);
   
-  regs[16-31] = push_register(d, R, regs[16-31])
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 end where					
 
 sbr(d:[reg_addr], K:[word], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
@@ -205,102 +217,101 @@ sbr(d:[reg_addr], K:[word], regs[16-31], S:[word]) = (regs[16-31], S:[word]) whe
 end where
 
 cbr(d:[reg_addr], K:[word], S:[word]) = (S:[word]) where
-  a = com_n<word>(K)
+  a = com_n<word>(K);
   (regs[16-31], S) = andi(d, a, regs[16-31], S)
 end where
 
 inc(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  Rd = pop_register(d, regs[16-31])
-  o = one<word>
+  Rd = pop_register(d, regs[16-31]);
+  o = one<word>();
 
-  (R,c) = adder(Rd, o, 0)
+  (R,c) = adder(Rd, o, 0);
 
-  # S[0] = I			# I
-  # S[1] = T			# T
-  # S[2] = 			# H
-  S[3] = cS(N, V)		# S
-  S[4] = cV2(R)			# V
-  S[5] = R7			# N
-  S[6] = cZ(R)			# Z
-  # S[7] = 			# C
+  S0 = S[0];
+  S1 = S[1];
+  S2 = S[2];
+  S3 = cS(N, V);		# S
+  S4 = cV2(R);			# V
+  S5 = R7;			# N
+  S6 = cZ(R);			# Z
+  S7 = S[7];			# C
 
-  regs[16-31] = push_register(d, R, regs[16-31])
+  S = setStatus(S[0-7], S);
+  
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
 tst(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  # S[0] = 			# I
-  # S[1] = 			# T
-  # S[2] = 			# H
-  S[3] = cS(N, V)		# S
-  S[4] = 0			# V
-  S[5] = R7			# N
-  S[6] = cZ(R)			# Z
-  # S[7] = 			# C
+  S0 = S[0];
+  S1 = S[1];
+  S2 = S[2];
+  S3 = cS(N, V);		# S
+  S4 = 0;			# V
+  S5 = R7;			# N
+  S6 = cZ(R);			# Z
+  S7 = S[7]; 			# C
 
+  S = setStatus(S[0-7], S);
   regs[16-31], S = and(d, d, regs[16-31], S)
 end where
 
 clr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  # S[0] 			# I
-  # S[1] 			# T
-  # S[2] =			# H
-  S[3] = 0			# S
-  S[4] = 0			# V
-  S[5] = 0			# N
-  S[6] = 1			# Z
-  # S[7] = 			# C
-  
-  regs[16-31] = eor(d, d)
+  S0 = S[0]; 			# I
+  S1 = S[1];			# T
+  S2 = S[2];			# H
+  S3 = 0;			# S
+  S4 = 0;			# V
+  S5 = 0;			# N
+  S6 = 1;			# Z
+  S7 = S[7]; 			# C
+
+  S = setStatus(S[0-7], S);
+  (regs[16-31]) = eor(d, d)
 end where
 
 ser(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  o = allone<word>
-
-  # S[0] 			# I
-  # S[1] 			# T
-  # S[2] =			# H
-  # S[3] =			# S
-  # S[4] =			# V
-  # S[5] = 			# N
-  # S[6] = 			# Z
-  # S[7] = 			# C
+  o = allone<word>();
   
-  regs[16-31] = push_register(d, o, regs[16-31])
+  (regs[16-31]) = push_register(d, o, regs[16-31])
 end where
 
 sub(r:[reg_addr], d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  Rd = pop_register(d, regs[16-31])
-  Rr = pop_register(r, regs[16-31])
+  Rd = pop_register(d, regs[16-31]);
+  Rr = pop_register(r, regs[16-31]);
 
-  (R, c) = subtracter<word>(Rd, Rr, 0)
+  (R, c) = subtracter<word>(Rd, Rr, 0);
 
-  # S[0] = 			# I
-  # S[1] = 			# T
-  S[2] = cH(not R[3], not Rd[3], Rr[3])	# H
-  S[3] = cS(S, V)		# S
-  S[4] = cV(R[7], Rd[7], not Rr[7]) # V
-  S[5] = R[7]			# N
-  S[6] = cZ(R)			# Z
-  S[7] = cC(cH(not R[7], not Rd[7], Rr[7])) # C
+  S0 = S[0];
+  S1 = S[1];
+  S2 = cH(not R[3], not Rd[3], Rr[3]);	# H
+  S3 = cS(S, V);		# S
+  S4 = cV(R[7], Rd[7], not Rr[7]); # V
+  S5 = R[7];			# N
+  S6 = cZ(R);			# Z
+  S7 = cC(cH(not R[7], not Rd[7], Rr[7])); # C
 
-  regs[16-31] = push_register(d, R, regs[16-31])
+  S = setStatus(S[0-7], S);
+
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
 subi(d:[4], K[8], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  Rd = pop_register(d, regs[16-31])
+  Rd = pop_register(d, regs[16-31]);
 
-  (R, c) = subtracter<word>(Rd, K, 0)
+  (R, c) = subtracter<word>(Rd, K, 0);
 
-  # S[0] =			# I
-  # S[1] =			# T
-  S[2] = cH(not R[3], not Rd[3], Rr[3])	# H
-  S[3] = cS(S, V)		# S
-  S[4] = cV(R[7], Rd[7], not Rr[7]) # V
-  S[5] = R[7]			# N
-  S[6] = cZ(R)			# Z
-  S[7] = cC(cH(not R[7], not Rd[7], Rr[7])) # C
+  S0 = S[0];			# I
+  S1 = S[1];			# T
+  S2 = cH(not R[3], not Rd[3], Rr[3]);	# H
+  S3 = cS(S, V);		# S
+  S4 = cV(R[7], Rd[7], not Rr[7]); # V
+  S5 = R[7];			# N
+  S6 = cZ(R);			# Z
+  S7 = cC(cH(not R[7], not Rd[7], Rr[7])); # C
+
+  S = setStatus(S[0-7], S);
   
-  regs[16-31] = push_register(d, R, regs[16-31])
+  (regs[16-31]) = push_register(d, R, regs[16-31])
   
 end where
 
@@ -311,34 +322,40 @@ sbci() = () where # TODO
 end where
 
 neg(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  Rd = pop_register(d, regs[16-31])
-  zero = zero<word>
+  Rd = pop_register(d, regs[16-31]);
+  zero = zero<word>();
 
-  (R, c) = subtracter(zero, Rd, 0)
+  (R, c) = subtracter(zero, Rd, 0);
 
-  # S[0] =			# I
-  # S[1] =			# T
-  S[2] = R[3] or Rd[3]		# H
-  S[3] = cS(N, V)      		# S
-  S[4] = cV2(R)			# V
-  S[5] = R[7] 			# N
-  S[6] = cZ(R)			# Z
-  S[7] = R[7] or R[6] or R[5] or R[4] or R[3] or R[2] or R[1] or R[0] # C
+  S0 = S[0];			# I
+  S1 = S[1];			# T
+  S2 = R[3] or Rd[3];		# H
+  S3 = cS(N, V);      		# S
+  S4 = cV2(R);			# V
+  S5 = R[7]; 			# N
+  S6 = cZ(R);			# Z
+  S7 = R[7] or R[6] or R[5] or R[4] or R[3] or R[2] or R[1] or R[0]; # C
 
-  regs[16-31] = push_register(d, R, regs[16-31])
+  S = setStatus(S[0-7], S);
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 
 end where
 
 dec(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  Rd = pop_register(d, regs[16-31])
-  one = one<word>
+  Rd = pop_register(d, regs[16-31]);
+  one = one<word>();
 
-  (R, c) = subtracter(one, Rd, 0)
+  (R, c) = subtracter(one, Rd, 0);
+  
+  S0 = S[0];
+  S1 = S[1];
+  S2 = S[2];
+  S3 = cS(N, V);      		# S
+  S4 = cV3(R);			# V
+  S5 = R[7]; 			# N
+  S6 = cZ(R);			# Z
+  S7 = S[7];
 
-  S[3] = cS(N, V)      		# S
-  S[4] = cV3(R)			# V
-  S[5] = R[7] 			# N
-  S[6] = cZ(R)			# Z
-
-  regs[16-31] = push_register(d, R, regs[16-31])
+  S = setStatus(S[0-7], S);
+  (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
