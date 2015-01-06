@@ -32,7 +32,6 @@ adc(r:[reg_addr], d:[reg_addr]) = () where
   w1 = pop_register(d)
   w2 = pop_register(r)
 
-  # TODO: get carry
   c = get_carry()
   (w, c) = adder<word>(w1, w2, c)
 
@@ -44,7 +43,6 @@ adc(r:[reg_addr], d:[reg_addr]) = () where
   set_half_carry(w1, w2, w)
 
   push_register(d, w)
-  
 end where
 
 and_n<n>(a:[n], b:[n])=(o:[n]) where
@@ -185,7 +183,6 @@ inc(d:[reg_addr]) = () where
   v = set_overflow(w)
   s = set_sign(n, v)
   set_zero(w)
-
 end where
 
 tst(d:[reg_addr]) = () where
@@ -199,4 +196,22 @@ end where
 ser(d:[reg_addr]) = () where
   o = allone<word>
   push_register(d, o)
+end where
+
+sub() = () where # TODO
+end where
+
+subi() = () where # TODO
+end where
+
+sbc() = () where # TODO
+end where
+
+sbci() = () where # TODO
+end where
+
+neg() = () where # TODO
+end where
+
+dec() = () where # TODO
 end where

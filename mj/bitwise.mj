@@ -8,16 +8,16 @@ lsl(d:[reg_addr]) = () where
 end where
 
 lsr(d:[reg_addr]) = () where
-  w1 = pop_register(d)	
+  w1 = pop_register(d)
 
   set_carry(w1[word-1])
   w = 0. w1[0..(word-2)]
- 
+
   set_zero(w)
   n = set_negative(w)
   v = n xor (w1[word-1])
 
-  push_register(d, w)  
+  push_register(d, w)
 end where
 
 rol(d:[reg_addr]) = () where
@@ -25,7 +25,7 @@ rol(d:[reg_addr]) = () where
 
   c = get_carry()
   w = w1[1..].c
-  
+
   set_zero(w)
   set_carry(w1[0])
   h = w[word-3]
@@ -41,7 +41,7 @@ ror(d:[reg_addr]) = () where
 
   c = get_carry
   w = c.w1[0..(word-2)]
- 
+
   set_carry(w1[word-1])
   set_zero(w)
   n = set_negative(w)
@@ -53,15 +53,83 @@ end where
 
 asr(d:[reg_addr]) = () where
   w1 = pop_register(d)
-  
+
   w = w1[0].w1[0..(word-2)]
 
   set_carry(w1[word-1])
   set_zero(w)
-  n = set_negative(w) 
+  n = set_negative(w)
   v = n xor (w1[word-1])
   s = set_sign(n,v)
 
   push_register(d, w)
 end where
- 
+
+swap() = () where # TODO
+end where
+
+bset() = () where # TODO
+end where
+
+bclr() = () where # TODO
+end where
+
+sbi() = () where # TODO
+end where
+
+cbi() = () where # TODO
+end where
+
+bst() = () where # TODO
+end where
+
+bld() = () where # TODO
+end where
+
+sec() = () where # TODO
+end where
+
+clc() = () where # TODO
+end where
+
+sen() = () where # TODO
+end where
+
+cln() = () where # TODO
+end where
+
+sez() = () where # TODO
+end where
+
+clz() = () where # TODO
+end where
+
+sei() = () where # TODO
+end where
+
+cli() = () where # TODO
+end where
+
+ses() = () where # TODO
+end where
+
+cls() = () where # TODO
+end where
+
+sev() = () where # TODO
+end where
+
+clv() = () where # TODO
+end where
+
+set() = () where # TODO
+end where
+
+clt() = () where # TODO
+end where
+
+seh() = () where # TODO
+end where
+
+clh() = () where # TODO
+end where
