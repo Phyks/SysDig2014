@@ -1,4 +1,10 @@
 require constants.mj
+require arithmetics.mj
+require bitwise.mj
+require branching.mj
+require gates.mj
+require others.mj
+require transfer.mj
 
 route0(opcode) = () where
   if opcode[1] = 0 then
@@ -273,7 +279,7 @@ route111100(opcode) = () where
     brts(opcode[6..12])
   elif opcode[13] = 1 and opcode[14] = 1 and opcode[15] = 1 then
     # TODO ?
-    nop
+    nop()
 end where
 
 route111101(opcode) = () where
