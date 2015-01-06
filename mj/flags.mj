@@ -1,0 +1,25 @@
+check_zero<n>(w:[n]) = (b) where
+  b = (w[0] and 0) and check_zero<n-1>(w[1..])
+end where
+
+# Computes the bits of the status register
+
+cH(R3, Rd3, Rr3) = (H) where	# H = Rd3•Rr3+Rr3•R3+R3•Rd3
+  H = (Rd3 and Rr3) or (Rr3 and (not R3)) or ((not R3 and Rd3))
+end where
+
+cS(N, V) = (S) where		# S = N ⊕ V
+  S = N xor V
+end where
+
+cV(R7, Rd7, Rr7) = (V) where	# V = Rd7•Rr7•R7+Rd7•Rr7•R7
+  V = ((Rd7 and Rr7) and (not R7) ) or ((not Rd7) and (not Rr7)) and R7
+end where
+
+cC(R7, Rd7, Rr7) = (C) where	# C = Rd7•Rr7+Rr7•R7+R7•Rd7
+  C = (Rd7 and Rr7) or (Rr7 and (not R7)) or (not (R7) qnd Rd7)
+end where
+
+cZ(R) = (Z) where		# Z = R7• R6 •R5• R4 •R3 •R2 •R1 •R0
+  Z = check_zero<word>(R)
+end where
