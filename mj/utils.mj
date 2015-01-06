@@ -1,12 +1,10 @@
-push_register(d:[reg_addr], w:[word]) = () where
-    # TODO
+push_register(d:[reg_addr], w:[word]) = () where # TODO
 end where
 
-pop_register(r:[reg_addr]) = (w:[word]) where
-    # TODO
+pop_register(r:[reg_addr]) = (w:[word]) where # TODO
 end where
 
-get_carry() = (c) where
+get_carry() = (c) where # TODO
 end where
 
 allone<n>() = (o:[n]) where
