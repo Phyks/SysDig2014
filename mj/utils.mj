@@ -1,67 +1,105 @@
-pusher(r[0-4], w:[word], regs[0-31]) = () where
-  if r0 = 0 then 
-    if r1 = O then
-      if r2 = 0 then
-        if r3 = 0 then
-          if r4 = 0 then
-            regs0 = w
-          else
-            regs1 = w
-          end if #r4
-        else
-          if r4 = 0 then
-            regs2 = w
-          else 
-            regs3 = w
-          end if #r4
-        end if #r3
-      else
-        if r3 = 0 then
-          if r4 = 0 then
-            regs4 = w
-          else
-            regs5 = w
-          end if # r4
-        else
-          if r4 = 0 then
-            regs6 = w
-          else
-            regs7 = w
-          end if #r4
-        end if #r3
-      end if #r2
-    else
-     if r2 = 0 then
-        if r3 = 0 then
-          if r4 = 0 then
-            regs8 = w
-          else
-            regs9 = w
-          end if #r4
-        else
-          if r4 = 0 then
-            regs10 = w
-          else 
-            regs11 = w
-          end if #r4
-        end if #r3
-      else
-        if r3 = 0 then
-          if r4 = 0 then
-            regs12 = w
-          else
-            regs13 = w
-          end if # r4
-        else
-          if r4 = 0 then
-            regs14 = w
-          else
-            regs15 = w
-          end if #r4
-        end if #r3
-      end if #r2
-    end if #r1
-  else
+init_register() = (regs[16-31]) where
+  z = zero<word>
+
+  
+  regs0 = reg z
+  regs1 = reg z
+  regs2 = reg z
+  regs3 = reg z
+  regs4 = reg z
+  regs5 = reg z
+  regs6 = reg z
+  regs7 = reg z
+  regs8 = reg z
+  regs9 = reg z
+  regs10 = reg z
+  regs11 = reg z
+  regs12 = reg z
+  regs13 = reg z
+  regs14 = reg z
+  regs15 = reg z
+  regs16 = reg z
+  regs17 = reg z
+  regs18 = reg z
+  regs19 = reg z
+  regs20 = reg z
+  regs21 = reg z
+  regs22 = reg z
+  regs23 = reg z
+  regs24 = reg z
+  regs25 = reg z
+  regs26 = reg z
+  regs27 = reg z
+  regs28 = reg z
+  regs29 = reg z
+  regs30 = reg z
+  regs31 = reg z
+
+
+pusher(r[0-4], w:[word], regs[16-31]) = () where
+  # if r0 = 0 then 
+  #   if r1 = O then
+  #     if r2 = 0 then
+  #       if r3 = 0 then
+  #         if r4 = 0 then
+  #           regs0 = w
+  #         else
+  #           regs1 = w
+  #         end if #r4
+  #       else
+  #         if r4 = 0 then
+  #           regs2 = w
+  #         else 
+  #           regs3 = w
+  #         end if #r4
+  #       end if #r3
+  #     else
+  #       if r3 = 0 then
+  #         if r4 = 0 then
+  #           regs4 = w
+  #         else
+  #           regs5 = w
+  #         end if # r4
+  #       else
+  #         if r4 = 0 then
+  #           regs6 = w
+  #         else
+  #           regs7 = w
+  #         end if #r4
+  #       end if #r3
+  #     end if #r2
+  #   else
+  #    if r2 = 0 then
+  #       if r3 = 0 then
+  #         if r4 = 0 then
+  #           regs8 = w
+  #         else
+  #           regs9 = w
+  #         end if #r4
+  #       else
+  #         if r4 = 0 then
+  #           regs10 = w
+  #         else 
+  #           regs11 = w
+  #         end if #r4
+  #       end if #r3
+  #     else
+  #       if r3 = 0 then
+  #         if r4 = 0 then
+  #           regs12 = w
+  #         else
+  #           regs13 = w
+  #         end if # r4
+  #       else
+  #         if r4 = 0 then
+  #           regs14 = w
+  #         else
+  #           regs15 = w
+  #         end if #r4
+  #       end if #r3
+  #     end if #r2
+  #   end if #r1
+  # else
     if r1 = O then
       if r2 = 0 then
         if r3 = 0 then
@@ -133,10 +171,10 @@ push_register(d:[reg_addr], w:[word]), regs[0,31]) = () where
   r3 = raddr[3]
   r4 = raddr[4]
 
-  pusher(r[0-4], w, regs[0-31])	
+  pusher(r[0-4], w, regs[16-31])	
 end where
 
-poper(r[0-4], regs[0-31]) = (w:[word]) where
+poper(r[0-4], regs[16-31]) = (w:[word]) where
   if r0 = 0 then 
     if r1 = O then
       if r2 = 0 then
@@ -264,13 +302,14 @@ poper(r[0-4], regs[0-31]) = (w:[word]) where
   end if #r0
 end where
 
-pop_register(raddr:[reg_addr], regs[0-31]) = (w:[word]) where
+pop_register(raddr:[reg_addr], regs[16-31]) = (w:[word]) where
   r0 = raddr[0]
   r1 = raddr[1]
   r2 = raddr[2]
   r3 = raddr[3]
   r4 = raddr[4]
-  w = poper(r[0-4], regs[0-31])
+  
+  w = poper(r[0-4], regs[16-31])
 end where
 
 get_carry() = (c) where # TODO
