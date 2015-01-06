@@ -1,0 +1,14 @@
+break() = () where
+    # Not implemented
+end where
+
+nop() = () where
+end where
+
+sleep() = () where
+    # Not implemented
+end where
+
+wdr() = () where
+    # Not implemented
+end where
