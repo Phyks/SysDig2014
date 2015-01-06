@@ -1,7 +1,9 @@
 push_register(d:[reg_addr], w:[word]) = () where
+    # TODO
 end where
 
 pop_register(r:[reg_addr]) = (w:[word]) where
+    # TODO
 end where
 
 allone<n>() = (o:[n]) where
@@ -17,7 +19,7 @@ one<n>() = (o:[n]) where
     o = []
   else if n = 1 then
     o = 1
-  else 
+  else
     o = 0.one<n-1>
   end if
 end where

@@ -317,7 +317,7 @@ end where
 
 
 main() = (registers:[word]:[nb_registers]) where
-  opcode = TODO
+  opcode = #TODO
   if opcode[0] = 0 then
     route0(opcode)
   else opcode[0] = 1 then
