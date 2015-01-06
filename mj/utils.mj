@@ -1,7 +1,276 @@
-push_register(d:[reg_addr], w:[word]) = () where # TODO
+pusher(r[0-4], w:[word], regs[0-31]) = () where
+  if r0 = 0 then 
+    if r1 = O then
+      if r2 = 0 then
+        if r3 = 0 then
+          if r4 = 0 then
+            regs0 = w
+          else
+            regs1 = w
+          end if #r4
+        else
+          if r4 = 0 then
+            regs2 = w
+          else 
+            regs3 = w
+          end if #r4
+        end if #r3
+      else
+        if r3 = 0 then
+          if r4 = 0 then
+            regs4 = w
+          else
+            regs5 = w
+          end if # r4
+        else
+          if r4 = 0 then
+            regs6 = w
+          else
+            regs7 = w
+          end if #r4
+        end if #r3
+      end if #r2
+    else
+     if r2 = 0 then
+        if r3 = 0 then
+          if r4 = 0 then
+            regs8 = w
+          else
+            regs9 = w
+          end if #r4
+        else
+          if r4 = 0 then
+            regs10 = w
+          else 
+            regs11 = w
+          end if #r4
+        end if #r3
+      else
+        if r3 = 0 then
+          if r4 = 0 then
+            regs12 = w
+          else
+            regs13 = w
+          end if # r4
+        else
+          if r4 = 0 then
+            regs14 = w
+          else
+            regs15 = w
+          end if #r4
+        end if #r3
+      end if #r2
+    end if #r1
+  else
+    if r1 = O then
+      if r2 = 0 then
+        if r3 = 0 then
+          if r4 = 0 then
+            regs16 = w
+          else
+            regs17 = w
+          end if #r4
+        else
+          if r4 = 0 then
+            regs18 = w
+          else
+            regs19 = w
+          end if #r4
+        end if #r3
+      else
+        if r3 = 0 then
+          if r4 = 0 then
+            regs20 = w
+          else
+            regs21 = w
+          end if # r4
+        else
+          if r4 = 0 then
+            regs22 = w
+          else
+            regs23 = w
+          end if #r4
+        end if #r3
+      end if #r2
+    else
+      if r2 = 0 then
+        if r3 = 0 then
+          if r4 = 0 then
+            regs24 = w
+          else
+            regs25 = w
+          end if #r4
+        else
+          if r4 = 0 then
+            regs26 = w
+          else
+            regs27 = w
+          end if #r4
+        end if #r3
+      else
+        if r3 = 0 then
+          if r4 = 0 then
+            regs28 = w
+          else
+            regs29 = w
+          end if # r4
+        else
+          if r4 = 0 then
+            regs30 = w
+          else
+            regs31 = w
+          end if #r4
+        end if #r3
+      end if #r2
+    end if #r1
+  end if #r0
 end where
 
-pop_register(r:[reg_addr]) = (w:[word]) where # TODO
+push_register(d:[reg_addr], w:[word]), regs[0,31]) = () where
+  r0 = raddr[0]
+  r1 = raddr[1]
+  r2 = raddr[2]
+  r3 = raddr[3]
+  r4 = raddr[4]
+
+  pusher(r[0-4], w, regs[0-31])	
+end where
+
+poper(r[0-4], regs[0-31]) = (w:[word]) where
+  if r0 = 0 then 
+    if r1 = O then
+      if r2 = 0 then
+        if r3 = 0 then
+          if r4 = 0 then
+            w = regs0
+          else
+            w = regs1
+          end if #r4
+        else
+          if r4 = 0 then
+            w = regs2
+          else 
+            w = regs3
+          end if #r4
+        end if #r3
+      else
+        if r3 = 0 then
+          if r4 = 0 then
+            w = regs4
+          else
+            w = regs5
+          end if # r4
+        else
+          if r4 = 0 then
+            w = regs6
+          else
+            w = regs7
+          end if #r4
+        end if #r3
+      end if #r2
+    else
+     if r2 = 0 then
+        if r3 = 0 then
+          if r4 = 0 then
+            w = regs8
+          else
+            w = regs9
+          end if #r4
+        else
+          if r4 = 0 then
+            w = regs10
+          else 
+            w = regs11
+          end if #r4
+        end if #r3
+      else
+        if r3 = 0 then
+          if r4 = 0 then
+            w = regs12
+          else
+            w = regs13
+          end if # r4
+        else
+          if r4 = 0 then
+            w = regs14
+          else
+            w = regs15
+          end if #r4
+        end if #r3
+      end if #r2
+    end if #r1
+  else
+    if r1 = O then
+      if r2 = 0 then
+        if r3 = 0 then
+          if r4 = 0 then
+            w = regs16
+          else
+            w = regs17
+          end if #r4
+        else
+          if r4 = 0 then
+            w = regs18
+          else
+            w = regs19
+          end if #r4
+        end if #r3
+      else
+        if r3 = 0 then
+          if r4 = 0 then
+            w = regs20
+          else
+            w = regs21
+          end if # r4
+        else
+          if r4 = 0 then
+            w = regs22
+          else
+            w = regs23
+          end if #r4
+        end if #r3
+      end if #r2
+    else
+      if r2 = 0 then
+        if r3 = 0 then
+          if r4 = 0 then
+            w = regs24
+          else
+            w = regs25
+          end if #r4
+        else
+          if r4 = 0 then
+            w = regs26
+          else
+            w = regs27
+          end if #r4
+        end if #r3
+      else
+        if r3 = 0 then
+          if r4 = 0 then
+            w = regs28
+          else
+            w = regs29
+          end if # r4
+        else
+          if r4 = 0 then
+            w = regs30
+          else
+            w = regs31
+          end if #r4
+        end if #r3
+      end if #r2
+    end if #r1
+  end if #r0
+end where
+
+pop_register(raddr:[reg_addr], regs[0-31]) = (w:[word]) where
+  r0 = raddr[0]
+  r1 = raddr[1]
+  r2 = raddr[2]
+  r3 = raddr[3]
+  r4 = raddr[4]
+  w = poper(r[0-4], regs[0-31])
 end where
 
 get_carry() = (c) where # TODO
