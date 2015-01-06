@@ -1,0 +1,101 @@
+rjmp() = () where # TODO
+end where
+
+ijmp() = () where # TODO
+end where
+
+rcall() = () where # TODO
+end where
+
+icall() = () where # TODO
+end where
+
+ret() = () where # TODO
+end where
+
+reti() = () where # TODO
+end where
+
+cpse() = () where # TODO
+end where
+
+cp() = () where # TODO
+end where
+
+cpc() = () where # TODO
+end where
+
+cpi() = () where # TODO
+end where
+
+sbrc() = () where # TODO
+end where
+
+sbrs() = () where # TODO
+end where
+
+sbic() = () where # TODO
+end where
+
+sbis() = () where # TODO
+end where
+
+brbs() = () where # TODO
+end where
+
+brbc() = () where # TODO
+end where
+
+breq() = () where # TODO
+end where
+
+brne() = () where # TODO
+end where
+
+brcs() = () where # TODO
+end where
+
+brcc() = () where # TODO
+end where
+
+brsh() = () where # TODO
+end where
+
+brlo() = () where # TODO
+end where
+
+brmi() = () where # TODO
+end where
+
+brpl() = () where # TODO
+end where
+
+brge() = () where # TODO
+end where
+
+brlt() = () where # TODO
+end where
+
+brhs() = () where # TODO
+end where
+
+brhc() = () where # TODO
+end where
+
+brts() = () where # TODO
+end where
+
+brtc() = () where # TODO
+end where
+
+brvs() = () where # TODO
+end where
+
+brvc() = () where # TODO
+end where
+
+brie() = () where # TODO
+end where
+
+brid() = () where # TODO
+end where
