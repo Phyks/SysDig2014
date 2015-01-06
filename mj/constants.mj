@@ -1,3 +1,5 @@
-const word = 8
-const reg_addr = 5
-const nb_registers = 16
+const word = 8;
+const reg_addr = 5;
+const instr_addr_size = 0; # TODO
+const instr_size = 16;
+const nb_registers = 16;

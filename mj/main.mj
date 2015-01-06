@@ -6,321 +6,349 @@ require gates.mj
 require others.mj
 require transfer.mj
 
-route0(opcode) = () where
-  if opcode[1] = 0 then
-    route00(opcode)
+route0(o[1-15]) = () where
+  if o1 = 0 then
+    route00(o[2-15])
   else
-    route01(opcode)
+    route01(o[2-15])
   endif
 end where
 
-route00(opcode) = () where
-  if opcode[2] = 0 then
-    route000(opcode)
+route00(o[2-15]) = () where
+  if o2 = 0 then
+    route000(o[3-15])
   else
-    route001(opcode)
+    route001(o[3-15])
   endif
 end where
 
-route000(opcode) = () where
-  if opcode[3] = 0 then
-    route0000(opcode)
+route000(o[3-15]) = () where
+  if o3 = 0 then
+    route0000(o[4-15])
   else
-    route0001(opcode)
+    route0001(o[4-15])
   endif
 end where
 
-route0000(opcode) = () where
-  if opcode[4] = 0 then
-    route00000(opcode)
+route0000(o[4-15]) = () where
+  if o4 = 0 then
+    route00000(o[5-15])
   else
-    route00001(opcode)
+    route00001(o[5-15])
   endif
 end where
 
-route00000(opcode) = () where
-  if opcode[5] = 0 then
+route00000(o[5-15]) = () where
+  if o5 = 0 then
     nop()
   else
     cpc(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   endif
 end where
 
-route00001(opcode) = () where
-  if opcode[5] = 0 then
+route00001(o[5-15]) = () where
+  if o5 = 0 then
     sbc(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   else
     add(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   endif
 end where
 
-route0001(opcode) = () where
-  if opcode[4] = 0 then
-    route00010(opcode)
+route0001(o[4-15]) = () where
+  if o4 = 0 then
+    route00010(o[5-15])
   else
-    route00011(opcode)
+    route00011(o[5-15])
   endif
 end where
 
-route00010(opcode) = () where
-  if opcode[5] = 0 then
+route00010(o[5-15]) = () where
+  if o5 = 0 then
     cpse(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   else
     cp(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   endif
 end where
 
-route00011(opcode) = () where
-  if opcode[5] = 0 then
+route00011(o[5-15]) = () where
+  if o5 = 0 then
     sub(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   else
     adc(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   endif
 end where
 
-route001(opcode) = () where
-  if opcode[3] = 0 then
-    route0010(opcode)
+route001(o[3-15]) = () where
+  if o3 = 0 then
+    route0010(o[4-15])
   else
-    route0011(opcode)
+    route0011(o[4-15])
   endif
 end where
 
-route0010(opcode) = () where
-  if opcode[4] = 0 then
-    route00100(opcode)
+route0010(o[4-15]) = () where
+  if o4 = 0 then
+    route00100(o[5-15])
   else
-    route00101(opcode)
+    route00101(o[5-15])
   endif
 end where
 
-route00100(opcode) = () where
-  if opcode[5] = 0 then
+route00100(o[5-15]) = () where
+  if o5 = 0 then
     and(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   else
     eor(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   endif
 end where
 
-route00101(opcode) = () where
-  if opcode[5] = 0 then
+route00101(o[5-15]) = () where
+  if o5 = 0 then
     or(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   else
     mov(opcode[6]..opcode[12..15], opcode[7]..ocode[8..11])
   endif
 end where
 
-route0011(opcode) = () where
+route0011(o[4-15]) = () where
   cpi(opcode[4..7]..opcode[12..15], opcode[8..11])
 end where
 
-route01(opcode) = () where
-  if opcode[2] = 0 then
-    route010(opcode)
+route01(o[2-15]) = () where
+  if o2 = 0 then
+    route010(o[3-15])
   else
-    route011(opcode)
+    route011(o[3-15])
   endif
 end where
 
-route010(opcode) = () where
-  if opcode[3] = 0 then
-    route0100(opcode)
+route010(o[3-15]) = () where
+  if o3 = 0 then
+    route0100(o[4-15])
   else
-    route0101(opcode)
+    route0101(o[4-15])
   endif
 end where
 
-route0100(opcode) = () where
+route0100(o[4-15]) = () where
   sbci(opcode[4..7]..opcode[12..15], opcode[8..11])
 end where
 
-route0101(opcode) = () where
+route0101(o[4-15]) = () where
   subi(opcode[4..7]..opcode[12..15], opcode[8..11])
 end where
 
-route011(opcode) = () where
-  if opcode[3] = 0 then
-    route0110(opcode)
+route011(o[3-15]) = () where
+  if o3 = 0 then
+    route0110(o[4-15])
   else
-    route0111(opcode)
+    route0111(o[4-15])
   endif
 end where
 
-route0110(opcode) = () where
+route0110(o[4-15]) = () where
   sbr(opcode[4..7]..opcode[12..15], opcode[8..11])
 end where
 
-route0111(opcode) = () where
+route0111(o[4-15]) = () where
   andi(opcode[4..7]..opcode[12..15], opcode[8..11])
 end where
 
 
-route1(opcode) = () where
-  if opcode[1] = 0 then
-    route10(opcode)
+route1(o[1-15]) = () where
+  if o1 = 0 then
+    route10(o[2-15])
   else
-    route11(opcode)
+    route11(o[2-15])
   endif
 end where
 
-route10(opcode) = () where
-  if opcode[2] = 0 then
-    route100(opcode)
+route10(o[2-15]) = () where
+  if o2 = 0 then
+    route100(o[3-15])
   else
-    route101(opcode)
+    route101(o[3-15])
   endif
 end where
 
-route100(opcode) = () where
-  if opcode[3] = 0 then
-    route1000(opcode)
+route100(o[3-15]) = () where
+  if o3 = 0 then
+    route1000(o[4-15])
   else
-    route1001(opcode)
+    route1001(o[4-15])
   endif
 end where
 
-route1000(opcode) = () where
-  if opcode[6] = 0 then
+route1000(o[4-15]) = () where
+  if o6 = 0 then
     ld(opcode[7..11], opcode[12..15])
   else
     st(opcode[7..11], opcode[12..15])
 end where
 
-route1001(opcode) = () where
+route1001(o[4-15]) = () where
   ld(opcode[7..11], opcode[12..15])
 end where
 
-route101(opcode) = () where
-  if opcode[3] = 0 then
-    route1010(opcode)
+route101(o[3-15]) = () where
+  if o3 = 0 then
+    route1010(o[4-15])
   else
-    route1011(opcode)
+    route1011(o[4-15])
   endif
 end where
 
-route1010(opcode) = () where
-  if opcode[4] = 0 then
+route1010(o[4-15]) = () where
+  if o4 = 0 then
     lds(opcode[5..7]..opcode[12..15], opcode[8..11])
   else
     sts(opcode[5..7]..opcode[12..15], opcode[8..11])
 end where
 
-route1011(opcode) = () where
-  if opcode[4] = 0 then
+route1011(o[4-15]) = () where
+  if o4 = 0 then
     in(opcode[5..6]..opcode[12..15], opcode[7..11])
   else
     out(opcode[5..6]..opcode[12..15], opcode[7..11])
 end where
 
-route11(opcode) = () where
-  if opcode[2] = 0 then
-    route110(opcode)
+route11(o[2-15]) = () where
+  if o2 = 0 then
+    route110(o[3-15])
   else
-    route111(opcode)
+    route111(o[3-15])
   endif
 end where
 
-route110(opcode) = () where
-  if opcode[3] = 0 then
-    route1100(opcode)
+route110(o[3-15]) = () where
+  if o3 = 0 then
+    route1100(o[4-15])
   else
-    route1101(opcode)
+    route1101(o[4-15])
   endif
 end where
 
-route1100(opcode) = () where
+route1100(o[4-15]) = () where
   rjmp(opcode[4..15])
 end where
 
-route1101(opcode) = () where
+route1101(o[4-15]) = () where
   rcall(opcode[4..15])
 end where
 
-route111(opcode) = () where
-  if opcode[3] = 0 then
-    route1110(opcode)
+route111(o[3-15]) = () where
+  if o3 = 0 then
+    route1110(o[4-15])
   else
-    route1111(opcode)
+    route1111(o[4-15])
   endif
 end where
 
-route1110(opcode) = () where
+route1110(o[4-15]) = () where
   ldi(opcode[4..7]..opcode[12..15], opcode[8..11])
 end where
 
-route1111(opcode) = () where
-  if opcode[4] = 0 then
-    route11110(opcode)
+route1111(o[4-15]) = () where
+  if o4 = 0 then
+    route11110(o[5-15])
   else
-    route11111(opcode)
+    route11111(o[5-15])
 end where
 
-route11110(opcode) = () where
-  if opcode[5] = 0 then
-    route111100(opcode)
+route11110(o[5-15]) = () where
+  if o5 = 0 then
+    route111100(o[6-15])
   else
-    route111101(opcode)
+    route111101(o[6-15])
 end where
 
-route111100(opcode) = () where
-  if opcode[13] = 0 and opcode[14] = 0 and opcode[15] = 0 then
+route111100(o[6-15]) = () where
+  if o13 = 0 and o14 = 0 and o15 = 0 then
     brlo(opcode[6..12])
-  elif opcode[13] = 0 and opcode[14] = 0 and opcode[15] = 1 then
-    breq(opcode[6..12])
-  elif opcode[13] = 0 and opcode[14] = 1 and opcode[15] = 0 then
-    brmi(opcode[6..12])
-  elif opcode[13] = 0 and opcode[14] = 1 and opcode[15] = 1 then
-    brvs(opcode[6..12])
-  elif opcode[13] = 1 and opcode[14] = 0 and opcode[15] = 0 then
-    brlt(opcode[6..12])
-  elif opcode[13] = 1 and opcode[14] = 0 and opcode[15] = 1 then
-    brhs(opcode[6..12])
-  elif opcode[13] = 1 and opcode[14] = 1 and opcode[15] = 0 then
-    brts(opcode[6..12])
-  elif opcode[13] = 1 and opcode[14] = 1 and opcode[15] = 1 then
-    # TODO ?
-    nop()
+  else
+    if o13 = 0 and o14 = 0 and o15 = 1 then
+      breq(opcode[6..12])
+    else
+      if o13 = 0 and o14 = 1 and o15 = 0 then
+        brmi(opcode[6..12])
+      else
+        if o13 = 0 and o14 = 1 and o15 = 1 then
+          brvs(opcode[6..12])
+        else
+          if o13 = 1 and o14 = 0 and o15 = 0 then
+            brlt(opcode[6..12])
+          else
+            if o13 = 1 and o14 = 0 and o15 = 1 then
+              brhs(opcode[6..12])
+            else
+              if o13 = 1 and o14 = 1 and o15 = 0 then
+                brts(opcode[6..12])
+              else o13 = 1 and o14 = 1 and o15 = 1 then
+                nop() # No opcode associated
+              endif
+            endif
+          endif
+        endif
+      endif
+    endif
+  endif
 end where
 
-route111101(opcode) = () where
-  if opcode[13] = 0 and opcode[14] = 0 and opcode[15] = 0 then
+route111101(o[6-15]) = () where
+  if o13 = 0 and o14 = 0 and o15 = 0 then
     brsh(opcode[6..12])
-  elif opcode[13] = 0 and opcode[14] = 0 and opcode[15] = 1 then
-    brne(opcode[6..12])
-  elif opcode[13] = 0 and opcode[14] = 1 and opcode[15] = 0 then
-    brpl(opcode[6..12])
-  elif opcode[13] = 0 and opcode[14] = 1 and opcode[15] = 1 then
-    brie(opcode[6..12])
-  elif opcode[13] = 1 and opcode[14] = 0 and opcode[15] = 0 then
-    brge(opcode[6..12])
-  elif opcode[13] = 1 and opcode[14] = 0 and opcode[15] = 1 then
-    brhc(opcode[6..12])
-  elif opcode[13] = 1 and opcode[14] = 1 and opcode[15] = 0 then
-    brtc(opcode[6..12])
-  elif opcode[13] = 1 and opcode[14] = 1 and opcode[15] = 1 then
-    brid(opcode[6..12])
+  else
+    if o13 = 0 and o14 = 0 and o15 = 1 then
+      brne(opcode[6..12])
+    else
+      if o13 = 0 and o14 = 1 and o15 = 0 then
+        brpl(opcode[6..12])
+      else
+        if o13 = 0 and o14 = 1 and o15 = 1 then
+          brie(opcode[6..12])
+        else
+          if o13 = 1 and o14 = 0 and o15 = 0 then
+            brge(opcode[6..12])
+          else
+            if o13 = 1 and o14 = 0 and o15 = 1 then
+              brhc(opcode[6..12])
+            else
+              if o13 = 1 and o14 = 1 and o15 = 0 then
+                brtc(opcode[6..12])
+              else o13 = 1 and o14 = 1 and o15 = 1 then
+                brid(opcode[6..12])
+              endif
+            endif
+          endif
+        endif
+      endif
+    endif
+  endif
 end where
 
-route11111(opcode) = () where
-  if opcode[5] = 0 then
+route11111(o[5-15]) = () where
+  if o5 = 0 then
     route111110(opcode)
   else
     sbrs(opcode[7..11], opcode[13..15])
 end where
 
-route111110(opcode) = () where
-  if opcode[6] = 0 then
+route111110(o[6-15]) = () where
+  if o6 = 0 then
     bld(opcode[7..11], opcode[13..15])
   else
     bst(opcode[7..11], opcode[13..15])
 end where
 
-
-main() = (registers:[word]:[nb_registers]) where
-  opcode = #TODO
-  if opcode[0] = 0 then
-    route0(opcode)
-  else opcode[0] = 1 then
-    route1(opcode)
+route(o[0-15]) = () where
+  if o0 = 0 then
+    route0(o[1-15])
+  else o0 = 1 then
+    route1(o[1-15])
   endif
+end where
+
+main() = () where
+  opcode = rom<instr_addr_size, instr_size>(instr_addr);
+  route(opcode[0..15])
 end where
