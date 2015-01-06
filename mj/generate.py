@@ -15,13 +15,13 @@ def compute_includes(file):
     generated = [re.sub(r"(\w+)\[(\d+)-(\d+)\]",
                         lambda m: ", ".join([m.group(1) + str(i)
                                              for i in range(int(m.group(2)),
-                                                            int(m.group(3)))]),
+                                                            int(m.group(3))+1)]),
                         i) for i in generated]
     # replace "foo[0..n]" by "foo[0], foo[1], …, foo[n]"
     generated = [re.sub(r"(\w+)\[(\d+)\.\.(\d+)\]",
                         lambda m: ", ".join([m.group(1) + "[" + str(i) + "]"
                                              for i in range(int(m.group(2)),
-                                                            int(m.group(3)))]),
+                                                            int(m.group(3))+1)]),
                         i) for i in generated]
     includes = {i: generated[i].replace('require', '').strip()
                 for i in range(len(generated))
