@@ -2,7 +2,7 @@ break() = () where
     # Not implemented
 end where
 
-nop() = () where
+nop(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 end where
 
 sleep() = () where
