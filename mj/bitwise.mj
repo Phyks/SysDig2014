@@ -29,47 +29,61 @@ lsr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   (regs[16-31]) = push_register(d, w)
 end where
 
-rol(d:[reg_addr], regs[16-31]) = (regs[16-31]) where
+rol(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   w1 = pop_register(d, regs[16-31])
 
-  c = get_carry()
+  c = S[7]
   w = w1[1..].c
 
-  set_zero(w)
-  set_carry(w1[0])
-  h = w[word-3]
-  n = set_negative(w)
-  v = n xor (w1[0])
-  set_sign(n,v)
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = w1[4] #H
+  S3 = cS(N,V) #S
+  S4 = w[0] xor w1[0] #V
+  S5 = w[0] #N
+  S6 = cZ(w) #Z
+  S7 = w1[0] #C
+
+  S = setStatus(S[0-7], S);
 
   (regs[16-31]) = push_register(d, w)
 end where
 
-ror(d:[reg_addr], regs[16-31]) = (regs[16-31]) where
+ror(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   w1 = pop_register(d, regs[16-31])
 
-  c = get_carry
+  c = S[7]
   w = c.w1[0..(word-2)]
 
-  set_carry(w1[word-1])
-  set_zero(w)
-  n = set_negative(w)
-  v = n xor (w1[word-1])
-  set_sign(n,v)
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = cS(N,V) #S
+  S4 = w[0] xor w1[7] #V
+  S5 = w[0] #N
+  S6 = cZ(w) #Z
+  S7 = w1[7] #C
+
+  S = setStatus(S[0-7], S);
 
   (regs[16-31]) = push_register(d, w)
 end where
 
-asr(d:[reg_addr], regs[16-31]) = (regs[16-31]) where
+asr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   w1 = pop_register(d, regs[16-31])
 
   w = w1[0].w1[0..(word-2)]
 
-  set_carry(w1[word-1])
-  set_zero(w)
-  n = set_negative(w)
-  v = n xor (w1[word-1])
-  s = set_sign(n,v)
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = cS(N,V) #S
+  S4 = w[0] xor w1[7] #V
+  S5 = w[0] #N
+  S6 = cZ(w) #Z
+  S7 = w1[7] #C
+
+  S = setStatus(S[0-7], S);
 
   (regs[16-31]) = push_register(d, w)
 end where
