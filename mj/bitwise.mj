@@ -2,20 +2,29 @@ require utils.mj
 require gates.mj
 require arithmetics.mj
 
-lsl(d:[reg_addr], regs[16-31]) = (regs[16-31]) where
-  (regs[16-31]) = add(d, d, regs[16-31])
+lsl(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+  (regs[16-31]) = add(d, d, regs[16-31], S)
 
 end where
 
-lsr(d:[reg_addr], regs[16-31]) = (regs[16-31]) where
+lsr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   w1 = pop_register(d, regs[16-31])
 
-  set_carry(w1[word-1])
+  a = (w1[word-1])
   w = 0. w1[0..(word-2)]
 
-  set_zero(w)
-  n = set_negative(w)
-  v = n xor (w1[word-1])
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = cS(N, V) #S
+  S4 = not a #V
+  S5 = 0 #N
+  S6 = cZ(w) #Z
+  S7 = a #C
+
+  S = setStatus(S[0-7], S);
+
 
   (regs[16-31]) = push_register(d, w)
 end where
