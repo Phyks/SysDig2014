@@ -2,73 +2,147 @@ require utils.mj
 require gates.mj
 require arithmetics.mj
 
-lsl(d:[reg_addr], regs[16-31]) = (regs[16-31]) where
-  (regs[16-31]) = add(d, d, regs[16-31])
+lsl(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+  (regs[16-31]) = add(d, d, regs[16-31], S)
 
 end where
 
-lsr(d:[reg_addr], regs[16-31]) = (regs[16-31]) where
+lsr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   w1 = pop_register(d, regs[16-31])
 
-  set_carry(w1[word-1])
+  a = (w1[word-1])
   w = 0. w1[0..(word-2)]
 
-  set_zero(w)
-  n = set_negative(w)
-  v = n xor (w1[word-1])
 
-  (regs[16-31]) = push_register(d, w)
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = cS(N, V) #S
+  S4 = not a #V
+  S5 = 0 #N
+  S6 = cZ(w) #Z
+  S7 = a #C
+
+  S = setStatus(S[0-7], S);
+
+
+  (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
 
-rol(d:[reg_addr], regs[16-31]) = (regs[16-31]) where
+rol(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   w1 = pop_register(d, regs[16-31])
 
-  c = get_carry()
+  c = S[7]
   w = w1[1..].c
 
-  set_zero(w)
-  set_carry(w1[0])
-  h = w[word-3]
-  n = set_negative(w)
-  v = n xor (w1[0])
-  set_sign(n,v)
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = w1[4] #H
+  S3 = cS(N,V) #S
+  S4 = w[0] xor w1[0] #V
+  S5 = w[0] #N
+  S6 = cZ(w) #Z
+  S7 = w1[0] #C
 
-  (regs[16-31]) = push_register(d, w)
+  S = setStatus(S[0-7], S);
+
+  (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
 
-ror(d:[reg_addr], regs[16-31]) = (regs[16-31]) where
+ror(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   w1 = pop_register(d, regs[16-31])
 
-  c = get_carry
+  c = S[7]
   w = c.w1[0..(word-2)]
 
-  set_carry(w1[word-1])
-  set_zero(w)
-  n = set_negative(w)
-  v = n xor (w1[word-1])
-  set_sign(n,v)
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = cS(N,V) #S
+  S4 = w[0] xor w1[7] #V
+  S5 = w[0] #N
+  S6 = cZ(w) #Z
+  S7 = w1[7] #C
 
-  (regs[16-31]) = push_register(d, w)
+  S = setStatus(S[0-7], S);
+
+  (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
 
-asr(d:[reg_addr], regs[16-31]) = (regs[16-31]) where
+asr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   w1 = pop_register(d, regs[16-31])
 
   w = w1[0].w1[0..(word-2)]
 
-  set_carry(w1[word-1])
-  set_zero(w)
-  n = set_negative(w)
-  v = n xor (w1[word-1])
-  s = set_sign(n,v)
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = cS(N,V) #S
+  S4 = w[0] xor w1[7] #V
+  S5 = w[0] #N
+  S6 = cZ(w) #Z
+  S7 = w1[7] #C
 
-  (regs[16-31]) = push_register(d, w)
+  S = setStatus(S[0-7], S);
+
+  (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
 
-swap() = () where # TODO
+swap(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+  w1 = pop_register(d, regs[16-31])
+
+  w = w1[4..7].w1[0..3]
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+ 
+
+  (regs[16-31]) = push_register(d,w, regs[16-31])
 end where
 
-bset() = () where # TODO
+bset(s, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where 
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  if s = 0 then
+    S7 = 1;
+  else if s = 1 then
+     S6 = 1;
+       else if s = 2 then
+	S5 = 1;
+	else if s = 3 then
+	  S4 = 1;
+	  else if s = 4 then
+	    S3 = 1;
+	    else if s = 5 then
+	      S2 = 1;
+	      else if s = 6 then
+		S1 = 1;
+		else
+		S0 = 1;
+              end if  
+	    end if
+	  end if	
+	end if
+      end if
+    end if
+  end if
+
+  S = setStatus(S[0-7], S);
 end where
 
 bclr() = () where # TODO

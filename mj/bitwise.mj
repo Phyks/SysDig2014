@@ -26,7 +26,7 @@ lsr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   S = setStatus(S[0-7], S);
 
 
-  (regs[16-31]) = push_register(d, w)
+  (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
 
 rol(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
@@ -46,7 +46,7 @@ rol(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 
   S = setStatus(S[0-7], S);
 
-  (regs[16-31]) = push_register(d, w)
+  (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
 
 ror(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
@@ -66,7 +66,7 @@ ror(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 
   S = setStatus(S[0-7], S);
 
-  (regs[16-31]) = push_register(d, w)
+  (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
 
 asr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
@@ -85,16 +85,102 @@ asr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 
   S = setStatus(S[0-7], S);
 
-  (regs[16-31]) = push_register(d, w)
+  (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
 
-swap() = () where # TODO
+swap(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+  w1 = pop_register(d, regs[16-31])
+
+  w = w1[4..7].w1[0..3]
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+ 
+
+  (regs[16-31]) = push_register(d,w, regs[16-31])
 end where
 
-bset() = () where # TODO
+bset(s, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where 
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  if s = 0 then
+    S7 = 1;
+  else if s = 1 then
+     S6 = 1;
+       else if s = 2 then
+	S5 = 1;
+	else if s = 3 then
+	  S4 = 1;
+	  else if s = 4 then
+	    S3 = 1;
+	    else if s = 5 then
+	      S2 = 1;
+	      else if s = 6 then
+		S1 = 1;
+		else
+		S0 = 1;
+              end if  
+	    end if
+	  end if	
+	end if
+      end if
+    end if
+  end if
+
+  S = setStatus(S[0-7], S);
 end where
 
-bclr() = () where # TODO
+bclr(s, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where 
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  if s = 0 then
+    S7 = 0;
+  else if s = 1 then
+     S6 = 0;
+       else if s = 2 then
+	S5 = 0;
+	else if s = 3 then
+	  S4 = 0;
+	  else if s = 4 then
+	    S3 = 0;
+	    else if s = 5 then
+	      S2 = 0;
+	      else if s = 6 then
+		S1 = 0;
+		else
+		S0 = 0;
+              end if  
+	    end if
+	  end if	
+	end if
+      end if
+    end if
+  end if
+
+  S = setStatus(S[0-7], S);
+
 end where
 
 sbi() = () where # TODO
