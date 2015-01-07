@@ -189,56 +189,276 @@ end where
 cbi() = () where # TODO
 end where
 
-bst() = () where # TODO
+bst(d:[reg_addr], b, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where 
+
+  w1 = pop_register(d, regs[16-31])
+  
+
+  S0 = S[0] #I
+  S1 = w1[7-b] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
 end where
 
-bld() = () where # TODO
+bld(d:[reg_addr], b, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+  w1 = pop_register(d, regs[16-31])
+
+  w1[7-b] = S[1]
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+  (regs[16-31]) = push_register(d, w1, regs[16-31])
+
+
 end where
 
-sec() = () where # TODO
+sec(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = 1 #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-clc() = () where # TODO
+clc(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = 0 #C
+
+  S = setStatus(S[0-7], S);
 end where
 
-sen() = () where # TODO
+sen(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = 1 #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-cln() = () where # TODO
+cln(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = 0 #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-sez() = () where # TODO
+sez(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+  
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = 1 #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-clz() = () where # TODO
+clz(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = 0 #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-sei() = () where # TODO
+sei(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = 1 #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-cli() = () where # TODO
+cli(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = 0 #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-ses() = () where # TODO
+ses(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = 1 #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-cls() = () where # TODO
+cls(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = 0 #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-sev() = () where # TODO
+sev(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = 1 #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-clv() = () where # TODO
+clv(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = 0 #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-set() = () where # TODO
+set(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = 1 #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-clt() = () where # TODO
+clt(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = 0 #T
+  S2 = S[2] #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-seh() = () where # TODO
+seh(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = 1 #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
 
-clh() = () where # TODO
+clh(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+
+  S0 = S[0] #I
+  S1 = S[1] #T
+  S2 = 0 #H
+  S3 = S[3] #S
+  S4 = S[4] #V
+  S5 = S[5] #N
+  S6 = S[6] #Z
+  S7 = S[7] #C
+
+  S = setStatus(S[0-7], S);
+
 end where
