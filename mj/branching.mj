@@ -56,7 +56,7 @@ cpse(r:[5], d:[5], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+wor
   PC = cpse_brancher(Rd, Rr)
 end where
 
-cp(r:[5], d:[5], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+cp(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -70,13 +70,37 @@ cp(r:[5], d:[5], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word]
   S7 = cC(R[7], (not Rd[7]), Rr[7]);
 
   S = setStatus(S[0], S[1], S[2-7]);
+  
   PC = increase(PC);
 end where
 
-cpc() = () where # TODO
+cpc() = () where
+  # TODO
+  S2 = cH(R[3], (not Rd[3]), Rr[3]);
+  S3 = cS(N, V);
+  S4 = cV((not R[7]), Rd[7], (not Rr[7]));
+  S5 = R[7];
+  S6 = cZ(R);
+  S7 = cC(R[7], (not Rd[7]), Rr[7]);
+
+  S = setStatus(S[0], S[1], S[2-7]);
+  
+  PC = increase(PC);
 end where
 
-cpi() = () where # TODO
+cpi(d:[4], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+  Rd = pop_register(1.d, regs[16-31]);
+
+  (R, c) = subtracter<word>(K, Rd);
+
+  S2 = cH(R[3], (not Rd[3]), K[3]);
+  S3 = cS(N, V);
+  S4 = cV((not R[7]), Rd[7], (not K[7]));
+  S5 = R[7];
+  S6 = cZ(R);
+  S7 = cC(R[7], (not Rd[7]), K[7]);
+
+  S = setStatus(S[0], S[1], S[2-7]);
 end where
 
 sbrc() = () where # TODO
