@@ -24,18 +24,18 @@ icall(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+
   
   PC = regs31.regs30;
   (STACK, c) = adder<word+word>(PC, zero, 1);
-  (SP, c) = subtracter<word+word>(SP, two):
+  (SP, c) = subtracter<word+word>(SP, two);
 end where
 
 ret(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   two = one<word+word-1>().0;
-  PC = STACK
+  PC = STACK;
   (SP, c) = adder<word+word>(SP, two, 0); 
 end where
 
 reti(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   two = one<word+word-1>().0;
-  PC = STACK
+  PC = STACK;
   (SP, c) = adder<word+word>(SP, two, 0);
 
   S = setStatus(1, S[1-7], S)
