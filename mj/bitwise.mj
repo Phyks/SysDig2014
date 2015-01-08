@@ -3,7 +3,7 @@ require gates.mj
 require arithmetics.mj
 
 lsl(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
-  (regs[16-31]) = add(d, d, regs[16-31], S)
+  (regs[16-31], S, PC, STACK, SP) = add(d, d, regs[16-31], S, PC, STACK, SP)
 
 end where
 
@@ -27,6 +27,8 @@ lsr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
 
 
   (regs[16-31]) = push_register(d, w, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 rol(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -47,6 +49,8 @@ rol(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, w, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 ror(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -67,6 +71,8 @@ ror(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, w, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 asr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -86,6 +92,8 @@ asr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, w, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 swap(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -106,6 +114,8 @@ swap(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+wor
  
 
   (regs[16-31]) = push_register(d,w, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 bset_brancher(v, s[0-2], S[0-7]) = (S[0-7]) where
@@ -144,6 +154,8 @@ bset(s, regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[wor
   (S[0-7]) = bset_brancher(0, s, S[0..7]);
   
   S = setStatus(S[0-7], S)
+
+  PC = increase(PC)
 end where
 
 bclr(s, regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where 
@@ -151,6 +163,7 @@ bclr(s, regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[wor
 
   S = setStatus(S[0-7]);
 
+  PC = increase(PC)
 end where
 
 sbi() = (caca) where # TODO
@@ -206,6 +219,8 @@ bst(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[wo
   S7 = S[7]; #C
 
   S = setStatus(S[0-7]);
+
+  PC = increase(PC)
 end where
 
 bld_brancher(T, b[0-2]) = (Rd:[word]) where
@@ -247,68 +262,101 @@ bld(d:[reg_addr], b, regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+w
 
   (regs[16-31]) = push_register(d, w1, regs[16-31])
   
+  PC = increase(PC)
 end where
 
 sec(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S[0-6], 1, S);
+
+  PC = increase(PC)
 end where
 
 clc(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S[0-6], 0, S);
+
+  PC = increase(PC)
 end where
 
 sen(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S[0-4], 1, S[6-7], S)
+
+  PC = increase(PC)
 end where
 
 cln(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S[0-4], 0, S[6-7], S);
+
+  PC = increase(PC)
 end where
 
 sez(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
-  S = setStatus(S[0-5], 1, S7, S);
+  S = setStatus(S[0-5], 1, S[7], S);
+
+  PC = increase(PC)
 end where
 
 clz(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
-  S = setStatus(S[0-5], 0, S7, S);
+  S = setStatus(S[0-5], 0, S[7], S);
+
+  PC = increase(PC)
 end where
 
 sei(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(0, S[1-7], S);
+
+  PC = increase(PC)
 end where
 
 cli(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(1, S[1-7], S);
+
+  PC = increase(PC)
 end where
 
 ses(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S[0-2], 1, S[4-7], S);
+
+  PC = increase(PC)
 end where
 
 cls(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S[0-2], 0, S[4-7], S);
+
+  PC = increase(PC)
 end where
 
 sev(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S[0-3], 1, S[5-7], S);
+
+  PC = increase(PC)
 end where
 
 clv(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S[0-3], 0, S[5-7], S);
+
+  PC = increase(PC)
 end where
 
 set(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S0, 1, S[2-7], S);
+
+  PC = increase(PC)
 end where
 
 clt(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S0, 0, S[2-7], S);
+
+  PC = increase(PC)
 end where
 
 seh(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S0, S1, 1, S[3-7], S);
+
+  PC = increase(PC)
 end where
 
 clh(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   S = setStatus(S0, S1, 0, S[3-7], S);
+
+  PC = increase(PC)
 end where
