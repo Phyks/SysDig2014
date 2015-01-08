@@ -68,6 +68,6 @@ getC(S) = (C) where
   C = S[7]
 end where
 
-setStatus(S[0-7], S) = (S) where
+setStatus(S[0-7]) = (S) where
   S = S0.S1.S2.S3.S4.S5.S6.S7
 end where
