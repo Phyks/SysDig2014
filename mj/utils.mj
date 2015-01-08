@@ -156,69 +156,69 @@ push_register(d:[reg_addr], w:[word], regs[16-31]) = () where
 end where
 
 poper(r[0-4], regs[16-31]) = (w:[word]) where
-  if r0 = 0 then 
-    if r1 = O then
-      if r2 = 0 then
-        if r3 = 0 then
-          if r4 = 0 then
-            w = regs0
-          else
-            w = regs1
-          end if #r4
-        else
-          if r4 = 0 then
-            w = regs2
-          else 
-            w = regs3
-          end if #r4
-        end if #r3
-      else
-        if r3 = 0 then
-          if r4 = 0 then
-            w = regs4
-          else
-            w = regs5
-          end if # r4
-        else
-          if r4 = 0 then
-            w = regs6
-          else
-            w = regs7
-          end if #r4
-        end if #r3
-      end if #r2
-    else
-     if r2 = 0 then
-        if r3 = 0 then
-          if r4 = 0 then
-            w = regs8
-          else
-            w = regs9
-          end if #r4
-        else
-          if r4 = 0 then
-            w = regs10
-          else 
-            w = regs11
-          end if #r4
-        end if #r3
-      else
-        if r3 = 0 then
-          if r4 = 0 then
-            w = regs12
-          else
-            w = regs13
-          end if # r4
-        else
-          if r4 = 0 then
-            w = regs14
-          else
-            w = regs15
-          end if #r4
-        end if #r3
-      end if #r2
-    end if #r1
-  else
+  # if r0 = 0 then 
+  #   if r1 = O then
+  #     if r2 = 0 then
+  #       if r3 = 0 then
+  #         if r4 = 0 then
+  #           w = regs0
+  #         else
+  #           w = regs1
+  #         end if #r4
+  #       else
+  #         if r4 = 0 then
+  #           w = regs2
+  #         else 
+  #           w = regs3
+  #         end if #r4
+  #       end if #r3
+  #     else
+  #       if r3 = 0 then
+  #         if r4 = 0 then
+  #           w = regs4
+  #         else
+  #           w = regs5
+  #         end if # r4
+  #       else
+  #         if r4 = 0 then
+  #           w = regs6
+  #         else
+  #           w = regs7
+  #         end if #r4
+  #       end if #r3
+  #     end if #r2
+  #   else
+  #    if r2 = 0 then
+  #       if r3 = 0 then
+  #         if r4 = 0 then
+  #           w = regs8
+  #         else
+  #           w = regs9
+  #         end if #r4
+  #       else
+  #         if r4 = 0 then
+  #           w = regs10
+  #         else 
+  #           w = regs11
+  #         end if #r4
+  #       end if #r3
+  #     else
+  #       if r3 = 0 then
+  #         if r4 = 0 then
+  #           w = regs12
+  #         else
+  #           w = regs13
+  #         end if # r4
+  #       else
+  #         if r4 = 0 then
+  #           w = regs14
+  #         else
+  #           w = regs15
+  #         end if #r4
+  #       end if #r3
+  #     end if #r2
+  #   end if #r1
+  # else
     if r1 = O then
       if r2 = 0 then
         if r3 = 0 then
@@ -280,7 +280,7 @@ poper(r[0-4], regs[16-31]) = (w:[word]) where
         end if #r3
       end if #r2
     end if #r1
-  end if #r0
+  # end if #r0
 end where
 
 pop_register(raddr:[reg_addr], regs[16-31]) = (w:[word]) where
@@ -298,6 +298,14 @@ allone<n>() = (o:[n]) where
     o = []
   else
     o = 1.allone<n-1>()
+  end if
+end where
+
+allone<n>() = (o:[n]) where
+  if n = 0 then
+    o = []
+  else
+    o = 0.allone<n-1>()
   end if
 end where
 
@@ -334,4 +342,14 @@ end where
 
 set_carry(wd:[word], wr:[word], w:[word]) = (c) where
   c = (not wd[7] and wr[7]) or (wr[7] and w[7]) or (w[7] and (not wd[7]))
+end where
+
+increase<n>(R) = (R) where	# simple increase
+  o = one<n>();
+  (R,c) = adder(R, o, 0);
+end where
+
+iincrease<n>(R) = (R) where	# double increase
+  two = one<n-1>().0;
+  (R,c) = adder(R, o, 0);
 end where
