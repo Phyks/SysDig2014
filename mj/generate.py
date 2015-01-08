@@ -18,16 +18,16 @@ def compute_includes(file):
         return ", ".join([pre + sep[0] + str(i) + sep[1] + suff
                           for i in range(i_start, i_end)])
 
+    # replace "foo[0-n]:[bar]" by "foo0:[bar], foo1:[bar], …, foon:[bar]"
+    generated = [re.sub(r"(\w+)\[(\d+)-(\d+)\](:\[\w+\])",
+                        lambda m: subfunction(m.group(1), m.group(2),
+                                              m.group(3), suff=m.group(4)),
+                        string)
+                 for string in generated]
     # replace "foo[0-n]" by "foo0, foo1, …, foon"
     generated = [re.sub(r"(\w+)\[(\d+)-(\d+)\]",
                         lambda m: subfunction(m.group(1), m.group(2),
                                               m.group(3)),
-                        string)
-                 for string in generated]
-    # replace "foo[0-n]:[bar]" by "foo0:[bar], foo1:[bar], …, foon:[bar]"
-    generated = [re.sub(r"(\w+)\[(\d+)-(\d+)\](:\[\w\])",
-                        lambda m: subfunction(m.group(1), m.group(2),
-                                              m.group(3), suff=m.group(4)),
                         string)
                  for string in generated]
     # replace "foo[0..n]" by "foo[0], foo[1], …, foo[n]"
