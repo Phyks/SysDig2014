@@ -33,7 +33,12 @@ ret(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+wo
   (SP, c) = adder<word+word>(SP, two, 0); 
 end where
 
-reti() = () where # TODO
+reti() = () where
+  two = one<word+word-1>().0;
+  PC = STACK
+  (SP, c) = adder<word+word>(SP, two, 0);
+
+  S = setStatus(1, S[1-7], S)
 end where
 
 cpse() = () where # TODO
