@@ -1,18 +1,30 @@
-rjmp(k:[12], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
+rjmp(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   (PC, c) = adder<word+word>(PC, 0.0.0.0.k, 1)
 end where
 
-ijmp(regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
+ijmp(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   Z = regs31.regs30;
 
   (PC, c) = adder<word+word>(PC, Z, 0)	
 end where
 
-rcall(regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where # TODO
-  S = S
+rcall(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  o = one<word+word>();
+  two = one<word+word-1>().0;
+  (PC, c) = adder<word+word>(PC, 0.0.0.0.k, 1); # PC ← PC+k+1
+  (STACK, c) = adder<word+word>(PC, o, 0);	# STACK ← PC+1
+  (SP, c) = subtracter<word+word>(SP, two); # SP ← SP-2
+  
 end where
 
-icall() = () where # TODO
+icall(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+  zero = zero<word+word>();
+  two = one<word+word-1>().0;
+  
+  PC = regs31.regs30;
+  (STACK, c) = adder<word+word>(PC, zero, 1);
+  (SP, c) = subtracter<word+word>(SP, two):
 end where
 
 ret() = () where # TODO
