@@ -259,210 +259,57 @@ clc(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 end where
 
 sen(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = 1 #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S[0-4], 1, S[6-7], S)
 end where
 
 cln(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = 0 #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S[0-4], 0, S[6-7], S);
 end where
 
 sez(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = 1 #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S[0-5], 1, S7, S);
 end where
 
 clz(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = 0 #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S[0-5], 0, S7, S);
 end where
 
 sei(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = 1 #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(0, S[1-7], S);
 end where
 
 cli(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = 0 #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(1, S[1-7], S);
 end where
 
 ses(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = 1 #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S[0-2], 1, S[4-7], S);
 end where
 
 cls(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = 0 #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S[0-2], 0, S[4-7], S);
 end where
 
 sev(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = 1 #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S[0-3], 1, S[5-7], S);
 end where
 
 clv(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = 0 #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S[0-3], 0, S[5-7], S);
 end where
 
 set(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = 1 #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S0, 1, S[2-7], S);
 end where
 
 clt(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = 0 #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S0, 0, S[2-7], S);
 end where
 
 seh(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = 1 #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S0, S1, 1, S[3-7], S);
 end where
 
 clh(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = 0 #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S0, S1, 0, S[3-7], S);
 end where
