@@ -108,47 +108,96 @@ swap(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   (regs[16-31]) = push_register(d,w, regs[16-31])
 end where
 
-bset_brancher(s[0-2], S[0-7]) = (S[0-7]) where
+bset_brancher(v, s[0-2], S[0-7]) = (S[0-7]) where
   if s0 = 0 then
     if s1 = 0 then
       if s2 = 0 then		# 000
-        S0 = 1
+        S0 = v
       else 			# 001
-        S1 = 1
+        S1 = v
       end if
     else
       if s2 = 0 then		# 010
-        S2 = 1
+        S2 = v
       else 			# 011
-        S3 = 1
+        S3 = v
       end if
     end if
   else
     if s1 = 0 then
       if s2 = 0 then		# 100
-        S4 = 1
+        S4 = v
       else 			# 101
-        S5 = 1
+        S5 = v
       end if
     else
       if s2 = 0 then		# 110
-        S6 = 1
+        S6 = v
       else 			# 111
-        S7 = 1
+        S7 = v
       end if
     end if
   end if
 end where
 
 bset(s, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where 
-  (S[0-7]) = bset_brancher(s, S[0..7]);
+  (S[0-7]) = bset_brancher(0, s, S[0..7]);
   
   S = setStatus(S[0-7], S)
 end where
 
 bclr(s, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where 
+  (S[0-7]) = bset_brancher(1, s, S[0..7]);
+
+  S = setStatus(S[0-7], S);
+
+end where
+
+sbi() = (caca) where # TODO
+  caca = 0
+end where
+
+cbi() = (caca) where # TODO
+  caca = 0
+end where
+
+bst_brancher(Rd:[word], b[0-2]) = (T) where
+  if b0 = 0 then
+    if b1 = 0 then
+      if b2 = 0 then		# 000
+        T = Rd[0]
+      else 			# 001
+        T = Rd[1]
+      end if
+    else
+      if b2 = 0 then		# 010
+        T = Rd[2]
+      else 			# 011
+        T = Rd[3]
+      end if
+    end if
+  else
+    if b1 = 0 then
+      if b2 = 0 then		# 100
+        T = Rd[4]
+      else 			# 101
+        T = Rd[5]
+      end if
+    else
+      if b2 = 0 then		# 110
+        T = Rd[6]
+      else 			# 111
+        T = Rd[7]
+      end if
+    end if
+  end if
+end where
+
+bst(d:[reg_addr], b:[3], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where 
+  Rd = pop_register(d, regs[16-31]);
+
   S0 = S[0]; #I
-  S1 = S[1]; #T
+  S1 = bst_brancher(Rd, b); #T
   S2 = S[2]; #H
   S3 = S[3]; #S
   S4 = S[4]; #V
@@ -156,103 +205,57 @@ bclr(s, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   S6 = S[6]; #Z
   S7 = S[7]; #C
 
-  if s = 0 then
-    S7 = 0;
-  else if s = 1 then
-     S6 = 0;
-       else if s = 2 then
-	S5 = 0;
-	else if s = 3 then
-	  S4 = 0;
-	  else if s = 4 then
-	    S3 = 0;
-	    else if s = 5 then
-	      S2 = 0;
-	      else if s = 6 then
-		S1 = 0;
-		else
-		S0 = 0;
-              end if  
-	    end if
-	  end if	
-	end if
+  S = setStatus(S[0-7], S);
+end where
+
+bld_brancher(T, b[0-2]) = (Rd:[word]) where
+  if b0 = 0 then
+    if b1 = 0 then
+      if b2 = 0 then		# 000
+        Rd = T.Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7]
+      else 			# 001
+        Rd = Rd[1].T.Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7]
+      end if
+    else
+      if b2 = 0 then		# 010
+        Rd = Rd[1].Rd[2].T.Rd[3].Rd[4].Rd[5].Rd[6].Rd[7]
+      else 			# 011
+        Rd = Rd[1].Rd[2].Rd[3].T.Rd[4].Rd[5].Rd[6].Rd[7]
+      end if
+    end if
+  else
+    if b1 = 0 then
+      if b2 = 0 then		# 100
+        Rd = Rd[1].Rd[2].Rd[3].Rd[4].T.Rd[5].Rd[6].Rd[7]
+      else 			# 101
+        Rd = Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].T.Rd[6].Rd[7]
+      end if
+    else
+      if b2 = 0 then		# 110
+        Rd = Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].T.Rd[7]
+      else 			# 111
+        Rd = Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7].T
       end if
     end if
   end if
-
-  S = setStatus(S[0-7], S);
-
-end where
-
-sbi() = () where # TODO
-end where
-
-cbi() = () where # TODO
-end where
-
-bst(d:[reg_addr], b, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where 
-
-  w1 = pop_register(d, regs[16-31])
-  
-
-  S0 = S[0] #I
-  S1 = w1[7-b] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
 end where
 
 bld(d:[reg_addr], b, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  w1 = pop_register(d, regs[16-31])
+  Rd = pop_register(d, regs[16-31]);
 
-  w1[7-b] = S[1]
+  Rd = bld_brancher(T, b);
 
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
-
-  S = setStatus(S[0-7], S);
   (regs[16-31]) = push_register(d, w1, regs[16-31])
 
 
 end where
 
 sec(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = 1 #C
-
-  S = setStatus(S[0-7], S);
-
+  S = setStatus(S[0-6], 1, S);
 end where
 
 clc(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = 0 #C
-
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-6], 0, S);
 end where
 
 sen(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
