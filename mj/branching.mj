@@ -104,7 +104,7 @@ cpi(d:[reg_addr-1], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+wo
   S = setStatus(S[0], S[1], S[2-7]);
 end where
 
-sbrc_brancher(Rr:[word], b) = (r) where
+sbr_brancher(Rr:[word], b:[3]) = (r) where
   if s0 = 0 then
     if s1 = 0 then
       if s2 = 0 then		# 000
@@ -136,8 +136,8 @@ sbrc_brancher(Rr:[word], b) = (r) where
   end if
 end where
 
-sbrc_comparator(Rr, PC) = (PC) where
-  if Rr = 0 then
+sbr_comparator(r, PC, v) = (PC) where
+  if r = v then
     PC = iincrease(PC)
   else
     PC = increase(PC)
@@ -147,12 +147,17 @@ end where
 sbrc(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
 
   Rr = pop_register(r, regs[16-31]);
-  r = sbrc_brancher(Rr, b);
+  r = sbr_brancher(Rr, b);
 
-  PC = sbrc_comparator(Rr, PC);
+  PC = sbr_comparator(Rr, PC, 0);
 end where
 
-sbrs() = () where # TODO
+sbrs(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  Rr = pop_register(r, regs[16-31]);
+  r = sbr_brancher(Rr, b);
+
+  PC = sbr_comparator(Rr, PC, 1);
 end where
 
 sbic() = () where # TODO
