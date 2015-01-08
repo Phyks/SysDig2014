@@ -27,7 +27,10 @@ icall(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+
   (SP, c) = subtracter<word+word>(SP, two):
 end where
 
-ret() = () where # TODO
+ret(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+  two = one<word+word-1>().0;
+  PC = STACK
+  (SP, c) = adder<word+word>(SP, two, 0); 
 end where
 
 reti() = () where # TODO
