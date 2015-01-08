@@ -213,7 +213,7 @@ com(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 end where					
 
 sbr(d:[reg_addr], K:[word], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  (regs[16-31], S:[word]) = ori(d, K, regs[16-31], S)
+  (regs[16-31], S) = ori(d, K, regs[16-31], S)
 end where
 
 cbr(d:[reg_addr], K:[word], S:[word]) = (S:[word]) where
@@ -252,7 +252,7 @@ tst(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   S7 = S[7]; 			# C
 
   S = setStatus(S[0-7], S);
-  regs[16-31], S = and_op(d, d, regs[16-31], S)
+  (regs[16-31], S) = and_op(d, d, regs[16-31], S)
 end where
 
 clr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
@@ -295,7 +295,7 @@ sub(r:[reg_addr], d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word])
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
-subi(d:[4], K[8], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+subi(d:[4], K:[8], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   Rd = pop_register(d, regs[16-31]);
 
   (R, c) = subtracter<word>(Rd, K, 0);
@@ -315,10 +315,12 @@ subi(d:[4], K[8], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   
 end where
 
-sbc() = () where # TODO
+sbc(d:[4], K:[8], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where # TODO
+  S = S
 end where
 
-sbci() = () where # TODO
+sbci(d:[4], K:[8], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where # TODO
+  S = S
 end where
 
 neg(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
