@@ -1,4 +1,5 @@
-rjmp() = () where # TODO
+rjmp(k:[12], S, Pc) = (S, Pc) where
+  Pc = 
 end where
 
 ijmp() = () where # TODO
