@@ -20,6 +20,8 @@ add(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], ST
   S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R)
+
+  PC = increase(PC)
 end where
 
 adc(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -41,6 +43,8 @@ adc(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], ST
   S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, R, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 and_n<n>(a:[n], b:[n]) = (o:[n]) where
@@ -69,6 +73,8 @@ and_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word],
   S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, R, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 andi(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -88,6 +94,8 @@ andi(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], STACK
   S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 or_n<n>(a:[n], b:[n]) = (o:[n]) where
@@ -116,6 +124,8 @@ or_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], 
   S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 ori(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -135,6 +145,8 @@ ori(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], STACK:
   S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, R, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 xor_n<n>(a:[n], b:[n]) = (o:[n]) where
@@ -165,6 +177,8 @@ eor(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], ST
   S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 com_n<n>(a:[n]) = (o:[n]) where
@@ -191,15 +205,17 @@ com(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
+
+  PC = increase(PC)
 end where					
 
 sbr(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
-  (regs[16-31], S) = ori(d, K, regs[16-31], S)
+  (regs[16-31], S, PC, STACK, SP) = ori(d, K, regs[16-31], S, PC, STACK, SP)
 end where
 
-cbr(d:[reg_addr], K:[word], S:[word], PC:[word], STACK:[word]) = (S:[word], PC:[word], STACK:[word]) where
+cbr(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   a = com_n<word>(K);
-  (regs[16-31], S) = andi(d, a, regs[16-31], S)
+  (regs[16-31], S, PC, STACK, SP) = andi(d, a, regs[16-31], S, PC, STACK, SP)
 end where
 
 inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -220,6 +236,8 @@ inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -233,7 +251,8 @@ tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S7 = S[7]; 			# C
 
   S = setStatus(S[0-7]);
-  (regs[16-31], S) = and_op(d, d, regs[16-31], S)
+  (regs[16-31], S, PC, STACK, SP) = and_op(d, d, regs[16-31], S, PC, STACK, SP)
+
 end where
 
 clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -247,13 +266,15 @@ clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S7 = S[7]; 			# C
 
   S = setStatus(S[0-7]);
-  (regs[16-31]) = eor(d, d)
+  (regs[16-31], S, PC, STACK, SP) = eor(d, d, regs[16-31], S, PC, STACK, SP)
 end where
 
 ser(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   o = allone<word>();
   
   (regs[16-31]) = push_register(d, o, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 sub(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -274,6 +295,8 @@ sub(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], ST
   S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, R, regs[16-31])
+
+  PC = increase(PC)
 end where
 
 subi(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -294,6 +317,7 @@ subi(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+wor
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
   
+  PC = increase(PC)
 end where
 
 sbc(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where # TODO
@@ -322,6 +346,7 @@ neg(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S = setStatus(S[0-7]);
   (regs[16-31]) = push_register(d, R, regs[16-31])
 
+  PC = increase(PC)
 end where
 
 dec(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
@@ -341,4 +366,6 @@ dec(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
 
   S = setStatus(S[0-7]);
   (regs[16-31]) = push_register(d, R, regs[16-31])
+
+  PC = increase(PC)
 end where
