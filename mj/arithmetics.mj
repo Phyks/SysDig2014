@@ -2,25 +2,6 @@ require utils.mj
 require gates.mj
 require flags.mj
 
-adder<n>(a:[n], b:[n], c_in) = (o:[n], c_out) where
-  if n = 0 then
-    o = [];
-    c_out = 0
-  else
-    (s_n1, c_n1) = adder<n-1>(a[1..], b[1..], c_in);
-    (s_n, c_out) = fulladder(a[0], b[0], c_n1);
-    o = s_n . s_n1
-  end if
-end where
-
-subtracter<n>(a:[n], b:[n]) = (o:[n], c_out) where
-  # b-a
-  an = not(a) ;
-  (o, c) = adder<n>(an, b, 1) ;
-  c_out = c and 1
-end where
-  
-
 add(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
