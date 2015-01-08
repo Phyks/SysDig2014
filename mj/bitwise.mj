@@ -8,20 +8,20 @@ lsl(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 end where
 
 lsr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  w1 = pop_register(d, regs[16-31])
+  w1 = pop_register(d, regs[16-31]);
 
-  a = (w1[word-1])
-  w = 0. w1[0..(word-2)]
+  a = (w1[wordm1]);
+  w = 0. w1[0..(wordm2)];
 
 
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = cS(N, V) #S
-  S4 = not a #V
-  S5 = 0 #N
-  S6 = cZ(w) #Z
-  S7 = a #C
+  S0 = S[0]; #I
+  S1 = S[1]; #T
+  S2 = S[2]; #H
+  S3 = cS(N, V); #S
+  S4 = not a; #V
+  S5 = 0; #N
+  S6 = cZ(w); #Z
+  S7 = a; #C
 
   S = setStatus(S[0-7], S);
 
@@ -30,19 +30,19 @@ lsr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 end where
 
 rol(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  w1 = pop_register(d, regs[16-31])
+  w1 = pop_register(d, regs[16-31]);
 
-  c = S[7]
-  w = w1[1..].c
+  c = S[7];
+  w = w1[1..].c;
 
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = w1[4] #H
-  S3 = cS(N,V) #S
-  S4 = w[0] xor w1[0] #V
-  S5 = w[0] #N
-  S6 = cZ(w) #Z
-  S7 = w1[0] #C
+  S0 = S[0]; #I
+  S1 = S[1]; #T
+  S2 = w1[4]; #H
+  S3 = cS(N,V); #S
+  S4 = w[0] xor w1[0]; #V
+  S5 = w[0]; #N
+  S6 = cZ(w); #Z
+  S7 = w1[0]; #C
 
   S = setStatus(S[0-7], S);
 
@@ -50,19 +50,19 @@ rol(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 end where
 
 ror(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  w1 = pop_register(d, regs[16-31])
+  w1 = pop_register(d, regs[16-31]);
 
-  c = S[7]
-  w = c.w1[0..(word-2)]
+  c = S[7];
+  w = c.w1[0..(wordm2)];
 
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = cS(N,V) #S
-  S4 = w[0] xor w1[7] #V
-  S5 = w[0] #N
-  S6 = cZ(w) #Z
-  S7 = w1[7] #C
+  S0 = S[0]; #I
+  S1 = S[1]; #T
+  S2 = S[2]; #H
+  S3 = cS(N,V); #S
+  S4 = w[0] xor w1[7]; #V
+  S5 = w[0]; #N
+  S6 = cZ(w); #Z
+  S7 = w1[7]; #C
 
   S = setStatus(S[0-7], S);
 
@@ -70,18 +70,18 @@ ror(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 end where
 
 asr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  w1 = pop_register(d, regs[16-31])
+  w1 = pop_register(d, regs[16-31]);
 
-  w = w1[0].w1[0..(word-2)]
+  w = w1[0].w1[0..(wordm2)];
 
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = cS(N,V) #S
-  S4 = w[0] xor w1[7] #V
-  S5 = w[0] #N
-  S6 = cZ(w) #Z
-  S7 = w1[7] #C
+  S0 = S[0]; #I
+  S1 = S[1]; #T
+  S2 = S[2]; #H
+  S3 = cS(N,V); #S
+  S4 = w[0] xor w1[7]; #V
+  S5 = w[0]; #N
+  S6 = cZ(w); #Z
+  S7 = w1[7]; #C
 
   S = setStatus(S[0-7], S);
 
@@ -89,18 +89,18 @@ asr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 end where
 
 swap(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
-  w1 = pop_register(d, regs[16-31])
+  w1 = pop_register(d, regs[16-31]);
 
-  w = w1[4..7].w1[0..3]
+  w = w1[4].w1[5].w1[6].w1[7].w1[0].w1[1].w1[2].w1[3];
 
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
+  S0 = S[0]; #I
+  S1 = S[1]; #T
+  S2 = S[2]; #H
+  S3 = S[3]; #S
+  S4 = S[4]; #V
+  S5 = S[5]; #N
+  S6 = S[6]; #Z
+  S7 = S[7]; #C
 
   S = setStatus(S[0-7], S);
  
@@ -109,14 +109,14 @@ swap(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
 end where
 
 bset(s, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where 
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
+  S0 = S[0]; #I
+  S1 = S[1]; #T
+  S2 = S[2]; #H
+  S3 = S[3]; #S
+  S4 = S[4]; #V
+  S5 = S[5]; #N
+  S6 = S[6]; #Z
+  S7 = S[7]; #C
 
   if s = 0 then
     S7 = 1;
@@ -142,18 +142,18 @@ bset(s, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
     end if
   end if
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7], S)
 end where
 
 bclr(s, regs[16-31], S:[word]) = (regs[16-31], S:[word]) where 
-  S0 = S[0] #I
-  S1 = S[1] #T
-  S2 = S[2] #H
-  S3 = S[3] #S
-  S4 = S[4] #V
-  S5 = S[5] #N
-  S6 = S[6] #Z
-  S7 = S[7] #C
+  S0 = S[0]; #I
+  S1 = S[1]; #T
+  S2 = S[2]; #H
+  S3 = S[3]; #S
+  S4 = S[4]; #V
+  S5 = S[5]; #N
+  S6 = S[6]; #Z
+  S7 = S[7]; #C
 
   if s = 0 then
     S7 = 0;
