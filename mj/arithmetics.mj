@@ -70,7 +70,7 @@ and_n<n>(a:[n], b:[n]) = (o:[n]) where
   end if
 end where
 
-and(d:[reg_addr], r:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+and_op(d:[reg_addr], r:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -119,7 +119,7 @@ or_n<n>(a:[n], b:[n]) = (o:[n]) where
   end if
 end where
 
-or(d:[reg_addr], r:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+or_op(d:[reg_addr], r:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -162,11 +162,11 @@ xor_n<n>(a:[n], b:[n]) = (o:[n]) where
   else
     a0 = a[0];
     b0 = b[0];
-    o = (a0 xor b0). xor_n<n-1>(a[1..], b[1..])
+    o = (a0 xor b0) . xor_n<n-1>(a[1..], b[1..])
   end if
 end where
 
-eor(d:[reg_addr], r:[reg_addr], regs[16-31], S:[word]) = (regs[16-31, S:[word]]) where
+eor(d:[reg_addr], r:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -252,7 +252,7 @@ tst(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
   S7 = S[7]; 			# C
 
   S = setStatus(S[0-7], S);
-  regs[16-31], S = and(d, d, regs[16-31], S)
+  regs[16-31], S = and_op(d, d, regs[16-31], S)
 end where
 
 clr(d:[reg_addr], regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
