@@ -17,7 +17,7 @@ add(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], ST
   S6 = cZ(R);
   S7 = cC(R[7], Rd[7], Rr[7]);
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R)
 end where
@@ -38,7 +38,7 @@ adc(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], ST
   S6 = cZ(R);			# Z
   S7 = cC(R[7], Rd[7], Rr[7]);	# C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
@@ -66,7 +66,7 @@ and_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word],
   S6 = cZ(R);			# Z
   S7 = S[7]; 			# C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
@@ -85,7 +85,7 @@ andi(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], STACK
   S6 = cZ(R);			# Z
   S7 = S[7];			# C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
@@ -113,7 +113,7 @@ or_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], 
   S6 = cZ(R);			# Z
   S7 = S[7];
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
@@ -132,7 +132,7 @@ ori(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], STACK:
   S6 = cZ(R);			# Z
   S7 = S[7];
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
@@ -162,7 +162,7 @@ eor(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], ST
   S6 = cZ(R);			# Z
   S7 = S[7];			# C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
@@ -188,7 +188,7 @@ com(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S6 = cZ(R);			# Z
   S7 = 1;			# C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where					
@@ -217,7 +217,7 @@ inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S6 = cZ(R);			# Z
   S7 = S[7];			# C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
@@ -232,7 +232,7 @@ tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S6 = cZ(R);			# Z
   S7 = S[7]; 			# C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   (regs[16-31], S) = and_op(d, d, regs[16-31], S)
 end where
 
@@ -246,7 +246,7 @@ clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S6 = 1;			# Z
   S7 = S[7]; 			# C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   (regs[16-31]) = eor(d, d)
 end where
 
@@ -271,7 +271,7 @@ sub(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], ST
   S6 = cZ(R);			# Z
   S7 = cC(cH(not R[7], not Rd[7], Rr[7])); # C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
@@ -290,7 +290,7 @@ subi(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+wor
   S6 = cZ(R);			# Z
   S7 = cC(cH(not R[7], not Rd[7], Rr[7])); # C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   
   (regs[16-31]) = push_register(d, R, regs[16-31])
   
@@ -319,7 +319,7 @@ neg(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S6 = cZ(R);			# Z
   S7 = R[7] or R[6] or R[5] or R[4] or R[3] or R[2] or R[1] or R[0]; # C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   (regs[16-31]) = push_register(d, R, regs[16-31])
 
 end where
@@ -339,6 +339,6 @@ dec(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S6 = cZ(R);			# Z
   S7 = S[7];
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where

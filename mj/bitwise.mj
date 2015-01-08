@@ -23,7 +23,7 @@ lsr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S6 = cZ(w); #Z
   S7 = a; #C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
 
 
   (regs[16-31]) = push_register(d, w, regs[16-31])
@@ -44,7 +44,7 @@ rol(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S6 = cZ(w); #Z
   S7 = w1[0]; #C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
@@ -64,7 +64,7 @@ ror(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S6 = cZ(w); #Z
   S7 = w1[7]; #C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
@@ -83,7 +83,7 @@ asr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S6 = cZ(w); #Z
   S7 = w1[7]; #C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
 
   (regs[16-31]) = push_register(d, w, regs[16-31])
 end where
@@ -102,7 +102,7 @@ swap(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+wor
   S6 = S[6]; #Z
   S7 = S[7]; #C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
  
 
   (regs[16-31]) = push_register(d,w, regs[16-31])
@@ -149,7 +149,7 @@ end where
 bclr(s, regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where 
   (S[0-7]) = bset_brancher(1, s, S[0..7]);
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
 
 end where
 
@@ -205,7 +205,7 @@ bst(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[wo
   S6 = S[6]; #Z
   S7 = S[7]; #C
 
-  S = setStatus(S[0-7], S);
+  S = setStatus(S[0-7]);
 end where
 
 bld_brancher(T, b[0-2]) = (Rd:[word]) where
