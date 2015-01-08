@@ -1,3 +1,4 @@
+
 fulladder(a,b,c) = (s, r) where
     s = (a xor b) xor c;
     r = (a and b) + ((a xor b) and c) ;
@@ -14,7 +15,7 @@ adder<n>(a:[n], b:[n], c_in) = (o:[n], c_out) where
   end if
 end where
 
-subtracter<n>(a:[n], b:[n]) = (o:[n], c_out) where
+subtracter<n>(a:[n], b:[n]) = (o:[n], c_out) where # b - a
   # b-a
   an = not(a) ;
   (o, c) = adder<n>(an, b, 1) ;
