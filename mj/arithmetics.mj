@@ -2,7 +2,7 @@ require utils.mj
 require gates.mj
 require flags.mj
 
-add(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+add(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -22,7 +22,7 @@ add(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[wor
   (regs[16-31]) = push_register(d, R)
 end where
 
-adc(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+adc(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -51,7 +51,7 @@ and_n<n>(a:[n], b:[n]) = (o:[n]) where
   end if
 end where
 
-and_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+and_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -71,7 +71,7 @@ and_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
-andi(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+andi(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
 
   R = and_n<word>(Rd, K);
@@ -100,7 +100,7 @@ or_n<n>(a:[n], b:[n]) = (o:[n]) where
   end if
 end where
 
-or_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+or_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -118,7 +118,7 @@ or_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[w
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
-ori(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+ori(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
 
   R = or_n(Rd, K);
@@ -147,7 +147,7 @@ xor_n<n>(a:[n], b:[n]) = (o:[n]) where
   end if
 end where
 
-eor(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+eor(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -175,7 +175,7 @@ com_n<n>(a:[n]) = (o:[n]) where
   end if
 end where
 
-com(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+com(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   R = com_n<word>(Rd);
 
@@ -193,7 +193,7 @@ com(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where					
 
-sbr(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+sbr(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   (regs[16-31], S) = ori(d, K, regs[16-31], S)
 end where
 
@@ -202,7 +202,7 @@ cbr(d:[reg_addr], K:[word], S:[word], PC:[word], FP:[word]) = (S:[word], PC:[wor
   (regs[16-31], S) = andi(d, a, regs[16-31], S)
 end where
 
-inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   o = one<word>();
 
@@ -222,7 +222,7 @@ inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
-tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   S0 = S[0];
   S1 = S[1];
   S2 = S[2];
@@ -236,7 +236,7 @@ tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16
   (regs[16-31], S) = and_op(d, d, regs[16-31], S)
 end where
 
-clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   S0 = S[0]; 			# I
   S1 = S[1];			# T
   S2 = S[2];			# H
@@ -250,13 +250,13 @@ clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16
   (regs[16-31]) = eor(d, d)
 end where
 
-ser(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+ser(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   o = allone<word>();
   
   (regs[16-31]) = push_register(d, o, regs[16-31])
 end where
 
-sub(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+sub(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -276,7 +276,7 @@ sub(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[wor
   (regs[16-31]) = push_register(d, R, regs[16-31])
 end where
 
-subi(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+subi(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
 
   (R, c) = subtracter<word>(Rd, K, 0);
@@ -296,15 +296,15 @@ subi(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[1
   
 end where
 
-sbc(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where # TODO
+sbc(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where # TODO
   S = S
 end where
 
-sbci(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where # TODO
+sbci(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where # TODO
   S = S
 end where
 
-neg(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+neg(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   zero = zero<word>();
 
@@ -324,7 +324,7 @@ neg(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16
 
 end where
 
-dec(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word], FP:[word]) where
+dec(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   one = one<word>();
 

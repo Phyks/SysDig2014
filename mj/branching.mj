@@ -1,11 +1,15 @@
-rjmp(k:[12], S, Pc) = (S, Pc) where
-  Pc = 
+rjmp(k:[12], regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
+  (PC, c) = adder<word+word>(PC, 0.0.0.0.k, 1)
 end where
 
-ijmp() = () where # TODO
+ijmp(regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where
+  Z = regs31.regs30;
+
+  (PC, c) = adder<word+word>(PC, Z, 0)	
 end where
 
-rcall() = () where # TODO
+rcall(regs[16-31]:[word], S:[word], PC:[word], FP:[word]) = (regs[16-31]:[word], S:[word], PC:[word+word], FP:[word+word], SP:[word+word]) where # TODO
+  S = S
 end where
 
 icall() = () where # TODO
