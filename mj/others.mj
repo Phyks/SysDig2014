@@ -2,7 +2,9 @@ break() = () where
     # Not implemented
 end where
 
-nop(regs[16-31], S:[word]) = (regs[16-31], S:[word]) where
+nop(regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  PC = increase(PC);
 end where
 
 sleep() = () where
