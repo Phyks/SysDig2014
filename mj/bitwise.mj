@@ -122,29 +122,29 @@ bset_brancher(v, s[0-2], S[0-7]) = (S[0-7]) where
   if s0 = 0 then
     if s1 = 0 then
       if s2 = 0 then		# 000
-        S7 = v
+        S0 = v
       else 			# 001
-        S6 = v
+        S1 = v
       end if
     else
       if s2 = 0 then		# 010
-        S5 = v
+        S2 = v
       else 			# 011
-        S4 = v
+        S3 = v
       end if
     end if
   else
     if s1 = 0 then
       if s2 = 0 then		# 100
-        S3 = v
+        S4 = v
       else 			# 101
-        S2 = v
+        S5 = v
       end if
     else
       if s2 = 0 then		# 110
-        S1 = v
+        S6 = v
       else 			# 111
-        S0 = v
+        S7 = v
       end if
     end if
   end if
