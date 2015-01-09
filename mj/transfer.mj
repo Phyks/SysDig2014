@@ -1,23 +1,69 @@
-ld(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where() = () where
+ldd(d:[reg_addr], address:[word+word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 end where
 
-lds() = () where # TODO
+ld(d:[reg_addr], o0, o1, o2, o3, regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where() = () where
+  if o0 = 0 and o1 = 0 and o2 = 1 and o3 = 1 then # X
+    regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[27]..regs[26], regs, S, PC, SP)
+  else
+    if o0 = 1 and o1 = 0 and o2 = 1 and o3 = 1 then # X+
+      regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[27]..regs[26], regs, S, PC, SP)
+    else
+      if o0 = 0 and o1 = 1 and o2 = 1 and o3 = 1 then # -X
+        regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[27]..regs[26], regs, S, PC, SP)
+      else
+        if o0 = 0 and o1 = 0 and o2 = 0 and o3 = 1 then # Y
+          regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[29]..regs[28], regs, S, PC, SP)
+        else
+          if o0 = 1 and o1 = 0 and o2 = 0 and o3 = 1 then # Y+
+            regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[29]..regs[28], regs, S, PC, SP)
+          else
+            if o0 = 0 and o1 = 1 and o2 = 0 and o3 = 1 then # -Y
+              regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[29]..regs[28], regs, S, PC, SP)
+            else
+              if o0 = 0 and o1 = 0 and o2 = 0 and o3 = 0 then # Z
+                regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[31]..regs[30], regs, S, PC, SP)
+              else
+                if o0 = 1 and o1 = 0 and o2 = 0 and o3 = 0 then #Z+
+                  regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[31]..regs[30], regs, S, PC, SP)
+                else
+                  if o0 = 0 and o1 = 1 and o2 = 0 and o3 = 0 then # -Z
+                    regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[31]..regs[30], regs, S, PC, SP)
+                  end if
+                end if
+              end if
+            end if
+          end if
+        end if
+      end if
+    end if
+  end if
+  PC = increase(PC)
 end where
 
-st() = () where # TODO
+lds(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+  PC = iincrease(PC)
 end where
 
-sts() = () where # TODO
+st(d:[reg_addr], o:[4], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+  PC = increase(PC)
 end where
 
-in() = () where # TODO
+sts(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+  PC = iincrease(PC)
 end where
 
-out() = () where # TODO
+in(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  # Not implemented
+  PC = increase(PC)
 end where
 
-push() = () where # TODO
+out(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  # Not implemented
+  PC = increase(PC)
 end where
 
-pop() = () where # TODO
+push(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+end where
+
+pop(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
 end where
