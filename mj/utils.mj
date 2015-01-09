@@ -1,5 +1,5 @@
 init_register(z:[word_size]) = (regs[16-31]) where
-			       
+
   regs16 = reg (z);
   regs17 = reg (z);
   regs18 = reg (z);
@@ -19,7 +19,7 @@ init_register(z:[word_size]) = (regs[16-31]) where
 end where
 
 pusher(r[0-4], w:[word], regs[16-31]) = () where
-  # if r0 = 0 then 
+  # if r0 = 0 then
   #   if r1 = O then
   #     if r2 = 0 then
   #       if r3 = 0 then
@@ -31,7 +31,7 @@ pusher(r[0-4], w:[word], regs[16-31]) = () where
   #       else
   #         if r4 = 0 then
   #           regs2 = w
-  #         else 
+  #         else
   #           regs3 = w
   #         end if #r4
   #       end if #r3
@@ -61,7 +61,7 @@ pusher(r[0-4], w:[word], regs[16-31]) = () where
   #       else
   #         if r4 = 0 then
   #           regs10 = w
-  #         else 
+  #         else
   #           regs11 = w
   #         end if #r4
   #       end if #r3
@@ -152,11 +152,11 @@ push_register(d:[reg_addr], w:[word], regs[16-31]) = () where
   r3 = raddr[3];
   r4 = raddr[4];
 
-  trash = pusher(r[0-4], w, regs[16-31])	
+  trash = pusher(r[0-4], w, regs[16-31])
 end where
 
 poper(r[0-4], regs[16-31]) = (w:[word]) where
-  # if r0 = 0 then 
+  # if r0 = 0 then
   #   if r1 = O then
   #     if r2 = 0 then
   #       if r3 = 0 then
@@ -168,7 +168,7 @@ poper(r[0-4], regs[16-31]) = (w:[word]) where
   #       else
   #         if r4 = 0 then
   #           w = regs2
-  #         else 
+  #         else
   #           w = regs3
   #         end if #r4
   #       end if #r3
@@ -198,7 +198,7 @@ poper(r[0-4], regs[16-31]) = (w:[word]) where
   #       else
   #         if r4 = 0 then
   #           w = regs10
-  #         else 
+  #         else
   #           w = regs11
   #         end if #r4
   #       end if #r3
@@ -289,7 +289,7 @@ pop_register(raddr:[reg_addr], regs[16-31]) = (w:[word]) where
   r2 = raddr[2];
   r3 = raddr[3];
   r4 = raddr[4];
-  
+
   w = poper(r[0-4], regs[16-31])
 end where
 
@@ -318,30 +318,6 @@ one<n>() = (o:[n]) where
     o = 0.one<n-1>()
   end if
   end if
-end where
-
-set_zero(b) = (b) where
-  b = check_zero<word>(w)
-end where
-
-set_negative(w) = (n) where
-  n = w[7]
-end where
-
-set_overflow(wd:[word], wr:[word], w) = (v) where
-  v = (wd[7] and wr[7] and (not w[7])) or ((not wd[7]) and (not wr[7]) and w[7])
-end where
-
-set_sign(n, v) = (s) where
-  s = n xor v
-end where
-
-set_half_carry(wd:[word], wr:[word], w:[word]) = (h) where
-  h = (wd[3] and wr[3]) or (wr[3] and (not w[3])) or ((not w[3]) and wd[3])
-end where
-
-set_carry(wd:[word], wr:[word], w:[word]) = (c) where
-  c = (not wd[7] and wr[7]) or (wr[7] and w[7]) or (w[7] and (not wd[7]))
 end where
 
 increase<n>(R) = (R) where	# simple increase
