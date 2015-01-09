@@ -327,7 +327,12 @@ end where
 
 iincrease<n>(R) = (R) where	# double increase
   two = one<n-1>().0;
-  (R,c) = adder(R, o, 0);
+  (R,c) = adder(R, two, 0);
+end where
+
+decrease<n>(R) = (R) where 	# simple decrease
+  o = one<n>();
+  (R, c) = subtracter(R, o);
 end where
 
 getBit(wire:[word], s0, s1, s2) = (r) where
