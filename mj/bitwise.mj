@@ -26,7 +26,7 @@ lsr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
   S = setStatus(S[0-7]);
 
 
-  (regs[16-31]) = push_register(d, w, regs[16-31])
+  (regs[16-31]) = push_register(d, w, regs[16-31]);
 
   PC = increase(PC)
 end where
@@ -48,7 +48,7 @@ rol(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
 
   S = setStatus(S[0-7]);
 
-  (regs[16-31]) = push_register(d, w, regs[16-31])
+  (regs[16-31]) = push_register(d, w, regs[16-31]);
 
   PC = increase(PC)
 end where
@@ -70,7 +70,7 @@ ror(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
 
   S = setStatus(S[0-7]);
 
-  (regs[16-31]) = push_register(d, w, regs[16-31])
+  (regs[16-31]) = push_register(d, w, regs[16-31]);
 
   PC = increase(PC)
 end where
@@ -91,7 +91,7 @@ asr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word
 
   S = setStatus(S[0-7]);
 
-  (regs[16-31]) = push_register(d, w, regs[16-31])
+  (regs[16-31]) = push_register(d, w, regs[16-31]);
 
   PC = increase(PC)
 end where
@@ -113,7 +113,7 @@ swap(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+wor
   S = setStatus(S[0-7]);
  
 
-  (regs[16-31]) = push_register(d,w, regs[16-31])
+  (regs[16-31]) = push_register(d,w, regs[16-31]);
 
   PC = increase(PC)
 end where
@@ -153,7 +153,7 @@ end where
 bset(s, regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where 
   (S[0-7]) = bset_brancher(0, s, S[0..7]);
   
-  S = setStatus(S[0-7], S)
+  S = setStatus(S[0-7], S);
 
   PC = increase(PC)
 end where
@@ -260,7 +260,7 @@ bld(d:[reg_addr], b, regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+w
 
   Rd = bld_brancher(T, b);
 
-  (regs[16-31]) = push_register(d, w1, regs[16-31])
+  (regs[16-31]) = push_register(d, w1, regs[16-31]);
   
   PC = increase(PC)
 end where
@@ -278,7 +278,7 @@ clc(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+wo
 end where
 
 sen(regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
-  S = setStatus(S[0-4], 1, S[6-7], S)
+  S = setStatus(S[0-4], 1, S[6-7], S);
 
   PC = increase(PC)
 end where

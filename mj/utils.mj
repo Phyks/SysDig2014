@@ -353,3 +353,35 @@ iincrease<n>(R) = (R) where	# double increase
   two = one<n-1>().0;
   (R,c) = adder(R, o, 0);
 end where
+
+getBit(wire:[word], s0, s1, s2) = (r) where
+  if s0 = 0 then
+    if s1 = 0 then
+      if s2 = 0 then		# 000
+        r = wire[0]
+      else 			# 001
+        r = wire[1]
+      end if
+    else
+      if s2 = 0 then		# 010
+        r = wire[2]
+      else 			# 011
+        r = wire[3]
+      end if
+    end if
+  else
+    if s1 = 0 then
+      if s2 = 0 then		# 100
+        r = wire[4]
+      else 			# 101
+        r = wire[5]
+      end if
+    else
+      if s2 = 0 then		# 110
+        r = wire[6]
+      else 			# 111
+        r = wire[7]
+      end if
+    end if
+  end if
+end where
