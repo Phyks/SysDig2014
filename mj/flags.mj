@@ -37,37 +37,37 @@ end where
 
 
 getI(S) = (I) where
-  I = S[0]
+  I = S[7]
 end where
 
 getT(S) = (T) where
-  T = S[1]
+  T = S[6]
 end where
 
 getH(S) = (H) where
-  H = S[2]
+  H = S[5]
 end where
 
 getS(S) = (s) where
-  s = S[3]
+  s = S[4]
 end where
 
 getV(S) = (V) where
-  V = S[4]
+  V = S[3]
 end where
 
 getN(S) = (N) where
-  N = S[5]
+  N = S[2]
 end where
 
 getZ(S) = (Z) where
-  Z = S[6]
+  Z = S[1]
 end where
 
 getC(S) = (C) where
-  C = S[7]
+  C = S[0]
 end where
 
 setStatus(S[0-7]) = (S) where
-  S = S0.S1.S2.S3.S4.S5.S6.S7
+  S = S7.S6.S5.S4.S3.S2.S1.S0
 end where
