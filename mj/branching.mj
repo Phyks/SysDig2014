@@ -125,7 +125,7 @@ sbrs(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[w
   Rr = pop_register(r, regs[16-31]);
   r = getBit(Rr, b[0..2]);
 
-  PC = sbr_comparator(Rr, PC, 1);
+  PC = sbr_comparator(Rr, PC, 1)
 end where
 
 # sbic(k)
@@ -134,10 +134,10 @@ end where
 # sbis() = () where # TODO
 # end where
 
-brb_annex(PC:[word+word], k:[7], cond, val) = (PC:[word+word) where
+brb_annex(PC:[word+word], k:[7], cond, val) = (PC:[word+word]) where
   if cond = val then
-    k16 = k[6].0.0.0.0.0.0.0.0.0.k[5..1];
-    (PC, c) = adder<word+word>(PC, k16, 1); # TODO: check form
+    k16 = k[0].k[1].k[2].k[3].k[5].0.0.0.0.0.0.0.0.0.k[6];
+    (PC, c) = adder<word+word>(PC, k16, 1); # TODO: check little/big endian
   else
     PC = increase(PC);
   end if
@@ -145,31 +145,42 @@ end where
 
 brbs(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   r = getBit(S, s[0..2]);
-  Pc = brb_annex(PC, k, r, 1); 
+  PC = brb_annex(PC, k, r, 1); 
 
 end where
 
 brbc(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
   r = getBit(S, s[0..2]);
   PC = brb_annex(PC, k, r, 0);
+
 end where
 
 breq(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
 
-  (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = brbs(k, 0.0.1, regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word])
+  # S[7] = S[110] = Z
+  (regs[16-31], S, PC, STACK, SP) = brbs(k, 1.1.0, regs[16-31], S, PC, STACK, SP)
 
 end where
 
 brne(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
 
-  (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = brbc(k, 0.0.1, regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word])
+  # S[7] = S[110] = Z
+  (regs[16-31], S, PC, STACK, SP) = brbc(k, 1.1.0, regs[16-31], S, PC, STACK, SP)
 
 end where
 
-brcs() = () where # TODO
+brcs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  # S[8] = S[118] = S
+  (regs[16-31], S, PC, STACK, SP) = brbs(k, 1.1.1, regs[16-31], S, PC, STACK, SP)
+
 end where
 
-brcc() = () where # TODO
+brcc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  # S[8] = S[118] = S
+  (regs[16-31], S, PC, STACK, SP) = brbc(k, 1.1.1, regs[16-31], S, PC, STACK, SP)
+
 end where
 
 brsh() = () where # TODO
