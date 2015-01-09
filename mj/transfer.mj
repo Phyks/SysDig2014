@@ -1,4 +1,4 @@
-ld() = () where # TODO
+ld(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where() = () where
 end where
 
 lds() = () where # TODO
