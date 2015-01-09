@@ -1,16 +1,18 @@
-break() = () where
+break(regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
     # Not implemented
-end where
-
-nop(regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
-
   PC = increase(PC);
 end where
 
-sleep() = () where
-    # Not implemented
+nop(regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+  PC = increase(PC);
 end where
 
-wdr() = () where
+sleep(regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
     # Not implemented
+  PC = increase(PC);
+end where
+
+wdr(regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+    # Not implemented
+  PC = increase(PC);
 end where
