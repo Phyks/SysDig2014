@@ -183,44 +183,72 @@ brcc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:
 
 end where
 
-brsh() = () where # TODO
+brsh(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbc(k, 1.1.1, regs[16-31], S, PC, STACK, SP)
 end where
 
-brlo() = () where # TODO
+brlo(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbs(k, 1.1.1, regs[16-31], S, PC, STACK, SP)
 end where
 
-brmi() = () where # TODO
+brmi(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbs(k, 1.0.1, regs[16-31], S, PC, STACK, SP)
 end where
 
-brpl() = () where # TODO
+brpl(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbc(k, 1.0.1, regs[16-31], S, PC, STACK, SP)
 end where
 
-brge() = () where # TODO
+brge(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbc(k, 0.1.1, regs[16-31], S, PC, STACK, SP)
 end where
 
-brlt() = () where # TODO
+brlt(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbs(k, 0.1.1, regs[16-31], S, PC, STACK, SP)
 end where
 
-brhs() = () where # TODO
+brhs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbs(k, 0.1.0, regs[16-31], S, PC, STACK, SP)
 end where
 
-brhc() = () where # TODO
+brhc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbc(k, 0.1.0, regs[16-31], S, PC, STACK, SP)
 end where
 
-brts() = () where # TODO
+brts(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbs(k, 0.0.1, regs[16-31], S, PC, STACK, SP)
 end where
 
-brtc() = () where # TODO
+brtc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbc(k, 0.0.1, regs[16-31], S, PC, STACK, SP)
 end where
 
-brvs() = () where # TODO
+brvs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbs(k, 1.0.0, regs[16-31], S, PC, STACK, SP)
 end where
 
-brvc() = () where # TODO
+brvc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbc(k, 1.0.0, regs[16-31], S, PC, STACK, SP)
 end where
 
-brie() = () where # TODO
+brie(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbs(k, 0.0.0, regs[16-31], S, PC, STACK, SP)
 end where
 
-brid() = () where # TODO
+brid(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], STACK:[word+word], SP:[word+word]) where
+
+  (regs[16-31], S, PC, STACK, SP) = brbc(k, 0.0.0, regs[16-31], S, PC, STACK, SP)
 end where
