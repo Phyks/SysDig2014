@@ -90,7 +90,7 @@ end where
 push(r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   w1 = pop_register(r, regs[16-31]);
 
-  o = ram<instr_size, word>(SP, 1, SP, w1);
+  out = ram<instr_size, word>(SP, 1, SP, w1);
 
   SP = decrease(SP);
 
@@ -101,9 +101,9 @@ end where
 pop(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   SP = increase(SP);
 
-  o = ram<instr_size, word>(SP, 0, SP, one<word>); # le one ne sert à rien à part à compléter la ram
+  out = ram<instr_size, word>(SP, 0, SP, one<word>()); # le one ne sert à rien à part à compléter la ram
 
-  (regs[16-31]) = push_register(d, o, regs[16-31]);
+  (regs[16-31]) = push_register(d, out, regs[16-31]);
 
   PC = increase(PC);
 end where
