@@ -4,4 +4,5 @@ const wordm2 = 6;
 const reg_addr = 5;
 const instr_addr_size = 512; # 512 Bytes of Flash
 const instr_size = 16;
+const ram_addr_size = 16;
 const nb_registers = 16;
