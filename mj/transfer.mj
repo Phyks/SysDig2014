@@ -1,4 +1,33 @@
-ld(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where() = () where
+ld(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+end where
+
+ldX(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  X = R27..R26;
+  z = zero<word>();
+  out = ram<ram_addr_size, word>(X, 0, z..z, z);
+  (regs[16-31]) = push_register(d, out, regs[16-31]);
+end where
+
+ldX+(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  z = zero<word>();
+  (R26, c1) = adder<word>(R26, z, 1);
+  (R27, c2) = adder<word>(R27, z, c1);
+  X = R27..R26; 
+  out = ram<ram_addr_size, word>(X, 0, z..z, z);
+  (regs[16-31]) = push_register(d, out, regs[16-31]);
+end where
+
+ldX-(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  z = zero<word>();
+  o = one<word>();
+  X = R27..R26; 
+  out = ram<ram_addr_size, word>(X, 0, z..z, z);
+
+  (R26, c) = subtracter<word>(R26, o);
+  carry = z[0..(word-1)]..c;
+  (R27, c2) = subtracter<word>(R27, carry);
+
+  (regs[16-31]) = push_register(d, out, regs[16-31]);
 end where
 
 lds() = () where # TODO
