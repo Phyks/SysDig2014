@@ -19,9 +19,9 @@ end where
 rcall(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
   # save PC+1 on the stack
-  PCtmp = increase(PC);
-  SP0 = push_stack(SP, PCtmp[0..7]);
-  SP = push_stack(SP0, PCtmp[8..15]);
+  PCtmp = increase<ram_addr_size>(PC);
+  SP0 = push_stack(SP, PCtmp[..7]);
+  SP = push_stack(SP0, PCtmp[8..]);
 
   (PC, c) = adder<word+word>(PC, 0.0.0.0.k, 1); # PC ← PC+k+1
   
@@ -33,9 +33,9 @@ icall(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-3
   PC = regs31.regs30;
 
   # save PC+1 on the stack
-  PCtmp = increase(PC);
-  SP0 = push_stack(SP, PCtmp[0..7]);
-  SP = push_stack(SP0, PCtmp[8..15]);
+  PCtmp = increase<ram_addr_size>(PC);
+  SP0 = push_stack(SP, PCtmp[..7]);
+  SP = push_stack(SP0, PCtmp[8..]);
 
   (regs[16-31]) = regs_identity(regs[16-31]);
   S = S;
@@ -44,8 +44,8 @@ end where
 ret(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
   # PC ← STACK(SP)
-  (PC815, SP0) = pop_stack(SP);
-  (PC07, SP) = pop_stack(SP0);
+  (SP0, PC815) = pop_stack(SP);
+  (SP, PC07) = pop_stack(SP0);
 
   PC = PC815.PC07;
 
@@ -55,24 +55,28 @@ end where
 
 reti(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   two = one<word+word-1>().0;
-  PC = pop_stack(SP);
-  (SP, c) = adder<word+word>(SP, two, 0);
+
+  # PC ← STACK(SP)
+  (SP0, PC815) = pop_stack(SP);
+  (SP, PC07) = pop_stack(SP0);
+
+  PC = PC815.PC07;
 
   S = setStatus(S[0..6], 1);
   (regs[16-31]) = regs_identity(regs[16-31]);
 end where
 
-cpse_brancher(Rd:[word], Rr:[word]) = (PC) where
+cpse_brancher(Rd:[word], Rr:[word]) = (PC:[ram_addr_size]) where
   if Rd = Rr then
-    PC = iincrease(PC);		# PC = PC+2
+    PC = iincrease<ram_addr_size>(PC);		# PC = PC+2
   else
-    PC = increase(PC);		# PC = PC+1
+    PC = increase<ram_addr_size>(PC);		# PC = PC+1
   end if
 end where
 
 cpse(r:[5], d:[5], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  Rd = pop_stack_register(d, regs[16-31]);
-  Rr = pop_stack_register(r, regs[16-31]);
+  Rd = pop_register(d, regs[16-31]);
+  Rr = pop_register(r, regs[16-31]);
 
   PC = cpse_brancher(Rd, Rr);
   (regs[16-31]) = regs_identity(regs[16-31]);
@@ -81,8 +85,8 @@ cpse(r:[5], d:[5], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
 end where
 
 cp(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  Rd = pop_stack_register(d, regs[16-31]);
-  Rr = pop_stack_register(r, regs[16-31]);
+  Rd = pop_register(d, regs[16-31]);
+  Rr = pop_register(r, regs[16-31]);
 
   (R, c) = subtracter<word>(Rr, Rd);
   
@@ -97,7 +101,7 @@ cp(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:
 
   (regs[16-31]) = regs_identity(regs[16-31]);
   SP = SP;
-  PC = increase(PC);
+  PC = increase<ram_addr_size>(PC);
 end where
 
 # cpc() = () where
@@ -111,12 +115,12 @@ end where
 
 #   S = setStatus(S[0-5], S[6], S[7]);
   
-#   PC = increase(PC);
+#   PC = increase<ram_addr_size>(PC);
 # end where
 
 cpi(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  Rd = pop_stack_register(1.d, regs[16-31]);
+  Rd = pop_register(1.d, regs[16-31]);
 
   (R, c) = subtracter<word>(K, Rd);
 
@@ -130,34 +134,36 @@ cpi(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[wor
   S = setStatus(S[0-5], S[6], S[7]);
   (regs[16-31]) = regs_identity(regs[16-31]);
   SP = SP;
-  PC = increase(PC);
+  PC = increase<ram_addr_size>(PC);
 end where
 
-sbr_comparator(r, PC, v) = (PC) where
+sbr_comparator(r, PC:[ram_addr_size], v) = (PC:[ram_addr_size]) where
   if r = v then
-    PC = iincrease(PC)
+    PC = iincrease<ram_addr_size>(PC)
   else
-    PC = increase(PC)
+    PC = increase<ram_addr_size>(PC)
   end if
 end where
 
 sbrc(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  Rr = pop_stack_register(r, regs[16-31]);
-  r = getBit(Rr, b[0..2]);
+  Rr = pop_register(r, regs[16-31]);
   
+  r2 = getBit(Rr, b[0..2]);
+  
+  PC = sbr_comparator(r2, PC, 0);
+
   (regs[16-31]) = regs_identity(regs[16-31]);
   SP = SP;
-  PC = sbr_comparator(Rr, PC, 0);
   S = S;
 end where
 
 sbrs(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  Rr = pop_stack_register(r, regs[16-31]);
-  r = getBit(Rr, b[0..2]);
+  Rr = pop_register(r, regs[16-31]);
+  r2 = getBit(Rr, b[0..2]);
  
-  PC = sbr_comparator(Rr, PC, 1);
+  PC = sbr_comparator(r2, PC, 1);
  (regs[16-31]) = regs_identity(regs[16-31]);
   SP = SP;
   S = S;
@@ -175,7 +181,7 @@ brb_annex(PC:[word+word], k:[7], cond, val) = (PC:[word+word]) where
     k16 = k[0].0.0.0.0.0.0.0.0.k[1].k[2].k[3].k[4].k[5];
     (PC, c) = adder<word+word>(PC, k16, 1); # TODO: check little/big endian
   else
-    PC = increase(PC);
+    PC = increase<ram_addr_size>(PC);
   end if
 end where
 

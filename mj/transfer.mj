@@ -1,9 +1,11 @@
+require utils.mj
+
 ldd(d:[reg_addr], address:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   z = zero<word>();
   out = ram<ram_addr_size, word>(address, 0, z.z, z);
 
   (regs[16-31]) = push_register(d, out, regs[16-31]);
-  PC = increase(PC);
+  PC = increase<ram_addr_size>(PC);
   SP = SP;
   S = S;
 end where
@@ -71,10 +73,10 @@ end where
 lds(d:[reg_addr], k:[instr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   w = ram<ram_addr_size, word>(k, 0, k, zero<word>());
 
-  (regs[15-31]) = push_register(d, w, regs[16-31]);
+  (regs[16-31]) = push_register(d, w, regs[16-31]);
   SP = SP;
   S = S;  
-  PC = iincrease(PC)
+  PC = iincrease<ram_addr_size>(PC)
   
 end where
 
@@ -82,8 +84,8 @@ std(w:[word], address:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+wo
   z = zero<word>();
   out = ram<ram_addr_size, word>(address, 1, address, w);
 
-  (regs[16-31]) = identity_registers(regs[16-31]);
-  PC = increase(PC);
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  PC = increase<ram_addr_size>(PC);
   SP = SP;
   S = S;
 end where
@@ -157,46 +159,46 @@ sts(r:[reg_addr], k:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word
   Rr = pop_register(r, regs[16-31]);
   out = ram<ram_addr_size, word>(k, 1, k, Rr);
 
-  PC = iincrease(PC);
+  PC = iincrease<ram_addr_size>(PC);
   S = S;
   SP = SP;
-  (regs[16-31]) = identity_regs(regs[16-31]);
+  (regs[16-31]) = regs_identity(regs[16-31]);
 end where
 
 in(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   # Not implemented
-  PC = increase(PC);
+  PC = increase<ram_addr_size>(PC);
   S = S;
   SP = SP;
-  (regs[16-31]) = identity_regs(regs[16-31]);
+  (regs[16-31]) = regs_identity(regs[16-31]);
 
 end where
 
 out(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   # Not implemented
-  PC = increase(PC);
+  PC = increase<ram_addr_size>(PC);
   S = S;
   SP = SP;
-  (regs[16-31]) = identity_regs(regs[16-31]);
+  (regs[16-31]) = regs_identity(regs[16-31]);
 end where
 
-push(r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
+push(r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Rr = pop_register(r, regs[16-31]);
 
   out = ram<instr_size, word>(SP, 1, SP, Rr);
 
-  SP = decrease(SP);
+  SP = decrease<ram_addr_size>(SP);
   S = S;
-  PC = increase(PC);
-  (regs[16-31]) = identity_regs(regs[16-31]);
+  PC = increase<ram_addr_size>(PC);
+  (regs[16-31]) = regs_identity(regs[16-31]);
 end where
 
-pop(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  SP = increase(SP);
+pop(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  SP = increase<ram_addr_size>(SP);
 
   out = ram<instr_size, word>(SP, 0, SP, one<word>()); # le one ne sert à rien à part à compléter la ram
 
   (regs[16-31]) = push_register(d, out, regs[16-31]);
   S = S;
-  PC = increase(PC);
+  PC = increase<ram_addr_size>(PC);
 end where
