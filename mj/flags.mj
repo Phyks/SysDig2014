@@ -69,5 +69,5 @@ getC(S) = (C) where
 end where
 
 setStatus(S[0-7]) = (S) where
-  S = S7.S6.S5.S4.S3.S2.S1.S0
+  S = S0.S1.S2.S3.S4.S5.S6.S7
 end where
