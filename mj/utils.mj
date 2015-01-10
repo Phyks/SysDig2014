@@ -1,5 +1,4 @@
-init_register(z:[word_size]) = (regs[16-31]) where
-
+init_register(z:[word]) = (regs[16-31]) where
   regs16 = reg (z);
   regs17 = reg (z);
   regs18 = reg (z);
