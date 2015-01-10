@@ -19,9 +19,9 @@ ld(d:[reg_addr], o0, o1, o2, o3, regs[16-31]:[word], S:[word], PC:[word+word], S
         regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs27..regs26, regs, S, PC, SP)
 	z = zero<word>();
   	o = one<word>();
-	(regs26, c) = subtracter<word>(R26, o);
+	(regs26, c) = subtracter<word>(regs26, o);
   	carry = z[0..(word-1)]..c;
-  	(regs27, c2) = subtracter<word>(R27, carry);
+  	(regs27, c2) = subtracter<word>(regs27, carry);
       else
         if o0 = 0 and o1 = 0 and o2 = 0 and o3 = 1 then # Y
           regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs29..regs28, regs, S, PC, SP)
