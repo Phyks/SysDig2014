@@ -42,15 +42,15 @@ route00000(o[5-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (re
   if o5 = 0 then
     (regs[16-31], S, PC, SP) = nop(regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = cpc(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP) # TODO
+    (regs[16-31], S, PC, SP) = cpc(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP) # TODO
   end if
 end where
 
 route00001(o[5-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o5 = 0 then
-    (regs[16-31], S, PC, SP) = sbc(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = sbc(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = add(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = add(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   end if
 end where
 
@@ -64,25 +64,25 @@ end where
 
 route00010(o[5-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o5 = 0 then
-    (regs[16-31], S, PC, SP) = cpse(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = cpse(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = cp(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = cp(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   end if
 end where
 
 route00011(o[5-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o5 = 0 then
-    (regs[16-31], S, PC, SP) = sub(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = sub(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = adc(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = adc(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   end if
 end where
 
 route001(o[3-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o3 = 0 then
-    regs[16-31], S = route0010(o[4-15], regs[16-31], S)
+    (regs[16-31], S, PC, SP) = route0010(o[4-15], regs[16-31], S)
   else
-    regs[16-31], S = route0011(o[4-15], regs[16-31], S)
+    (regs[16-31], S, PC, SP) = route0011(o[4-15], regs[16-31], S)
   end if
 end where
 
@@ -96,22 +96,22 @@ end where
 
 route00100(o[5-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o5 = 0 then
-    (regs[16-31], S, PC, SP) = and(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = and_op(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = eor(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = eor(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   end if
 end where
 
 route00101(o[5-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o5 = 0 then
-    (regs[16-31], S, PC, SP) = or(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = or_op(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = mov(o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = mov(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   end if
 end where
 
 route0011(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = cpi(o4..o5..o6..o7..o12..o13..o14..o15, o8..o9..o10..o11, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = cpi(o4.o5.o6.o7.o12.o13.o14.o15, o8.o9.o10.o11, regs[16-31], S, PC, SP)
 end where
 
 route01(o[2-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
@@ -131,11 +131,11 @@ route010(o[3-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs
 end where
 
 route0100(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = sbci(o4..o5..o6..o7..o12..o13..o14..o15, o8..o9..o10..o11, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = sbci(o4.o5.o6.o7.o12.o13.o14.o15, o8.o9.o10.o11, regs[16-31], S, PC, SP)
 end where
 
 route0101(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = subi(o4..o5..o6..o7..o12..o13..o14..o15, o8..o9..o10..o11, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = subi(o4.o5.o6.o7.o12.o13.o14.o15, o8.o9.o10.o11, regs[16-31], S, PC, SP)
 end where
 
 route011(o[3-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
@@ -147,11 +147,11 @@ route011(o[3-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs
 end where
 
 route0110(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = sbr(o4..o5..o6..o7..o12..o13..o14..o15, o8..o9..o10..o11, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = sbr(o4.o5.o6.o7.o12.o13.o14.o15, o8.o9.o10.o11, regs[16-31], S, PC, SP)
 end where
 
 route0111(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = andi(o4..o5..o6..o7..o12..o13..o14..o15, o8..o9..o10..o11, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = andi(o4.o5.o6.o7.o12.o13.o14.o15, o8.o9.o10.o11, regs[16-31], S, PC, SP)
 end where
 
 
@@ -181,13 +181,13 @@ end where
 
 route1000(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o6 = 0 then
-    (regs[16-31], S, PC, SP) = ld(o7..o8..o9..o10..o11, o12..o13..o14..o15, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = ld(o7.o8.o9.o10.o11, o12.o13.o14.o15, regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = st(o7..o8..o9..o10..o11, o12..o13..o14..o15, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = st(o7.o8.o9.o10.o11, o12.o13.o14.o15, regs[16-31], S, PC, SP)
 end where
 
 route1001(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = ld(o7..o8..o9..o10..o11, o12..o13..o14..o15, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = ld(o7.o8.o9.o10.o11, o12.o13.o14.o15, regs[16-31], S, PC, SP)
 end where
 
 route101(o[3-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
@@ -200,16 +200,16 @@ end where
 
 route1010(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o4 = 0 then
-    (regs[16-31], S, PC, SP) = lds(o5..o6..o7..o12..o13..o14..o15, o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = lds(o5.o6.o7.o12.o13.o14.o15, o8.o9.o10.o11, regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = sts(o5..o6..o7..o12..o13..o14..o15, o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = sts(o5.o6.o7.o12.o13.o14.o15, o8.o9.o10.o11, regs[16-31], S, PC, SP)
 end where
 
 route1011(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o4 = 0 then
-    (regs[16-31], S, PC, SP) = in(o5..o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = in(o5.o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = out(o5..o6..o12..o13..o14..o15, o7..o8..o9..o10..o11, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = out(o5.o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP)
 end where
 
 route11(o[2-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
@@ -229,11 +229,11 @@ route110(o[3-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs
 end where
 
 route1100(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = rjmp(o4..o5..o6..o7..o8..o9..o10..o11..o12..o13..o14..o15, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = rjmp(o4.o5.o6.o7.o8.o9.o10.o11.o12.o13.o14.o15, regs[16-31], S, PC, SP)
 end where
 
 route1101(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = rcall(o4..o5..o6..o7..o8..o9..o10..o11..o12..o13..o14..o15, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = rcall(o4.o5.o6.o7.o8.o9.o10.o11.o12.o13.o14.o15, regs[16-31], S, PC, SP)
 end where
 
 route111(o[3-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
@@ -245,7 +245,7 @@ route111(o[3-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs
 end where
 
 route1110(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = ldi(o4..o5..o6..o7..o12..o13..o14..o15, o8..o9..o10..o11, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = ldi(o4.o5.o6.o7.o12.o13.o14.o15, o8.o9.o10.o11, regs[16-31], S, PC, SP)
 end where
 
 route1111(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
@@ -264,25 +264,25 @@ end where
 
 route111100(o[6-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o13 = 0 and o14 = 0 and o15 = 0 then
-    (regs[16-31], S, PC, SP) = brlo(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = brlo(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
   else
     if o13 = 0 and o14 = 0 and o15 = 1 then
-      (regs[16-31], S, PC, SP) = breq(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+      (regs[16-31], S, PC, SP) = breq(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
     else
       if o13 = 0 and o14 = 1 and o15 = 0 then
-        (regs[16-31], S, PC, SP) = brmi(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+        (regs[16-31], S, PC, SP) = brmi(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
       else
         if o13 = 0 and o14 = 1 and o15 = 1 then
-          (regs[16-31], S, PC, SP) = brvs(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+          (regs[16-31], S, PC, SP) = brvs(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
         else
           if o13 = 1 and o14 = 0 and o15 = 0 then
-            (regs[16-31], S, PC, SP) = brlt(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+            (regs[16-31], S, PC, SP) = brlt(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
           else
             if o13 = 1 and o14 = 0 and o15 = 1 then
-              (regs[16-31], S, PC, SP) = brhs(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+              (regs[16-31], S, PC, SP) = brhs(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
             else
               if o13 = 1 and o14 = 1 and o15 = 0 then
-                (regs[16-31], S, PC, SP) = brts(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+                (regs[16-31], S, PC, SP) = brts(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
               else o13 = 1 and o14 = 1 and o15 = 1 then
                 (regs[16-31], S, PC, SP) = nop(regs[16-31], S, PC, SP) # No opcode associated
               end if
@@ -296,27 +296,27 @@ end where
 
 route111101(o[6-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o13 = 0 and o14 = 0 and o15 = 0 then
-    (regs[16-31], S, PC, SP) = brsh(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = brsh(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
   else
     if o13 = 0 and o14 = 0 and o15 = 1 then
-      (regs[16-31], S, PC, SP) = brne(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+      (regs[16-31], S, PC, SP) = brne(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
     else
       if o13 = 0 and o14 = 1 and o15 = 0 then
-        (regs[16-31], S, PC, SP) = brpl(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+        (regs[16-31], S, PC, SP) = brpl(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
       else
         if o13 = 0 and o14 = 1 and o15 = 1 then
-          (regs[16-31], S, PC, SP) = brie(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+          (regs[16-31], S, PC, SP) = brie(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
         else
           if o13 = 1 and o14 = 0 and o15 = 0 then
-            (regs[16-31], S, PC, SP) = brge(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+            (regs[16-31], S, PC, SP) = brge(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
           else
             if o13 = 1 and o14 = 0 and o15 = 1 then
-              (regs[16-31], S, PC, SP) = brhc(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+              (regs[16-31], S, PC, SP) = brhc(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
             else
               if o13 = 1 and o14 = 1 and o15 = 0 then
-                (regs[16-31], S, PC, SP) = brtc(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+                (regs[16-31], S, PC, SP) = brtc(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
               else o13 = 1 and o14 = 1 and o15 = 1 then
-                (regs[16-31], S, PC, SP) = brid(o6..o7..o8..o9..o10..o11..o12, regs[16-31], S, PC, SP)
+                (regs[16-31], S, PC, SP) = brid(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
               end if
             end if
           end if
@@ -330,14 +330,14 @@ route11111(o[5-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (re
   if o5 = 0 then
     (regs[16-31], S, PC, SP) = route111110(o[5-15], regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = sbrs(o7..o8..o9..o10..o11, o13..o14..o15, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = sbrs(o7.o8.o9.o10.o11, o13.o14.o15, regs[16-31], S, PC, SP)
 end where
 
 route111110(o[6-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o6 = 0 then
-    (regs[16-31], S, PC, SP) = bld(o7..o8..o9..o10..o11, o13..o14..o15, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = bld(o7.o8.o9.o10.o11, o13.o14.o15, regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = bst(o7..o8..o9..o10..o11, o13..o14..o15, regs[16-31], S, PC, SP)
+    (regs[16-31], S, PC, SP) = bst(o7.o8.o9.o10.o11, o13.o14.o15, regs[16-31], S, PC, SP)
 end where
 
 route(o[0-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
