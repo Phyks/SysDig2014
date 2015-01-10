@@ -1,44 +1,65 @@
 rjmp(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (PC, c) = adder<word+word>(PC, 0.0.0.0.k, 1)
+  (PC, c) = adder<word+word>(PC, 0.0.0.0.k, 1);
+
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  S = S;
+  SP = SP;
 end where
 
 ijmp(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Z = regs31.regs30;
 
-  (PC, c) = adder<word+word>(PC, Z, 0)	
+  (PC, c) = adder<word+word>(PC, Z, 0);
+
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  S = S;
+  SP = SP;
 end where
 
 rcall(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  o = one<word+word>();
-  two = one<word+word-1>().0;
+  # save PC+1 on the stack
+  PCtmp = increase(PC);
+  SP0 = push(SP, PCtmp[0..7]);
+  SP = push(SP0, PCtmp[8..15]);
+
   (PC, c) = adder<word+word>(PC, 0.0.0.0.k, 1); # PC ← PC+k+1
-  (STACK, c) = adder<word+word>(PC, o, 0);	# STACK ← PC+1
-  (SP, c) = subtracter<word+word>(SP, two); # SP ← SP-2
   
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  S = S;
 end where
 
-icall(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  zero = zero<word+word>();
-  two = one<word+word-1>().0;
-  
+icall(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where  
   PC = regs31.regs30;
-  (STACK, c) = adder<word+word>(PC, zero, 1);
-  (SP, c) = subtracter<word+word>(SP, two);
+
+  # save PC+1 on the stack
+  PCtmp = increase(PC);
+  SP0 = push(SP, PCtmp[0..7]);
+  SP = push(SP0, PCtmp[8..15]);
+
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  S = S;
 end where
 
 ret(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  two = one<word+word-1>().0;
-  PC = STACK;
-  (SP, c) = adder<word+word>(SP, two, 0); 
+
+  # PC ← STACK(SP)
+  (PC815, SP0) = pop(SP);
+  (PC07, SP) = pop(SP0);
+
+  PC = PC815.PC07;
+
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  S = S;
 end where
 
 reti(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   two = one<word+word-1>().0;
-  PC = STACK;
+  PC = pop(SP);
   (SP, c) = adder<word+word>(SP, two, 0);
 
-  S = setStatus(1, S[1-7])
+  S = setStatus(1, S[1..7]);
+  (regs[16-31]) = regs_identity(regs[16-31]);
 end where
 
 cpse_brancher(Rd:[word], Rr:[word]) = (PC) where
@@ -102,6 +123,8 @@ cpi(d:[reg_addr-1], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]
   S0 = cC(R[7], (not Rd[7]), K[7]);
 
   S = setStatus(S[7], S[6], S[2-7]);
+
+  PC = increase(PC);
 end where
 
 sbr_comparator(r, PC, v) = (PC) where
@@ -136,7 +159,8 @@ end where
 
 brb_annex(PC:[word+word], k:[7], cond, val) = (PC:[word+word]) where
   if cond = val then
-    k16 = k[0].k[1].k[2].k[3].k[5].0.0.0.0.0.0.0.0.0.k[6];
+    # rewrite k in two complement's form on 16 bits
+    k16 = k[0].0.0.0.0.0.0.0.0.k[1].k[2].k[3].k[4].k[5];
     (PC, c) = adder<word+word>(PC, k16, 1); # TODO: check little/big endian
   else
     PC = increase(PC);
@@ -146,7 +170,6 @@ end where
 brbs(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   r = getBit(S, s[0..2]);
   PC = brb_annex(PC, k, r, 1); 
-
 end where
 
 brbc(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
@@ -158,97 +181,97 @@ end where
 breq(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
   # S[0] = S[110] = Z
-  (regs[16-31], S, PC, SP) = brbs(k, 1.1.0, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbs(k, 0.0.1, regs[16-31], S, PC, SP)
 
 end where
 
 brne(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
   # S[0] = S[110] = Z
-  (regs[16-31], S, PC, SP) = brbc(k, 1.1.0, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbc(k, 0.0.1, regs[16-31], S, PC, SP)
 
 end where
 
 brcs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
   # S[8] = S[118] = S
-  (regs[16-31], S, PC, SP) = brbs(k, 1.1.1, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbs(k, 0.0.0, regs[16-31], S, PC, SP)
 
 end where
 
 brcc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
   # S[8] = S[118] = S
-  (regs[16-31], S, PC, SP) = brbc(k, 1.1.1, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbc(k, 0.0.0, regs[16-31], S, PC, SP)
 
 end where
 
 brsh(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 1.1.1, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbc(k, 0.0.0, regs[16-31], S, PC, SP)
 end where
 
 brlo(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 1.1.1, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbs(k, 0.0.0, regs[16-31], S, PC, SP)
 end where
 
 brmi(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 1.0.1, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbs(k, 0.1.0, regs[16-31], S, PC, SP)
 end where
 
 brpl(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 1.0.1, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbc(k, 0.1.0, regs[16-31], S, PC, SP)
 end where
 
 brge(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 0.1.1, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbc(k, 1.0.0, regs[16-31], S, PC, SP)
 end where
 
 brlt(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 0.1.1, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbs(k, 1.0.0, regs[16-31], S, PC, SP)
 end where
 
 brhs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 0.1.0, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbs(k, 1.0.1, regs[16-31], S, PC, SP)
 end where
 
 brhc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 0.1.0, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbc(k, 1.0.1, regs[16-31], S, PC, SP)
 end where
 
 brts(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 0.0.1, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbs(k, 1.1.0, regs[16-31], S, PC, SP)
 end where
 
 brtc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 0.0.1, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbc(k, 1.1.0, regs[16-31], S, PC, SP)
 end where
 
 brvs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 1.0.0, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbs(k, 0.1.1, regs[16-31], S, PC, SP)
 end where
 
 brvc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 1.0.0, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbc(k, 0.1.1, regs[16-31], S, PC, SP)
 end where
 
 brie(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 0.0.0, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbs(k, 1.1.1, regs[16-31], S, PC, SP)
 end where
 
 brid(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 0.0.0, regs[16-31], S, PC, SP)
+  (regs[16-31], S, PC, SP) = brbc(k, 1.1.1, regs[16-31], S, PC, SP)
 end where
