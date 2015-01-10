@@ -94,7 +94,9 @@ cp(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:
   S0 = cC(R[7], (not Rd[7]), Rr[7]);
 
   S = setStatus(S[0-5], S[6], S[7]);
-  
+
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  SP = SP;
   PC = increase(PC);
 end where
 
