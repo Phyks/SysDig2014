@@ -202,3 +202,10 @@ pop(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S = S;
   PC = increase<ram_addr_size>(PC);
 end where
+
+mov(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  S = S;
+  SP = SP;
+  PC = PC;
+end where
