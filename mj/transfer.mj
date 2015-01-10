@@ -1,14 +1,17 @@
 ldd(d:[reg_addr], address:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   z = zero<word>();
   out = ram<ram_addr_size, word>(address, 0, z.z, z);
+
   (regs[16-31]) = push_register(d, out, regs[16-31]);
   PC = increase(PC);
+  SP = SP;
+  S = S;
 end where
 
 ld(d:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   if o3 = 0 then # Z cases
     if o0 = 1 then # Z+
-      (regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs, S, PC, SP);
+      (regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs[16-31], S, PC, SP);
       z = zero<word>();
       (regs30, c1) = adder<word>(regs30, z, 1);
       (regs31, c2) = adder<word>(regs31, z, c1);
@@ -19,15 +22,15 @@ ld(d:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+
 	(regs30, c) = subtracter<word>(regs30, o);
   	carry = z[0..(word-1)].c;
   	(regs31, c2) = subtracter<word>(regs31, carry);
-    	(regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs, S, PC, SP)
+    	(regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs[16-31], S, PC, SP)
       else # Z
-        (regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs, S, PC, SP)
+        (regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs[16-31], S, PC, SP)
       end if
     end if
   else
     if o2 = 1 then # X cases
       if o0 = 1 then # X+
-        (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs, S, PC, SP);
+        (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs[16-31], S, PC, SP);
         z = zero<word>();
         (regs26, c1) = adder<word>(regs26, z, 1);
         (regs27, c2) = adder<word>(regs27, z, c1);
@@ -38,14 +41,14 @@ ld(d:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+
 	  (regs26, c) = subtracter<word>(regs26, o);
   	  carry = z[0..(word-1)].c;
   	  (regs27, c2) = subtracter<word>(regs27, carry);
-    	  (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs, S, PC, SP)
+    	  (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs[16-31], S, PC, SP)
         else # X
-          (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs, S, PC, SP)
+          (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs[16-31], S, PC, SP)
 	end if
       end if
     else # Y cases
       if o0 = 1 then # Y+
-        (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs, S, PC, SP);
+        (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs[16-31], S, PC, SP);
         z = zero<word>();
         (regs28, c1) = adder<word>(regs28, z, 1);
         (regs29, c2) = adder<word>(regs29, z, c1);
@@ -56,46 +59,136 @@ ld(d:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+
 	  (regs28, c) = subtracter<word>(regs28, o);
   	  carry = z[0..(word-1)].c;
   	  (regs29, c2) = subtracter<word>(regs29, carry);
-    	  (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs, S, PC, SP)
+    	  (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs[16-31], S, PC, SP)
         else # Y
-          (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs, S, PC, SP)
+          (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs[16-31], S, PC, SP)
 	end if
       end if
     end if
   end if
 end where
 
-lds(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+lds(d:[reg_addr], k:[instr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  w = ram<ram_addr_size, word>(k, 0, k, zero<word>());
+
+  (regs[15-31]) = push_register(d, w, regs[16-31]);
+  SP = SP;
+  S = S;  
   PC = iincrease(PC)
+  
 end where
 
-st(d:[reg_addr], o:[4], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
-  PC = increase(PC)
+std(w:[word], address:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  z = zero<word>();
+  out = ram<ram_addr_size, word>(address, 1, address, w);
+
+  (regs[16-31]) = identity_registers(regs[16-31]);
+  PC = increase(PC);
+  SP = SP;
+  S = S;
 end where
 
-sts(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
-  PC = iincrease(PC)
+st_annex(w:[word], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  if o3 = 0 then # Z cases
+    if o0 = 1 then # Z+
+      (regs[16-31], S, PC, SP) = std(w, regs31.regs30, regs[16-31], S, PC, SP);
+      z = zero<word>();
+      (regs30, c1) = adder<word>(regs30, z, 1);
+      (regs31, c2) = adder<word>(regs31, z, c1);
+    else
+      if o1 = 1 then # -Z
+        z = zero<word>();
+    	o = one<word>();
+	(regs30, c) = subtracter<word>(regs30, o);
+  	carry = z[0..(word-1)].c;
+  	(regs31, c2) = subtracter<word>(regs31, carry);
+    	(regs[16-31], S, PC, SP) = std(w, regs31.regs30, regs[16-31], S, PC, SP)
+      else # Z
+        (regs[16-31], S, PC, SP) = std(w, regs31.regs30, regs[16-31], S, PC, SP)
+      end if
+    end if
+  else
+    if o2 = 1 then # X cases
+      if o0 = 1 then # X+
+        (regs[16-31], S, PC, SP) = std(w, regs27.regs26, regs[16-31], S, PC, SP);
+        z = zero<word>();
+        (regs26, c1) = adder<word>(regs26, z, 1);
+        (regs27, c2) = adder<word>(regs27, z, c1);
+      else
+        if o1 = 1 then # -X
+  	  z = zero<word>();
+    	  o = one<word>();
+	  (regs26, c) = subtracter<word>(regs26, o);
+  	  carry = z[0..(word-1)].c;
+  	  (regs27, c2) = subtracter<word>(regs27, carry);
+    	  (regs[16-31], S, PC, SP) = std(w, regs27.regs26, regs[16-31], S, PC, SP)
+        else # X
+          (regs[16-31], S, PC, SP) = std(w, regs27.regs26, regs[16-31], S, PC, SP)
+	end if
+      end if
+    else # Y cases
+      if o0 = 1 then # Y+
+        (regs[16-31], S, PC, SP) = std(w, regs29.regs28, regs[16-31], S, PC, SP);
+        z = zero<word>();
+        (regs28, c1) = adder<word>(regs28, z, 1);
+        (regs29, c2) = adder<word>(regs29, z, c1);
+      else
+        if o1 = 1 then # -Y
+  	  z = zero<word>();
+    	  o = one<word>();
+	  (regs28, c) = subtracter<word>(regs28, o);
+  	  carry = z[0..(word-1)].c;
+  	  (regs29, c2) = subtracter<word>(regs29, carry);
+    	  (regs[16-31], S, PC, SP) = std(w, regs29.regs28, regs[16-31], S, PC, SP)
+        else # Y
+          (regs[16-31], S, PC, SP) = std(w, regs29.regs28, regs[16-31], S, PC, SP)
+	end if
+      end if
+    end if
+  end if
+end where
+
+st(r:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  w = pop_register(r, regs[16-31]);
+  (regs[16-31], S, PC, SP) = st_annex(w, o[0-3], regs[16-31], S, PC, SP);
+end where
+
+sts(r:[reg_addr], k:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  Rr = pop_register(r, regs[16-31]);
+  out = ram<ram_addr_size, word>(k, 1, k, Rr);
+
+  PC = iincrease(PC);
+  S = S;
+  SP = SP;
+  (regs[16-31]) = identity_regs(regs[16-31]);
 end where
 
 in(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   # Not implemented
-  PC = increase(PC)
+  PC = increase(PC);
+  S = S;
+  SP = SP;
+  (regs[16-31]) = identity_regs(regs[16-31]);
+
 end where
 
 out(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   # Not implemented
-  PC = increase(PC)
+  PC = increase(PC);
+  S = S;
+  SP = SP;
+  (regs[16-31]) = identity_regs(regs[16-31]);
 end where
 
 push(r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  w1 = pop_register(r, regs[16-31]);
+  Rr = pop_register(r, regs[16-31]);
 
-  out = ram<instr_size, word>(SP, 1, SP, w1);
+  out = ram<instr_size, word>(SP, 1, SP, Rr);
 
   SP = decrease(SP);
-
+  S = S;
   PC = increase(PC);
-
+  (regs[16-31]) = identity_regs(regs[16-31]);
 end where
 
 pop(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
@@ -104,6 +197,6 @@ pop(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   out = ram<instr_size, word>(SP, 0, SP, one<word>()); # le one ne sert à rien à part à compléter la ram
 
   (regs[16-31]) = push_register(d, out, regs[16-31]);
-
+  S = S;
   PC = increase(PC);
 end where
