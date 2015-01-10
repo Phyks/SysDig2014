@@ -300,32 +300,32 @@ route111100(o[6-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (r
 end where
 
 route111101(o[6-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
-  if o13 = 0 and o14 = 0 and o15 = 0 then
-    (regs[16-31], S, PC, SP) = brsh(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
-  else
-    if o13 = 0 and o14 = 0 and o15 = 1 then
-      (regs[16-31], S, PC, SP) = brne(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
+  if o13 = 0 then
+    if o14 = 0 then
+      if o15 = 0 then # 000
+        (regs[16-31], S, PC, SP) = brsh(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
+      else # 001
+        (regs[16-31], S, PC, SP) = brne(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
+      end if
     else
-      if o13 = 0 and o14 = 1 and o15 = 0 then
+      if o15 = 0 then # 010
         (regs[16-31], S, PC, SP) = brpl(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
-      else
-        if o13 = 0 and o14 = 1 and o15 = 1 then
-          (regs[16-31], S, PC, SP) = brie(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
-        else
-          if o13 = 1 and o14 = 0 and o15 = 0 then
-            (regs[16-31], S, PC, SP) = brge(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
-          else
-            if o13 = 1 and o14 = 0 and o15 = 1 then
-              (regs[16-31], S, PC, SP) = brhc(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
-            else
-              if o13 = 1 and o14 = 1 and o15 = 0 then
-                (regs[16-31], S, PC, SP) = brtc(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
-              else o13 = 1 and o14 = 1 and o15 = 1 then
-                (regs[16-31], S, PC, SP) = brid(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
-              end if
-            end if
-          end if
-        end if
+      else # 011
+        (regs[16-31], S, PC, SP) = brie(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
+      end if     
+    end if
+  else	
+    if o14 = 0 then
+      if o15 = 0 then # 100
+        (regs[16-31], S, PC, SP) = brge(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
+      else # 101
+        (regs[16-31], S, PC, SP) = brhc(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
+      end if
+    else
+      if o15 = 0 then # 110
+        (regs[16-31], S, PC, SP) = brtc(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
+      else # 111
+        (regs[16-31], S, PC, SP) = brid(o6.o7.o8.o9.o10.o11.o12, regs[16-31], S, PC, SP)
       end if
     end if
   end if
