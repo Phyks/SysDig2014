@@ -355,29 +355,21 @@ route(o[0-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16
   end if
 end where
 
-main() = () where
-  opcode = rom<instr_addr_size, instr_size>(instr_addr);
-  op0 = opcode[0];
-  op1 = opcode[1];
-  op2 = opcode[2];
-  op3 = opcode[3];
-  op4 = opcode[4];
-  op5 = opcode[5];
-  op6 = opcode[6];
-  op7 = opcode[7];
-  op8 = opcode[8];
-  op9 = opcode[9];
-  op10 = opcode[10];
-  op11 = opcode[11];
-  op12 = opcode[12];
-  op13 = opcode[13];
-  op14 = opcode[14];
-  op15 = opcode[15];
+mainLoop(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word]) where
+  # Get the opcode of the instruction
+  opcode = rom<instr_addr_size, instr_size>(PC);
+  (op[0-15]) = op_decomposer(opcode); 
   
-  z = zero<word>();
-  (regs[16-31]) = init_register(zero<word>());
-  S = z;
-  PC = z.z;
-  SP = z.z;
+  # Route it to the instruction
   (regs[16-31], S, PC, SP) = route(op[0-15], S, PC, SP);
+
+  # Loop
+  (regs[16-31], S, PC, SP) = mainLoop(regs[16-31], S, PC, SP);
+end where
+
+main() = () where
+  # Initialize everything to zero, except SP which is RAMEND 
+  RAMEND = allone<instr_size>();
+  (regs[16-31], S, PC, SP) = init_register(zero<word>(), RAMEND);
+  
 end where

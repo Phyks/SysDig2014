@@ -20,8 +20,8 @@ rcall(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (r
 
   # save PC+1 on the stack
   PCtmp = increase(PC);
-  SP0 = push(SP, PCtmp[0..7]);
-  SP = push(SP0, PCtmp[8..15]);
+  SP0 = push_stack(SP, PCtmp[0..7]);
+  SP = push_stack(SP0, PCtmp[8..15]);
 
   (PC, c) = adder<word+word>(PC, 0.0.0.0.k, 1); # PC ← PC+k+1
   
@@ -34,8 +34,8 @@ icall(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-3
 
   # save PC+1 on the stack
   PCtmp = increase(PC);
-  SP0 = push(SP, PCtmp[0..7]);
-  SP = push(SP0, PCtmp[8..15]);
+  SP0 = push_stack(SP, PCtmp[0..7]);
+  SP = push_stack(SP0, PCtmp[8..15]);
 
   (regs[16-31]) = regs_identity(regs[16-31]);
   S = S;
@@ -44,8 +44,8 @@ end where
 ret(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
   # PC ← STACK(SP)
-  (PC815, SP0) = pop(SP);
-  (PC07, SP) = pop(SP0);
+  (PC815, SP0) = pop_stack(SP);
+  (PC07, SP) = pop_stack(SP0);
 
   PC = PC815.PC07;
 
@@ -55,7 +55,7 @@ end where
 
 reti(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   two = one<word+word-1>().0;
-  PC = pop(SP);
+  PC = pop_stack(SP);
   (SP, c) = adder<word+word>(SP, two, 0);
 
   S = setStatus(S[0..6], 1);
@@ -71,8 +71,8 @@ cpse_brancher(Rd:[word], Rr:[word]) = (PC) where
 end where
 
 cpse(r:[5], d:[5], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  Rd = pop_register(d, regs[16-31]);
-  Rr = pop_register(r, regs[16-31]);
+  Rd = pop_stack_register(d, regs[16-31]);
+  Rr = pop_stack_register(r, regs[16-31]);
 
   PC = cpse_brancher(Rd, Rr);
   (regs[16-31]) = regs_identity(regs[16-31]);
@@ -81,8 +81,8 @@ cpse(r:[5], d:[5], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
 end where
 
 cp(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  Rd = pop_register(d, regs[16-31]);
-  Rr = pop_register(r, regs[16-31]);
+  Rd = pop_stack_register(d, regs[16-31]);
+  Rr = pop_stack_register(r, regs[16-31]);
 
   (R, c) = subtracter<word>(Rr, Rd);
   
@@ -116,7 +116,7 @@ end where
 
 cpi(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  Rd = pop_register(1.d, regs[16-31]);
+  Rd = pop_stack_register(1.d, regs[16-31]);
 
   (R, c) = subtracter<word>(K, Rd);
 
@@ -143,20 +143,24 @@ end where
 
 sbrc(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  Rr = pop_register(r, regs[16-31]);
+  Rr = pop_stack_register(r, regs[16-31]);
   r = getBit(Rr, b[0..2]);
   
   (regs[16-31]) = regs_identity(regs[16-31]);
   SP = SP;
   PC = sbr_comparator(Rr, PC, 0);
+  S = S;
 end where
 
 sbrs(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  Rr = pop_register(r, regs[16-31]);
+  Rr = pop_stack_register(r, regs[16-31]);
   r = getBit(Rr, b[0..2]);
-
-  PC = sbr_comparator(Rr, PC, 1)
+ 
+  PC = sbr_comparator(Rr, PC, 1);
+ (regs[16-31]) = regs_identity(regs[16-31]);
+  SP = SP;
+  S = S;
 end where
 
 # sbic(k)
@@ -179,13 +183,18 @@ brbs(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
   r = getBit(S, s[0..2]);
   PC = brb_annex(PC, k, r, 1);
 
-  S = S; 
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  SP = SP;
+  S = S;
 end where
 
 brbc(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   r = getBit(S, s[0..2]);
   PC = brb_annex(PC, k, r, 0);
 
+ (regs[16-31]) = regs_identity(regs[16-31]);
+  SP = SP;
+  S = S;
 end where
 
 breq(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
