@@ -145,13 +145,13 @@ pusher(r[0-4], w:[word], regs[16-31]) = () where
 end where
 
 push_register(d:[reg_addr], w:[word], regs[16-31]) = () where
-  r0 = raddr[0];
-  r1 = raddr[1];
-  r2 = raddr[2];
-  r3 = raddr[3];
-  r4 = raddr[4];
+  d0 = d[0];
+  d1 = d[1];
+  d2 = d[2];
+  d3 = d[3];
+  d4 = d[4];
 
-  trash = pusher(r[0-4], w, regs[16-31])
+  trash = pusher(d[0-4], w, regs[16-31])
 end where
 
 poper(r[0-4], regs[16-31]) = (w:[word]) where
