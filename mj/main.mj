@@ -350,7 +350,7 @@ end where
 route(o[0-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
   if o0 = 0 then
     (regs[16-31], S, PC, SP) = route0(o[1-15], regs[16-31], S, PC, SP)
-  else o0 = 1 then
+  else # o0 = 1
     (regs[16-31], S, PC, SP) = route1(o[1-15], regs[16-31], S, PC, SP)
   end if
 end where
