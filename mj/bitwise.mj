@@ -327,7 +327,7 @@ cln(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]
 end where
 
 sez(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0], 1, S[2-7]);
+  S = setStatus(S[0], 1, S[2..7]);
 
   (regs[16-31]) = regs_identity(regs[16-31]);
   PC = increase(PC);
@@ -335,7 +335,7 @@ sez(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]
 end where
 
 clz(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-   S = setStatus(S[0], 0, S[2-7]);
+   S = setStatus(S[0], 0, S[2..7]);
 
   (regs[16-31]) = regs_identity(regs[16-31]);
   PC = increase(PC);
