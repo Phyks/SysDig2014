@@ -385,3 +385,18 @@ getBit(wire:[word], s0, s1, s2) = (r) where
     end if
   end if
 end where
+
+
+push(SP:[ram_addr_size], w:[word]) = (SP) where
+  #o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data);
+  o = ram<ram_addr_size, word>(SP, 1, SP, w);
+
+  # decrease SP by the right amount
+  SP = decrease(SP);
+end where
+
+pop(SP:[ram_addr_size]) = (SP, o) where
+  #o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data);
+  o = ram<ram_addr_size, word>(SP, 0, SP, zero<word>());
+  SP = increase(SP);
+end where

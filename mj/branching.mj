@@ -58,7 +58,7 @@ reti(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31
   PC = pop(SP);
   (SP, c) = adder<word+word>(SP, two, 0);
 
-  S = setStatus(1, S[1..7]);
+  S = setStatus(S[0..6], 1);
   (regs[16-31]) = regs_identity(regs[16-31]);
 end where
 
@@ -74,7 +74,10 @@ cpse(r:[5], d:[5], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
-  PC = cpse_brancher(Rd, Rr)
+  PC = cpse_brancher(Rd, Rr);
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  S = S;
+  SP = SP;
 end where
 
 cp(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
@@ -84,13 +87,13 @@ cp(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:
   (R, c) = subtracter<word>(Rr, Rd);
   
   S5 = cH(R[3], (not Rd[3]), Rr[3]);
-  S4 = cS(N, V);
+  S4 = cS(S2, S3);
   S3 = cV((not R[7]), Rd[7], (not Rr[7]));
   S2 = R[7];
   S1 = cZ(R);
   S0 = cC(R[7], (not Rd[7]), Rr[7]);
 
-  S = setStatus(S[7], S[6], S[2-7]);
+  S = setStatus(S[0-5], S[6], S[7]);
   
   PC = increase(PC);
 end where
@@ -98,13 +101,13 @@ end where
 cpc() = () where
   # TODO
   S5 = cH(R[3], (not Rd[3]), Rr[3]);
-  S4 = cS(N, V);
+  S4 = cS(S2, S3);
   S3 = cV((not R[7]), Rd[7], (not Rr[7]));
   S2 = R[7];
   S1 = cZ(R);
   S0 = cC(R[7], (not Rd[7]), Rr[7]);
 
-  S = setStatus(S[7], S[6], S[2-7]);
+  S = setStatus(S[0-5], S[6], S[7]);
   
   PC = increase(PC);
 end where
@@ -116,13 +119,13 @@ cpi(d:[reg_addr-1], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]
   (R, c) = subtracter<word>(K, Rd);
 
   S5 = cH(R[3], (not Rd[3]), K[3]);
-  S4 = cS(N, V);
+  S4 = cS(S2, S3);
   S3 = cV((not R[7]), Rd[7], (not K[7]));
   S2 = R[7];
   S1 = cZ(R);
   S0 = cC(R[7], (not Rd[7]), K[7]);
 
-  S = setStatus(S[7], S[6], S[2-7]);
+  S = setStatus(S[0-5], S[6], S[7]);
 
   PC = increase(PC);
 end where
@@ -169,7 +172,9 @@ end where
 
 brbs(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   r = getBit(S, s[0..2]);
-  PC = brb_annex(PC, k, r, 1); 
+  PC = brb_annex(PC, k, r, 1);
+
+  S = S; 
 end where
 
 brbc(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
