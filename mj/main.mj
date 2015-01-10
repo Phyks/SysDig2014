@@ -374,5 +374,10 @@ main() = () where
   op14 = opcode[14];
   op15 = opcode[15];
   
-  route(op[0-15]);
+  z = zero<word>();
+  (regs[16-31]) = init_register(zero<word>());
+  S = z;
+  PC = z.z;
+  SP = z.z;
+  (regs[16-31], S, PC, SP) = route(op[0-15], S, PC, SP);
 end where
