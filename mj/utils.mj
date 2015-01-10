@@ -1,23 +1,72 @@
-init_register(z:[word], spval:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  regs16 = reg (z);
-  regs17 = reg (z);
-  regs18 = reg (z);
-  regs19 = reg (z);
-  regs20 = reg (z);
-  regs21 = reg (z);
-  regs22 = reg (z);
-  regs23 = reg (z);
-  regs24 = reg (z);
-  regs25 = reg (z);
-  regs26 = reg (z);
-  regs27 = reg (z);
-  regs28 = reg (z);
-  regs29 = reg (z);
-  regs30 = reg (z);
-  regs31 = reg (z);
-  S = z;
-  PC = z.z;
-  SP = spval;
+require gates.mj
+
+regs_identity(regs[16-31]:[word]) = (regs[16-31]:[word]) where
+  regs16 = regs16;
+  regs17 = regs17;
+  regs18 = regs18;
+  regs19 = regs19;
+  regs20 = regs20;
+  regs21 = regs21;
+  regs22 = regs22;
+  regs23 = regs23;
+  regs24 = regs24;
+  regs25 = regs25;
+  regs26 = regs26;
+  regs27 = regs27;
+  regs28 = regs28;
+  regs29 = regs29;
+  regs30 = regs30;
+  regs31 = regs31;
+end where
+
+allone<n>() = (o:[n]) where
+  if n = 0 then
+    o = []
+  else
+    o = 1.allone<n-1>()
+  end if
+end where
+
+zero<n>() = (o:[n]) where
+  if n = 0 then
+    o = []
+  else
+    o = 0.allone<n-1>()
+  end if
+end where
+
+one<n>() = (o:[n]) where
+  if n = 0 then
+    o = []
+  else if n = 1 then
+    o = 1
+  else
+    o = 0.one<n-1>()
+  end if
+  end if
+end where
+
+init_register(z, SP_init:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  regs16 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs17 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs18 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs19 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs20 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs21 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs22 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs23 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs24 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs25 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs26 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs27 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs28 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs29 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs30 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs31 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  z2 = zero<word>();
+  S = z2;
+  PC = z2.z2;
+  SP = SP_init;
 end where
 
 op_decomposer(opcode:[instr_size]) = (op[0-15]) where
@@ -39,7 +88,7 @@ op_decomposer(opcode:[instr_size]) = (op[0-15]) where
   op15 = opcode[15];
 end where
 
-pusher(r[0-4], w:[word], regs[16-31]) = () where
+pusher(r[0-4], w:[word], regs[16-31]:[word]) = (regs[16-31]:[word]) where
   # if r0 = 0 then
   #   if r1 = O then
   #     if r2 = 0 then
@@ -107,28 +156,36 @@ pusher(r[0-4], w:[word], regs[16-31]) = () where
       if r2 = 0 then
         if r3 = 0 then
           if r4 = 0 then
+	    (regs[16-31]) = regs_identity(regs[16-31]);
             regs16 = w ;
           else
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs17 = w ;
           end if #r4
         else
           if r4 = 0 then
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs18 = w ;
           else
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs19 = w ;
           end if #r4
         end if #r3
       else
         if r3 = 0 then
           if r4 = 0 then
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs20 = w ;
           else
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs21 = w ;
           end if # r4
         else
           if r4 = 0 then
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs22 = w ;
           else
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs23 = w ;
           end if #r4
         end if #r3
@@ -137,28 +194,36 @@ pusher(r[0-4], w:[word], regs[16-31]) = () where
       if r2 = 0 then
         if r3 = 0 then
           if r4 = 0 then
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs24 = w ;
           else
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs25 = w ;
           end if #r4
         else
           if r4 = 0 then
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs26 = w ;
           else
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs27 = w ;
           end if #r4
         end if #r3
       else
         if r3 = 0 then
           if r4 = 0 then
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs28 = w ;
           else
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs29 = w ;
           end if # r4
         else
           if r4 = 0 then
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs30 = w
           else
+            (regs[16-31]) = regs_identity(regs[16-31]);
             regs31 = w
           end if #r4
         end if #r3
@@ -166,37 +231,17 @@ pusher(r[0-4], w:[word], regs[16-31]) = () where
     end if #r1
 end where
 
-push_register(d:[reg_addr], w:[word], regs[16-31]) = () where
+push_register(d:[reg_addr], w:[word], regs[16-31]:[word]) = (regs[16-31]:[word]) where
   d0 = d[0];
   d1 = d[1];
   d2 = d[2];
   d3 = d[3];
   d4 = d[4];
 
-  trash = pusher(d[0-4], w, regs[16-31])
+  (regs[16-31]) = pusher(d[0-4], w, regs[16-31])
 end where
 
-
-regs_identity(regs[16-31]:[word]) = (regs[16-31]:[word]) where
-  regs16 = regs16;
-  regs17 = regs17;
-  regs18 = regs18;
-  regs19 = regs19;
-  regs20 = regs20;
-  regs21 = regs21;
-  regs22 = regs22;
-  regs23 = regs23;
-  regs24 = regs24;
-  regs25 = regs25;
-  regs26 = regs26;
-  regs27 = regs27;
-  regs28 = regs28;
-  regs29 = regs29;
-  regs30 = regs30;
-  regs31 = regs31;
-end where
-
-poper(r[0-4], regs[16-31]) = (w:[word]) where
+poper(r[0-4], regs[16-31]:[word]) = (w:[word]) where
   # if r0 = 0 then
   #   if r1 = O then
   #     if r2 = 0 then
@@ -324,7 +369,7 @@ poper(r[0-4], regs[16-31]) = (w:[word]) where
   # end if #r0
 end where
 
-pop_register(raddr:[reg_addr], regs[16-31]) = (w:[word]) where
+pop_register(raddr:[reg_addr], regs[16-31]:[word]) = (w:[word]) where
   r0 = raddr[0];
   r1 = raddr[1];
   r2 = raddr[2];
@@ -334,46 +379,20 @@ pop_register(raddr:[reg_addr], regs[16-31]) = (w:[word]) where
   w = poper(r[0-4], regs[16-31])
 end where
 
-allone<n>() = (o:[n]) where
-  if n = 0 then
-    o = []
-  else
-    o = 1.allone<n-1>()
-  end if
-end where
-
-zero<n>() = (o:[n]) where
-  if n = 0 then
-    o = []
-  else
-    o = 0.allone<n-1>()
-  end if
-end where
-
-one<n>() = (o:[n]) where
-  if n = 0 then
-    o = []
-  else if n = 1 then
-    o = 1
-  else
-    o = 0.one<n-1>()
-  end if
-  end if
-end where
-
-increase<n>(R) = (R) where	# simple increase
+increase<n>(R:[n]) = (R:[n]) where	# simple increase
   o = one<n>();
-  (R,c) = adder(R, o, 0);
+  (R, c) = adder<n>(R, o, 0);
+ 
 end where
 
-iincrease<n>(R) = (R) where	# double increase
+iincrease<n>(R:[n]) = (R:[n]) where	# double increase
   two = one<n-1>().0;
-  (R,c) = adder(R, two, 0);
+  (R, c) = adder<n>(R, two, 0);
 end where
 
-decrease<n>(R) = (R) where 	# simple decrease
+decrease<n>(R:[n]) = (R:[n]) where 	# simple decrease
   o = one<n>();
-  (R, c) = subtracter(R, o);
+  (R, c) = subtracter<n>(R, o);
 end where
 
 getBit(wire:[word], s0, s1, s2) = (r) where
@@ -409,16 +428,18 @@ getBit(wire:[word], s0, s1, s2) = (r) where
 end where
 
 
-push_stack(SP:[ram_addr_size], w:[word]) = (SP) where
+push_stack(SP:[ram_addr_size], w:[word]) = (SP:[ram_addr_size]) where
   #o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data);
   o = ram<ram_addr_size, word>(SP, 1, SP, w);
 
   # decrease SP by the right amount
-  SP = decrease(SP);
+  SP = decrease<ram_addr_size>(SP);
+
 end where
 
-pop_stack(SP:[ram_addr_size]) = (SP, o) where
+pop_stack(SP:[ram_addr_size]) = (SP:[ram_addr_size], o:[word]) where
   #o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data);
   o = ram<ram_addr_size, word>(SP, 0, SP, zero<word>());
-  SP = increase(SP);
+
+  SP = increase<ram_addr_size>(SP);
 end where

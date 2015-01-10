@@ -44,7 +44,7 @@ def compute_includes(file):
         if v in already_included:
             continue
         generated[k] = compute_includes(v)
-    return ''.join(generated)
+    return '\n'.join(generated)
 
 
 def main():
