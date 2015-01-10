@@ -183,8 +183,8 @@ route1000(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (reg
   if o6 = 0 then
     (regs[16-31], S, PC, SP) = ld(o7.o8.o9.o10.o11, o12.o13.o14.o15, regs[16-31], S, PC, SP)
   else
-    (regs[16-31], S, PC, SP) = st(o7.o8.o9.o10.o11, o12.o13.o14.o15, regs[16-31], S, PC, SP)
-  enf if
+    (regs[16-31], S, PC, SP) = st(o7.o8.o9.o10.o11, o12.o13.o14.o15, regs[16-31], S, PC, SP);
+  end if
 end where
 
 route1001(o[4-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
