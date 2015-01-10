@@ -336,6 +336,7 @@ route11111(o[5-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (re
     (regs[16-31], S, PC, SP) = route111110(o[5-15], regs[16-31], S, PC, SP)
   else
     (regs[16-31], S, PC, SP) = sbrs(o7.o8.o9.o10.o11, o13.o14.o15, regs[16-31], S, PC, SP)
+  end if
 end where
 
 route111110(o[6-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
@@ -343,6 +344,7 @@ route111110(o[6-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (r
     (regs[16-31], S, PC, SP) = bld(o7.o8.o9.o10.o11, o13.o14.o15, regs[16-31], S, PC, SP)
   else
     (regs[16-31], S, PC, SP) = bst(o7.o8.o9.o10.o11, o13.o14.o15, regs[16-31], S, PC, SP)
+  end if		  
 end where
 
 route(o[0-15], regs[16-31], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31], S:[word], PC:[word+word], SP:[word+word]) where
