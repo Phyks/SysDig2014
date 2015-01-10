@@ -104,8 +104,12 @@ cp(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:
   PC = increase<ram_addr_size>(PC);
 end where
 
-# cpc() = () where
-#   # TODO
+cpc(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  S = S;
+  PC = PC;
+  SP = SP
+
 #   S5 = cH(R[3], (not Rd[3]), Rr[3]);
 #   S4 = cS(S2, S3);
 #   S3 = cV((not R[7]), Rd[7], (not Rr[7]));
@@ -116,7 +120,7 @@ end where
 #   S = setStatus(S[0-5], S[6], S[7]);
   
 #   PC = increase<ram_addr_size>(PC);
-# end where
+end where
 
 cpi(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
