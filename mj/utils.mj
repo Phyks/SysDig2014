@@ -301,7 +301,7 @@ allone<n>() = (o:[n]) where
   end if
 end where
 
-allone<n>() = (o:[n]) where
+zero<n>() = (o:[n]) where
   if n = 0 then
     o = []
   else
