@@ -339,13 +339,13 @@ subi(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
   SP = SP;
 end where
 
-sbc(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
-  S = S
-end where
+# sbc(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+#   S = S
+# end where
 
-sbci(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
-  S = S
-end where
+# sbci(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+#   S = S
+# end where
 
 neg(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
