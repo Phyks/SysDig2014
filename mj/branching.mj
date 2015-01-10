@@ -100,21 +100,21 @@ cp(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:
   PC = increase(PC);
 end where
 
-cpc() = () where
-  # TODO
-  S5 = cH(R[3], (not Rd[3]), Rr[3]);
-  S4 = cS(S2, S3);
-  S3 = cV((not R[7]), Rd[7], (not Rr[7]));
-  S2 = R[7];
-  S1 = cZ(R);
-  S0 = cC(R[7], (not Rd[7]), Rr[7]);
+# cpc() = () where
+#   # TODO
+#   S5 = cH(R[3], (not Rd[3]), Rr[3]);
+#   S4 = cS(S2, S3);
+#   S3 = cV((not R[7]), Rd[7], (not Rr[7]));
+#   S2 = R[7];
+#   S1 = cZ(R);
+#   S0 = cC(R[7], (not Rd[7]), Rr[7]);
 
-  S = setStatus(S[0-5], S[6], S[7]);
+#   S = setStatus(S[0-5], S[6], S[7]);
   
-  PC = increase(PC);
-end where
+#   PC = increase(PC);
+# end where
 
-cpi(d:[reg_addr-1], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+cpi(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
   Rd = pop_register(1.d, regs[16-31]);
 
@@ -128,7 +128,8 @@ cpi(d:[reg_addr-1], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]
   S0 = cC(R[7], (not Rd[7]), K[7]);
 
   S = setStatus(S[0-5], S[6], S[7]);
-
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  SP = SP;
   PC = increase(PC);
 end where
 
