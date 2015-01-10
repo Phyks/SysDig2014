@@ -62,28 +62,28 @@ cp(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:
 
   (R, c) = subtracter<word>(Rr, Rd);
   
-  S2 = cH(R[3], (not Rd[3]), Rr[3]);
-  S3 = cS(N, V);
-  S4 = cV((not R[7]), Rd[7], (not Rr[7]));
-  S5 = R[7];
-  S6 = cZ(R);
-  S7 = cC(R[7], (not Rd[7]), Rr[7]);
+  S5 = cH(R[3], (not Rd[3]), Rr[3]);
+  S4 = cS(N, V);
+  S3 = cV((not R[7]), Rd[7], (not Rr[7]));
+  S2 = R[7];
+  S1 = cZ(R);
+  S0 = cC(R[7], (not Rd[7]), Rr[7]);
 
-  S = setStatus(S[0], S[1], S[2-7]);
+  S = setStatus(S[7], S[6], S[2-7]);
   
   PC = increase(PC);
 end where
 
 cpc() = () where
   # TODO
-  S2 = cH(R[3], (not Rd[3]), Rr[3]);
-  S3 = cS(N, V);
-  S4 = cV((not R[7]), Rd[7], (not Rr[7]));
-  S5 = R[7];
-  S6 = cZ(R);
-  S7 = cC(R[7], (not Rd[7]), Rr[7]);
+  S5 = cH(R[3], (not Rd[3]), Rr[3]);
+  S4 = cS(N, V);
+  S3 = cV((not R[7]), Rd[7], (not Rr[7]));
+  S2 = R[7];
+  S1 = cZ(R);
+  S0 = cC(R[7], (not Rd[7]), Rr[7]);
 
-  S = setStatus(S[0], S[1], S[2-7]);
+  S = setStatus(S[7], S[6], S[2-7]);
   
   PC = increase(PC);
 end where
@@ -94,14 +94,14 @@ cpi(d:[reg_addr-1], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]
 
   (R, c) = subtracter<word>(K, Rd);
 
-  S2 = cH(R[3], (not Rd[3]), K[3]);
-  S3 = cS(N, V);
-  S4 = cV((not R[7]), Rd[7], (not K[7]));
-  S5 = R[7];
-  S6 = cZ(R);
-  S7 = cC(R[7], (not Rd[7]), K[7]);
+  S5 = cH(R[3], (not Rd[3]), K[3]);
+  S4 = cS(N, V);
+  S3 = cV((not R[7]), Rd[7], (not K[7]));
+  S2 = R[7];
+  S1 = cZ(R);
+  S0 = cC(R[7], (not Rd[7]), K[7]);
 
-  S = setStatus(S[0], S[1], S[2-7]);
+  S = setStatus(S[7], S[6], S[2-7]);
 end where
 
 sbr_comparator(r, PC, v) = (PC) where
@@ -157,14 +157,14 @@ end where
 
 breq(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  # S[7] = S[110] = Z
+  # S[0] = S[110] = Z
   (regs[16-31], S, PC, SP) = brbs(k, 1.1.0, regs[16-31], S, PC, SP)
 
 end where
 
 brne(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-  # S[7] = S[110] = Z
+  # S[0] = S[110] = Z
   (regs[16-31], S, PC, SP) = brbc(k, 1.1.0, regs[16-31], S, PC, SP)
 
 end where
