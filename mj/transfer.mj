@@ -1,62 +1,63 @@
-ld(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-end where
-
-ldX(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  X = R27..R26;
+ldd(d:[reg_addr], address:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   z = zero<word>();
-  out = ram<ram_addr_size, word>(X, 0, z..z, z);
-  (regs[16-31]) = push_register(d, out, regs[16-31]);
-end where
-
-ldX+(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  z = zero<word>();
-  (R26, c1) = adder<word>(R26, z, 1);
-  (R27, c2) = adder<word>(R27, z, c1);
-  X = R27..R26; 
-  out = ram<ram_addr_size, word>(X, 0, z..z, z);
-  (regs[16-31]) = push_register(d, out, regs[16-31]);
-end where
-
-ldX-(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  z = zero<word>();
-  o = one<word>();
-  X = R27..R26; 
-  out = ram<ram_addr_size, word>(X, 0, z..z, z);
-
-  (R26, c) = subtracter<word>(R26, o);
-  carry = z[0..(word-1)]..c;
-  (R27, c2) = subtracter<word>(R27, carry);
-
+  out = ram<ram_addr_size, word>(address, 0, z..z, z);
   (regs[16-31]) = push_register(d, out, regs[16-31]);
 end where
 
 ld(d:[reg_addr], o0, o1, o2, o3, regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where() = () where
   if o0 = 0 and o1 = 0 and o2 = 1 and o3 = 1 then # X
-    regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[27]..regs[26], regs, S, PC, SP)
+    regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs27..regs26, regs, S, PC, SP)
   else
     if o0 = 1 and o1 = 0 and o2 = 1 and o3 = 1 then # X+
-      regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[27]..regs[26], regs, S, PC, SP)
+      z = zero<word>();
+      (R26, c1) = adder<word>(regs26, z, 1);
+      (R27, c2) = adder<word>(regs27, z, c1);
+      X = R27..R26;
+      regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, X, regs, S, PC, SP)
     else
       if o0 = 0 and o1 = 1 and o2 = 1 and o3 = 1 then # -X
-        regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[27]..regs[26], regs, S, PC, SP)
+        regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs27..regs26, regs, S, PC, SP)
+	z = zero<word>();
+  	o = one<word>();
+	(regs26, c) = subtracter<word>(R26, o);
+  	carry = z[0..(word-1)]..c;
+  	(regs27, c2) = subtracter<word>(R27, carry);
       else
         if o0 = 0 and o1 = 0 and o2 = 0 and o3 = 1 then # Y
-          regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[29]..regs[28], regs, S, PC, SP)
+          regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs29..regs28, regs, S, PC, SP)
         else
           if o0 = 1 and o1 = 0 and o2 = 0 and o3 = 1 then # Y+
-            regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[29]..regs[28], regs, S, PC, SP)
+            z = zero<word>();
+      	    (R28, c1) = adder<word>(regs28, z, 1);
+      	    (R29, c2) = adder<word>(regs29, z, c1);
+      	    Y = R29..R28;
+            regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, Y, regs, S, PC, SP)
           else
             if o0 = 0 and o1 = 1 and o2 = 0 and o3 = 1 then # -Y
-              regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[29]..regs[28], regs, S, PC, SP)
+              regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs29..regs28, regs, S, PC, SP)
+      	      z = zero<word>();
+  	      o = one<word>();
+	      (regs28, c) = subtracter<word>(regs28, o);
+  	      carry = z[0..(word-1)]..c;
+  	      (regs29, c2) = subtracter<word>(regs29, carry)
             else
               if o0 = 0 and o1 = 0 and o2 = 0 and o3 = 0 then # Z
-                regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[31]..regs[30], regs, S, PC, SP)
+                regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs31..regs30, regs, S, PC, SP)
               else
                 if o0 = 1 and o1 = 0 and o2 = 0 and o3 = 0 then #Z+
-                  regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[31]..regs[30], regs, S, PC, SP)
+		  z = zero<word>();
+      	    	  (R30, c1) = adder<word>(regs30, z, 1);
+      	    	  (R31, c2) = adder<word>(regs31, z, c1);
+      	    	  Z = R31..R30;
+                  regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs31..regs30, regs, S, PC, SP)
                 else
                   if o0 = 0 and o1 = 1 and o2 = 0 and o3 = 0 then # -Z
-                    regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs[31]..regs[30], regs, S, PC, SP)
+                    regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word] = ldd(d, regs31..regs30, regs, S, PC, SP)
+		    z = zero<word>();
+  	      	    o = one<word>();
+	      	    (regs30, c) = subtracter<word>(regs30, o);
+  	      	    carry = z[0..(word-1)]..c;
+  	      	    (regs31, c2) = subtracter<word>(regs31, carry)
                   end if
                 end if
               end if
