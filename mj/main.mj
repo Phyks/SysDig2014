@@ -357,5 +357,22 @@ end where
 
 main() = () where
   opcode = rom<instr_addr_size, instr_size>(instr_addr);
-  route(opcode[0..15])
+  op0 = opcode[0];
+  op1 = opcode[1];
+  op2 = opcode[2];
+  op3 = opcode[3];
+  op4 = opcode[4];
+  op5 = opcode[5];
+  op6 = opcode[6];
+  op7 = opcode[7];
+  op8 = opcode[8];
+  op9 = opcode[9];
+  op10 = opcode[10];
+  op11 = opcode[11];
+  op12 = opcode[12];
+  op13 = opcode[13];
+  op14 = opcode[14];
+  op15 = opcode[15];
+  
+  route(op[0-15]);
 end where
