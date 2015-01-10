@@ -145,7 +145,9 @@ sbrc(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word
 
   Rr = pop_register(r, regs[16-31]);
   r = getBit(Rr, b[0..2]);
-
+  
+  (regs[16-31]) = regs_identity(regs[16-31]);
+  SP = SP;
   PC = sbr_comparator(Rr, PC, 0);
 end where
 
