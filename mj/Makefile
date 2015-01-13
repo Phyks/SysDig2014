@@ -3,8 +3,8 @@ MJC=../minijazz/minijazz/mjc.native
 
 all: compile
 
-core: $(MJS)
-	./generate.py main.mj > core
+core.mj: $(MJS)
+	./generate.py main.mj > core.mj
 
 compile: core
-	$(MJC) core
+	$(MJC) core.mj
