@@ -2,14 +2,8 @@ MJS=arithmetics.mj bitwise.mj branching.mj constants.mj flags.mj gates.mj main.m
 
 all: compile
 
-mjc.native:
-	cd ../simulateur/minijazz
-	ocamlbuild mjc.native
-	cd -
-	ln -s ln -s ../simulateur/minijazz/_build/main/mjc.native mjc.native
+core: $(MJS)
+	./generate.py main.mj > core
 
-_tmp: $(MJS)
-	./generate.py main.mj > _tmp
-
-compile: _tmp mjc.native
-	./mjc.native _tmp
+compile: core mjc.native
+	./mjc.native core
