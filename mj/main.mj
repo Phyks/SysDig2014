@@ -45,6 +45,9 @@ end where
 route00000(o[5-15], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   if o5 = 0 then
     (regs[16-31], S, PC, SP) = nop(regs[16-31], S, PC, SP)
+    # (regs[16-31]) = regs_identity(regs[16-31]);
+    # S = S;
+    # PC = PC; SP = SP;
   else
     (regs[16-31], S, PC, SP) = cpc(o6.o12.o13.o14.o15, o7.o8.o9.o10.o11, regs[16-31], S, PC, SP) # TODO
   end if
@@ -367,16 +370,17 @@ mainLoop(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[1
   (op[0-15]) = op_decomposer(opcode); 
   
   # Route it to the instruction
-  (regs[16-31], S, PC, SP) = route(op[0-15], regs[16-31], S, PC, SP);
-
+  (regs[16-31], S, PC, SP) = route00000(op[5-15], regs[16-31], S, PC, SP);
+  
   # Loop
   (regs[16-31], S, PC, SP) = mainLoop(regs[16-31], S, PC, SP);
 end where
 
 main() = () where
   # Initialize everything to zero, except SP which is RAMEND 
-  RAMEND = allone<instr_size>();
+  RAMEND = zero<7>().1.zero<8>(); #RAMEND = 512
   z = 0;
   (regs[16-31], S, PC, SP) = init_register(z, RAMEND);
   
+  (regs[16-31], S, PC, SP) = mainLoop(regs[16-31], S, PC, SP);
 end where
