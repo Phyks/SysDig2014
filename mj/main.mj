@@ -376,6 +376,7 @@ end where
 main() = () where
   # Initialize everything to zero, except SP which is RAMEND 
   RAMEND = allone<instr_size>();
-  (regs[16-31], S, PC, SP) = init_register(0, RAMEND);
+  z = 0;
+  (regs[16-31], S, PC, SP) = init_register(z, RAMEND);
   
 end where
