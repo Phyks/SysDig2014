@@ -2,7 +2,7 @@ require utils.mj
 require gates.mj
 require flags.mj
 
-add(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+add(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -25,7 +25,7 @@ add(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
   SP = SP;
 end where
 
-adc(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+adc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -81,8 +81,8 @@ and_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word],
   SP = SP;
 end where
 
-andi(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  Rd = pop_register(d, regs[16-31]);
+andi(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  Rd = pop_register(1.d, regs[16-31]);
 
   R = and_n<word>(Rd, K);
 
@@ -97,7 +97,7 @@ andi(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[w
 
   S = setStatus(S[0-7]);
   
-  (regs[16-31]) = push_register(d, R, regs[16-31]);
+  (regs[16-31]) = push_register(1.d, R, regs[16-31]);
 
   PC = increase<ram_addr_size>(PC);
   SP = SP;
@@ -136,8 +136,8 @@ or_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], 
   SP = SP;
 end where
 
-ori(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  Rd = pop_register(d, regs[16-31]);
+ori(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  Rd = pop_register(1.d, regs[16-31]);
 
   R = or_n<word>(Rd, K);
 
@@ -152,7 +152,7 @@ ori(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[wo
 
   S = setStatus(S[0-7]);
 
-  (regs[16-31]) = push_register(d, R, regs[16-31]);
+  (regs[16-31]) = push_register(1.d, R, regs[16-31]);
 
   PC = increase<ram_addr_size>(PC);
   SP = SP;
@@ -195,7 +195,7 @@ com_n<n>(a:[n]) = (o:[n]) where
   if n = 0 then
     o = []
   else
-    o = (a[0] & 0).com_n<n-1>(a[1..])
+    o = (not a[0]).com_n<n-1>(a[1..])
   end if
 end where
 
@@ -220,12 +220,12 @@ com(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   SP = SP;
 end where					
 
-sbr(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+sbr(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   (regs[16-31], S, PC, SP) = ori(d, K, regs[16-31], S, PC, SP)
 end where
 
-cbr(d:[reg_addr], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  a = com_n<word>(K);
+cbr(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  a = com_n<8>(K);
   (regs[16-31], S, PC, SP) = andi(d, a, regs[16-31], S, PC, SP)
 end where
 
@@ -294,7 +294,7 @@ ser(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S = S;
 end where
 
-sub(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+sub(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -317,7 +317,7 @@ sub(r:[reg_addr], d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
   SP = SP;
 end where
 
-subi(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+subi(d:[4], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Rd = pop_register(1.d, regs[16-31]);
   
   (R, c) = subtracter<word>(Rd, K);
@@ -346,7 +346,7 @@ sbc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
   SP = SP
 end where
 
-sbci(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+sbci(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
   (regs[16-31]) = regs_identity(regs[16-31]);
   S = S;
   PC = PC;
