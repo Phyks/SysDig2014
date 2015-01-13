@@ -1,12 +1,19 @@
 require gates.mj
 
 muxn<n>(a:[n], b:[n], v) = (c:[n]) where
-  c0 = mux(a[0], b[0], v);
-  cr = muxn<n-1>(a[2..], b[2..], v);
-  c = c0.cr;
+  if n = 0 then
+    c = []
+  else
+    c0 = mux(a[0], b[0], v);
+    cr = muxn<n-1>(a[1..], b[1..], v);
+    c = c0.cr;
+  end if
 end where
 
-muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word], regs_2_[16-31]:[word], S2:[word], PC2:[word+word], SP2:[word+word], v) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word],
+      regs_2_[16-31]:[word], S2:[word], PC2:[word+word], SP2:[word+word],
+      v)
+       = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   regs16 = muxn<word>(regs_1_16, regs_2_26, v);
   regs17 = muxn<word>(regs_1_17, regs_2_27, v);
   regs18 = muxn<word>(regs_1_18, regs_2_28, v);
@@ -26,7 +33,7 @@ muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word], regs_2
   S = muxn<word>(S1, S2, v);
   PC = muxn<word+word>(PC1, PC2, v);
   SP = muxn<word+word>(SP1, SP2, v);
-			
+	
 end where
 
 regs_identity(regs[16-31]:[word]) = (regs[16-31]:[word]) where
