@@ -6,5 +6,5 @@ all: compile
 core: $(MJS)
 	./generate.py main.mj > core
 
-compile: core mjc.native
+compile: core
 	$(MJC) core
