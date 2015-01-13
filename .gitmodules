@@ -1,3 +1,6 @@
 [submodule "simulateur"]
-	path = simulateur
+	path = minijazz
+	url = https://github.com/cphyc/simulateur.git
+[submodule "minijazz"]
+	path = minijazz
 	url = https://github.com/cphyc/simulateur.git
