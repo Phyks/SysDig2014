@@ -284,7 +284,7 @@ bld_brancher(Rd:[word], T, b[0-2]) = (Rd:[word]) where
   end if
 end where
 
-bld(d:[reg_addr], b, regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+bld(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
 
   Rd = bld_brancher(Rd, getT(S), b[0..2]);
