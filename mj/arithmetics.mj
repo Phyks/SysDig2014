@@ -339,14 +339,14 @@ subi(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
   SP = SP;
 end where
 
-sbc(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+sbc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
   (regs[16-31]) = regs_identity(regs[16-31]);
   S = S;
   PC = PC;
   SP = SP
 end where
 
-sbci(d:[4], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+sbci(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
   (regs[16-31]) = regs_identity(regs[16-31]);
   S = S;
   PC = PC;
