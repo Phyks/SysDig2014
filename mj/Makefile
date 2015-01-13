@@ -6,5 +6,5 @@ all: compile
 core.mj: $(MJS)
 	./generate.py main.mj > core.mj
 
-compile: core
+compile: core.mj
 	$(MJC) core.mj
