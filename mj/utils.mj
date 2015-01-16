@@ -144,146 +144,22 @@ op_decomposer(opcode:[instr_size]) = (op[0-15]) where
 end where
 
 pusher(r[0-4], w:[word], regs[16-31]:[word]) = (regs[16-31]:[word]) where
-  # if r0 = 0 then
-  #   if r1 = O then
-  #     if r2 = 0 then
-  #       if r3 = 0 then
-  #         if r4 = 0 then
-  #           regs0 = w
-  #         else
-  #           regs1 = w
-  #         end if #r4
-  #       else
-  #         if r4 = 0 then
-  #           regs2 = w
-  #         else
-  #           regs3 = w
-  #         end if #r4
-  #       end if #r3
-  #     else
-  #       if r3 = 0 then
-  #         if r4 = 0 then
-  #           regs4 = w
-  #         else
-  #           regs5 = w
-  #         end if # r4
-  #       else
-  #         if r4 = 0 then
-  #           regs6 = w
-  #         else
-  #           regs7 = w
-  #         end if #r4
-  #       end if #r3
-  #     end if #r2
-  #   else
-  #    if r2 = 0 then
-  #       if r3 = 0 then
-  #         if r4 = 0 then
-  #           regs8 = w
-  #         else
-  #           regs9 = w
-  #         end if #r4
-  #       else
-  #         if r4 = 0 then
-  #           regs10 = w
-  #         else
-  #           regs11 = w
-  #         end if #r4
-  #       end if #r3
-  #     else
-  #       if r3 = 0 then
-  #         if r4 = 0 then
-  #           regs12 = w
-  #         else
-  #           regs13 = w
-  #         end if # r4
-  #       else
-  #         if r4 = 0 then
-  #           regs14 = w
-  #         else
-  #           regs15 = w
-  #         end if #r4
-  #       end if #r3
-  #     end if #r2
-  #   end if #r1
-  # else
-    if r1 = O then
-      if r2 = 0 then
-        if r3 = 0 then
-          if r4 = 0 then
-	    (regs[16-31]) = regs_identity(regs[16-31]);
-            regs16 = w ;
-          else
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs17 = w ;
-          end if #r4
-        else
-          if r4 = 0 then
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs18 = w ;
-          else
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs19 = w ;
-          end if #r4
-        end if #r3
-      else
-        if r3 = 0 then
-          if r4 = 0 then
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs20 = w ;
-          else
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs21 = w ;
-          end if # r4
-        else
-          if r4 = 0 then
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs22 = w ;
-          else
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs23 = w ;
-          end if #r4
-        end if #r3
-      end if #r2
-    else
-      if r2 = 0 then
-        if r3 = 0 then
-          if r4 = 0 then
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs24 = w ;
-          else
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs25 = w ;
-          end if #r4
-        else
-          if r4 = 0 then
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs26 = w ;
-          else
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs27 = w ;
-          end if #r4
-        end if #r3
-      else
-        if r3 = 0 then
-          if r4 = 0 then
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs28 = w ;
-          else
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs29 = w ;
-          end if # r4
-        else
-          if r4 = 0 then
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs30 = w
-          else
-            (regs[16-31]) = regs_identity(regs[16-31]);
-            regs31 = w
-          end if #r4
-        end if #r3
-      end if #r2
-    end if #r1
+  regs16 = muxn<word>(w, regs16, (not r1) and (not r2) and (not r3) and (not r4));
+  regs17 = muxn<word>(w, regs17, (not r1) and (not r2) and (not r3) and r4);
+  regs18 = muxn<word>(w, regs18, (not r1) and (not r2) and r3 and (not r4));
+  regs19 = muxn<word>(w, regs19, (not r1) and (not r2) and r3 and r4);
+  regs20 = muxn<word>(w, regs20, (not r1) and r2 and (not r3) and (not r4));
+  regs21 = muxn<word>(w, regs21, (not r1) and r2 and (not r3) and r4);
+  regs22 = muxn<word>(w, regs22, (not r1) and r2 and r3 and (not r4));
+  regs23 = muxn<word>(w, regs23, (not r1) and r2 and r3 and r4);
+  regs24 = muxn<word>(w, regs24, r1 and (not r2) and (not r3) and (not r4));
+  regs25 = muxn<word>(w, regs25, r1 and (not r2) and (not r3) and r4);
+  regs26 = muxn<word>(w, regs26, r1 and (not r2) and r3 and (not r4));
+  regs27 = muxn<word>(w, regs27, r1 and (not r2) and r3 and r4);
+  regs28 = muxn<word>(w, regs28, r1 and r2 and (not r3) and (not r4));
+  regs29 = muxn<word>(w, regs29, r1 and r2 and (not r3) and r4);
+  regs30 = muxn<word>(w, regs30, r1 and r2 and r3 and (not r4));
+  regs31 = muxn<word>(w, regs31, r1 and r2 and r3 and r4)
 end where
 
 push_register(d:[reg_addr], w:[word], regs[16-31]:[word]) = (regs[16-31]:[word]) where
