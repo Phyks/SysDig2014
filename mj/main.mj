@@ -6,6 +6,8 @@ require gates.mj
 require others.mj
 require transfer.mj
 
+# TODO : muxes are inversed
+
 route00010(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = cpse(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = cp(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
@@ -40,7 +42,7 @@ route00000(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]
     # S = S;
     # PC = PC; SP = SP;
 
-    (regs2[16-31], S2, PC2, SP2) = cpc(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP); # TODO
+    (regs2[16-31], S2, PC2, SP2) = cpc(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
 
     (regs[16-31], S, PC, SP) = muxer(regs1[16-31], S1, PC1, SP1, regs2[16-31], S2, PC2, SP2, o10);
 end where
@@ -289,19 +291,19 @@ end where
 
 route1010(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
 
-    # next = rom<instr_addr_size, instr_size>(increase<word+word>(PC));
-    # (regs1[16-31], S1, PC1, SP1) = lds(o8.o7.o6.o5.o4, next, regs[16-31], S, PC, SP);
-    # (regs2[16-31], S2, PC2, SP2) = sts(o8.o7.o6.o5.o4, next, regs[16-31], S, PC, SP);
+    next = rom<instr_addr_size, instr_size>(increase<word+word>(PC));
+    (regs1[16-31], S1, PC1, SP1) = lds(o8.o7.o6.o5.o4, next, regs[16-31], S, PC, SP);
+    (regs2[16-31], S2, PC2, SP2) = sts(o8.o7.o6.o5.o4, next, regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = nop(regs[16-31], S, PC, SP); # TODO
+    (regs[16-31], S, PC, SP) = muxer(regs1[16-31], S1, PC1, SP1, regs2[16-31], S2, PC2, SP2, o11)
 end where
 
 route1011(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
     # (regs[16-31], S, PC, SP) = in(o10.o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP)
-    (regs1[16-31], S1, PC1, SP1) = nop(regs[16-31], S, PC, SP); # TODO : This should be in
+    (regs1[16-31], S1, PC1, SP1) = in(regs[16-31], S, PC, SP);
 
     # (regs[16-31], S, PC, SP) = out(o10.o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP)
-    (regs2[16-31], S2, PC2, SP2) = nop(regs[16-31], S, PC, SP); # TODO : This should be out
+    (regs2[16-31], S2, PC2, SP2) = out(regs[16-31], S, PC, SP);
 
     (regs[16-31], S, PC, SP) = muxer(regs1[16-31], S1, PC1, SP1, regs2[16-31], S2, PC2, SP2, o11)
 end where
@@ -382,7 +384,7 @@ mainLoop(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[1
   (op[0-15]) = op_decomposer(opcode);
 
   # Route it to the instruction
-  (regs[16-31], S, PC, SP) = route00000(op[0-10], regs[16-31], S, PC, SP);
+  (regs[16-31], S, PC, SP) = route(op[0-15], regs[16-31], S, PC, SP);
 
   # Loop
   # (regs[16-31], S, PC, SP) = mainLoop(regs[16-31], S, PC, SP);
