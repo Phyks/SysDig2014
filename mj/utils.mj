@@ -297,7 +297,21 @@ push_register(d:[reg_addr], w:[word], regs[16-31]:[word]) = (regs[16-31]:[word])
 end where
 
 poper(r[0-4], regs[16-31]:[word]) = (w:[word]) where
-  w = mux_n<word>(mux_n<word>(mux_n<word>(mux_n<word>(regs31, regs30, r4), mux_n<word>(regs29, regs28, r4), r3), mux_n<word>(mux_n<word>(regs27, regs26, r4), mux_n<word>(regs25, regs24, r4), r3), r2), mux_n<word>(mux_n<word>(mux_n<word>(regs23, regs22, r4), mux_n<word>(regs21, regs20, r4), r3), mux_n<word>(mux_n<word>(regs19, regs18, r4), mux_n<word>(regs17, regs16, r4), r3), r2), r1)
+  w = mux_n<word>( mux_n<word>( mux_n<word>( mux_n<word>(regs31, regs30, r4),
+                                             mux_n<word>(regs29, regs28, r4),
+					     r3),
+			  	mux_n<word>( mux_n<word>(regs27, regs26, r4),
+				             mux_n<word>(regs25, regs24, r4),
+					     r3),
+				r2),
+		   mux_n<word>( mux_n<word>( mux_n<word>(regs23, regs22, r4),
+		                             mux_n<word>(regs21, regs20, r4),
+					     r3),
+			        mux_n<word>( mux_n<word>(regs19, regs18, r4),
+				             mux_n<word>(regs17, regs16, r4),
+					     r3),
+                                r2),
+		   r1)
 end where
 
 pop_register(raddr:[reg_addr], regs[16-31]:[word]) = (w:[word]) where
@@ -326,7 +340,13 @@ decrease<n>(R:[n]) = (R:[n]) where 	# simple decrease
 end where
 
 getBit(wire:[word], s0, s1, s2) = (r) where
-  r = mux(mux(mux(wire[7], wire[6], s2), mux(wire[5], wire[4], s2), s1), mux(mux(wire[3], wire[2], s2), mux(wire[1], wire[0], s2), s1), s0)
+  r = mux( mux( mux(wire[7], wire[6], s2),
+                mux(wire[5], wire[4], s2),
+                s1),
+           mux( mux(wire[3], wire[2], s2),
+	        mux(wire[1], wire[0], s2),
+                s1),
+           s0)
 end where
 
 
