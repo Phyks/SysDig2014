@@ -1,38 +1,51 @@
 require gates.mj
 
-muxn<n>(a:[n], b:[n], v) = (c:[n]) where
+
+mux_n<n>(a:[n], b:[n], v) = (c:[n]) where
   if n = 0 then
     c = []
   else
-    c0 = mux(a[0], b[0], v);
-    cr = muxn<n-1>(a[1..], b[1..], v);
-    c = c0.cr;
+    c = mux(a[0], b[0], v).mux_n<n-1>(a[1..], b[1..], v);
   end if
+end where
+
+reg_n<n>(a:[n]) = (o:[n]) where
+  if n = 0 then
+    o = []
+  else
+    o = (reg a[0]).reg_n<n-1>(a[1..])
+  end if
+end where
+
+
+enableReg<n> (writeVal:[n], enable) = (val:[n]) where
+  newVal = mux_n<n>(writeVal, val, enable);
+  val = reg_n<n>(newVal);
 end where
 
 muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word],
       regs_2_[16-31]:[word], S2:[word], PC2:[word+word], SP2:[word+word],
       v)
        = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  regs16 = muxn<word>(regs_1_16, regs_2_26, v);
-  regs17 = muxn<word>(regs_1_17, regs_2_27, v);
-  regs18 = muxn<word>(regs_1_18, regs_2_28, v);
-  regs19 = muxn<word>(regs_1_19, regs_2_29, v);
-  regs20 = muxn<word>(regs_1_20, regs_2_20, v);
-  regs21 = muxn<word>(regs_1_21, regs_2_21, v); 
-  regs22 = muxn<word>(regs_1_22, regs_2_22, v);
-  regs23 = muxn<word>(regs_1_23, regs_2_23, v);
-  regs24 = muxn<word>(regs_1_24, regs_2_24, v);
-  regs25 = muxn<word>(regs_1_25, regs_2_25, v);
-  regs26 = muxn<word>(regs_1_26, regs_2_26, v);
-  regs27 = muxn<word>(regs_1_27, regs_2_27, v);
-  regs28 = muxn<word>(regs_1_28, regs_2_28, v);
-  regs29 = muxn<word>(regs_1_29, regs_2_29, v);
-  regs30 = muxn<word>(regs_1_30, regs_2_30, v);
-  regs31 = muxn<word>(regs_1_31, regs_2_31, v);
-  S = muxn<word>(S1, S2, v);
-  PC = muxn<word+word>(PC1, PC2, v);
-  SP = muxn<word+word>(SP1, SP2, v);
+  regs16 = mux_n<word>(regs_1_16, regs_2_26, v);
+  regs17 = mux_n<word>(regs_1_17, regs_2_27, v);
+  regs18 = mux_n<word>(regs_1_18, regs_2_28, v);
+  regs19 = mux_n<word>(regs_1_19, regs_2_29, v);
+  regs20 = mux_n<word>(regs_1_20, regs_2_20, v);
+  regs21 = mux_n<word>(regs_1_21, regs_2_21, v); 
+  regs22 = mux_n<word>(regs_1_22, regs_2_22, v);
+  regs23 = mux_n<word>(regs_1_23, regs_2_23, v);
+  regs24 = mux_n<word>(regs_1_24, regs_2_24, v);
+  regs25 = mux_n<word>(regs_1_25, regs_2_25, v);
+  regs26 = mux_n<word>(regs_1_26, regs_2_26, v);
+  regs27 = mux_n<word>(regs_1_27, regs_2_27, v);
+  regs28 = mux_n<word>(regs_1_28, regs_2_28, v);
+  regs29 = mux_n<word>(regs_1_29, regs_2_29, v);
+  regs30 = mux_n<word>(regs_1_30, regs_2_30, v);
+  regs31 = mux_n<word>(regs_1_31, regs_2_31, v);
+  S = mux_n<word>(S1, S2, v);
+  PC = mux_n<word+word>(PC1, PC2, v);
+  SP = mux_n<word+word>(SP1, SP2, v);
 	
 end where
 
@@ -83,22 +96,22 @@ one<n>() = (o:[n]) where
 end where
 
 init_register(z, SP_init:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  regs16 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs17 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs18 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs19 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs20 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs21 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs22 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs23 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs24 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs25 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs26 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs27 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs28 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs29 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs30 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
-  regs31 = (reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z).(reg z);
+  regs16 = z.z.z.z.z.z.z.z;
+  regs17 = z.z.z.z.z.z.z.z;
+  regs18 = z.z.z.z.z.z.z.z;
+  regs19 = z.z.z.z.z.z.z.z;
+  regs20 = z.z.z.z.z.z.z.z;
+  regs21 = z.z.z.z.z.z.z.z;
+  regs22 = z.z.z.z.z.z.z.z;
+  regs23 = z.z.z.z.z.z.z.z;
+  regs24 = z.z.z.z.z.z.z.z;
+  regs25 = z.z.z.z.z.z.z.z;
+  regs26 = z.z.z.z.z.z.z.z;
+  regs27 = z.z.z.z.z.z.z.z;
+  regs28 = z.z.z.z.z.z.z.z;
+  regs29 = z.z.z.z.z.z.z.z;
+  regs30 = z.z.z.z.z.z.z.z;
+  regs31 = z.z.z.z.z.z.z.z;
   z2 = zero<word>();
   S = z2;
   PC = z2.z2;
@@ -417,18 +430,18 @@ end where
 
 increase<n>(R:[n]) = (R:[n]) where	# simple increase
   o = one<n>();
-  (R, c) = adder<n>(R, o, 0);
+  (R, c) = nadder<n>(R, o, 0);
  
 end where
 
 iincrease<n>(R:[n]) = (R:[n]) where	# double increase
   two = one<n-1>().0;
-  (R, c) = adder<n>(R, two, 0);
+  (R, c) = nadder<n>(R, two, 0);
 end where
 
 decrease<n>(R:[n]) = (R:[n]) where 	# simple decrease
   o = one<n>();
-  (R, c) = subtracter<n>(R, o);
+  (R, c) = nsubber<n>(R, o, 0);
 end where
 
 getBit(wire:[word], s0, s1, s2) = (r) where
