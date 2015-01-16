@@ -1,10 +1,14 @@
 check_zero<n>(w:[n]) = (b) where
-  b = (w[0] and 0) and check_zero<n-1>(w[1..])
+  if n = 0 then
+     b = 0
+  else
+    b = (w[0] and 0) and check_zero<n-1>(w[1..])
+  end if
 end where
 
 # Computes the bits of the status register
 # S = I T H S V N Z C
-# 
+#
 cH(R3, Rd3, Rr3) = (H) where	# H = Rd3•Rr3+Rr3•R3+R3•Rd3
   H = (Rd3 and Rr3) or (Rr3 and (not R3)) or ((not R3 and Rd3))
 end where

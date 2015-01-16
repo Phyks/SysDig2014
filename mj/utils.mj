@@ -1,5 +1,12 @@
 require gates.mj
 
+equals<n>(a:[n], b:[n]) = c where
+  if n = 1 then
+    c = a[0] xor b[0]
+  else
+    c = mux(equals<n-1>(a[1..], b[1..]), 0, a[0] xor b[0])
+  end if
+end where
 
 mux_n<n>(a:[n], b:[n], v) = (c:[n]) where
   if n = 0 then
@@ -18,7 +25,7 @@ reg_n<n>(a:[n]) = (o:[n]) where
 end where
 
 
-enableReg<n> (writeVal:[n], enable) = (val:[n]) where
+enableReg<n>(writeVal:[n], enable) = (val:[n]) where
   newVal = mux_n<n>(writeVal, val, enable);
   val = reg_n<n>(newVal);
 end where
@@ -32,7 +39,7 @@ muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word],
   regs18 = mux_n<word>(regs_1_18, regs_2_28, v);
   regs19 = mux_n<word>(regs_1_19, regs_2_29, v);
   regs20 = mux_n<word>(regs_1_20, regs_2_20, v);
-  regs21 = mux_n<word>(regs_1_21, regs_2_21, v); 
+  regs21 = mux_n<word>(regs_1_21, regs_2_21, v);
   regs22 = mux_n<word>(regs_1_22, regs_2_22, v);
   regs23 = mux_n<word>(regs_1_23, regs_2_23, v);
   regs24 = mux_n<word>(regs_1_24, regs_2_24, v);
@@ -46,7 +53,6 @@ muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word],
   S = mux_n<word>(S1, S2, v);
   PC = mux_n<word+word>(PC1, PC2, v);
   SP = mux_n<word+word>(SP1, SP2, v);
-	
 end where
 
 regs_identity(regs[16-31]:[word]) = (regs[16-31]:[word]) where
@@ -291,131 +297,7 @@ push_register(d:[reg_addr], w:[word], regs[16-31]:[word]) = (regs[16-31]:[word])
 end where
 
 poper(r[0-4], regs[16-31]:[word]) = (w:[word]) where
-  # if r0 = 0 then
-  #   if r1 = O then
-  #     if r2 = 0 then
-  #       if r3 = 0 then
-  #         if r4 = 0 then
-  #           w = regs0
-  #         else
-  #           w = regs1
-  #         end if #r4
-  #       else
-  #         if r4 = 0 then
-  #           w = regs2
-  #         else
-  #           w = regs3
-  #         end if #r4
-  #       end if #r3
-  #     else
-  #       if r3 = 0 then
-  #         if r4 = 0 then
-  #           w = regs4
-  #         else
-  #           w = regs5
-  #         end if # r4
-  #       else
-  #         if r4 = 0 then
-  #           w = regs6
-  #         else
-  #           w = regs7
-  #         end if #r4
-  #       end if #r3
-  #     end if #r2
-  #   else
-  #    if r2 = 0 then
-  #       if r3 = 0 then
-  #         if r4 = 0 then
-  #           w = regs8
-  #         else
-  #           w = regs9
-  #         end if #r4
-  #       else
-  #         if r4 = 0 then
-  #           w = regs10
-  #         else
-  #           w = regs11
-  #         end if #r4
-  #       end if #r3
-  #     else
-  #       if r3 = 0 then
-  #         if r4 = 0 then
-  #           w = regs12
-  #         else
-  #           w = regs13
-  #         end if # r4
-  #       else
-  #         if r4 = 0 then
-  #           w = regs14
-  #         else
-  #           w = regs15
-  #         end if #r4
-  #       end if #r3
-  #     end if #r2
-  #   end if #r1
-  # else
-    if r1 = O then
-      if r2 = 0 then
-        if r3 = 0 then
-          if r4 = 0 then
-            w = regs16
-          else
-            w = regs17
-          end if #r4
-        else
-          if r4 = 0 then
-            w = regs18
-          else
-            w = regs19
-          end if #r4
-        end if #r3
-      else
-        if r3 = 0 then
-          if r4 = 0 then
-            w = regs20
-          else
-            w = regs21
-          end if # r4
-        else
-          if r4 = 0 then
-            w = regs22
-          else
-            w = regs23
-          end if #r4
-        end if #r3
-      end if #r2
-    else
-      if r2 = 0 then
-        if r3 = 0 then
-          if r4 = 0 then
-            w = regs24
-          else
-            w = regs25
-          end if #r4
-        else
-          if r4 = 0 then
-            w = regs26
-          else
-            w = regs27
-          end if #r4
-        end if #r3
-      else
-        if r3 = 0 then
-          if r4 = 0 then
-            w = regs28
-          else
-            w = regs29
-          end if # r4
-        else
-          if r4 = 0 then
-            w = regs30
-          else
-            w = regs31
-          end if #r4
-        end if #r3
-      end if #r2
-    end if #r1
-  # end if #r0
+  w = mux_n<word>(mux_n<word>(mux_n<word>(mux_n<word>(regs31, regs30, r4), mux_n<word>(regs29, regs28, r4), r3), mux_n<word>(mux_n<word>(regs27, regs26, r4), mux_n<word>(regs25, regs24, r4), r3), r2), mux_n<word>(mux_n<word>(mux_n<word>(regs23, regs22, r4), mux_n<word>(regs21, regs20, r4), r3), mux_n<word>(mux_n<word>(regs19, regs18, r4), mux_n<word>(regs17, regs16, r4), r3), r2), r1)
 end where
 
 pop_register(raddr:[reg_addr], regs[16-31]:[word]) = (w:[word]) where
@@ -431,7 +313,6 @@ end where
 increase<n>(R:[n]) = (R:[n]) where	# simple increase
   o = one<n>();
   (R, c) = nadder<n>(R, o, 0);
- 
 end where
 
 iincrease<n>(R:[n]) = (R:[n]) where	# double increase
@@ -445,35 +326,7 @@ decrease<n>(R:[n]) = (R:[n]) where 	# simple decrease
 end where
 
 getBit(wire:[word], s0, s1, s2) = (r) where
-  if s0 = 0 then
-    if s1 = 0 then
-      if s2 = 0 then		# 000
-        r = wire[0]
-      else 			# 001
-        r = wire[1]
-      end if
-    else
-      if s2 = 0 then		# 010
-        r = wire[2]
-      else 			# 011
-        r = wire[3]
-      end if
-    end if
-  else
-    if s1 = 0 then
-      if s2 = 0 then		# 100
-        r = wire[4]
-      else 			# 101
-        r = wire[5]
-      end if
-    else
-      if s2 = 0 then		# 110
-        r = wire[6]
-      else 			# 111
-        r = wire[7]
-      end if
-    end if
-  end if
+  r = mux(mux(mux(wire[7], wire[6], s2), mux(wire[5], wire[4], s2), s1), mux(mux(wire[3], wire[2], s2), mux(wire[1], wire[0], s2), s1), s0)
 end where
 
 
@@ -491,42 +344,4 @@ pop_stack(SP:[ram_addr_size]) = (SP:[ram_addr_size], o:[word]) where
   o = ram<ram_addr_size, word>(SP, 0, SP, zero<word>());
 
   SP = increase<ram_addr_size>(SP);
-end where
-
-pop_register(a:[reg_addr], R[16-31]:[word]) = (Rout:[word]) where
-  Rout   = mux_n<word>(r1,        r0,    a[0]);
-
-  r1     = mux_n<word>(r11,      r10,    a[1]);
-  r0     = mux_n<word>(r01,      r00,    a[1]);
-
-  r11    = mux_n<word>(r111,    r110,    a[2]);
-  r10    = mux_n<word>(r101,    r100,    a[2]);
-  r01    = mux_n<word>(r011,    r010,    a[2]);
-  r00    = mux_n<word>(r001,    r000,    a[2]);
-
-  r111   = mux_n<word>(r1111,   r1110,   a[3]);
-  r110   = mux_n<word>(r1101,   r1110,   a[3]);
-  r101   = mux_n<word>(r1011,   r1010,   a[3]);
-  r100   = mux_n<word>(r1001,   r1010,   a[3]);
-  r011   = mux_n<word>(r0111,   r0110,   a[3]);
-  r010   = mux_n<word>(r0101,   r0110,   a[3]);
-  r001   = mux_n<word>(r0011,   r0010,   a[3]);
-  r000   = mux_n<word>(r0001,   r0000,   a[3]);
-
-  r1111  = mux_n<word>(R31,        R30,  a[4]);
-  r1110  = mux_n<word>(R29,        R28,  a[4]);
-  r1101  = mux_n<word>(R27,        R26,  a[4]);
-  r1100  = mux_n<word>(R25,        R24,  a[4]);
-  r1011  = mux_n<word>(R23,        R22,  a[4]);
-  r1010  = mux_n<word>(R21,        R20,  a[4]);
-  r1001  = mux_n<word>(R19,        R18,  a[4]);
-  r1000  = mux_n<word>(R17,        R16,  a[4]);
-  r0111  = mux_n<word>(R15,        R14,  a[4]);
-  r0110  = mux_n<word>(R13,        R12,  a[4]);
-  r0101  = mux_n<word>(R11,        R10,  a[4]);
-  r0100  = mux_n<word>(R9,          R8,  a[4]);
-  r0011  = mux_n<word>(R7,          R6,  a[4]);
-  r0010  = mux_n<word>(R5,          R4,  a[4]);
-  r0001  = mux_n<word>(R3,          R2,  a[4]);
-  r0000  = mux_n<word>(R1,          R0,  a[4]);
 end where
