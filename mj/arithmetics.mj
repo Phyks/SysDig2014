@@ -6,7 +6,7 @@ add(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
-  (R, c) = adder<word>(Rd, Rr, 0);
+  (R, c) = nadder<word>(Rd, Rr, 0);
 
   S7 = S[7];
   S6 = S[6];
@@ -30,7 +30,7 @@ adc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
   Rr = pop_register(r, regs[16-31]);
 
   c = getC(S);
-  (R, c) = adder<word>(Rd, Rr, c);
+  (R, c) = nadder<word>(Rd, Rr, c);
 
   S7 = S[7];
   S6 = S[6];
@@ -298,7 +298,7 @@ sub(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
-  (R, c) = subtracter<word>(Rd, Rr);
+  (R, c) = nsubber<word>(Rd, Rr, 0);
 
   S7 = S[7];
   S6 = S[6];
@@ -320,7 +320,7 @@ end where
 subi(d:[4], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Rd = pop_register(1.d, regs[16-31]);
   
-  (R, c) = subtracter<word>(Rd, K);
+  (R, c) = nsubber<word>(Rd, K, 0);
 
   S7 = S[7];			# I
   S6 = S[6];			# T
@@ -357,7 +357,7 @@ neg(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   Rd = pop_register(d, regs[16-31]);
   zero = zero<word>();
 
-  (R, c) = subtracter<word>(zero, Rd);
+  (R, c) = nsubber<word>(zero, Rd, 0);
 
   S7 = S[7];			# I
   S6 = S[6];			# T
@@ -379,7 +379,7 @@ dec(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   Rd = pop_register(d, regs[16-31]);
   one = one<word>();
 
-  (R, c) = subtracter<word>(one, Rd);
+  (R, c) = nsubber<word>(one, Rd, 0);
   
   S7 = S[7];
   S6 = S[6];
