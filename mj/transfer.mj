@@ -15,15 +15,15 @@ ld(d:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+
     if o0 = 1 then # Z+
       (regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs[16-31], S, PC, SP);
       z = zero<word>();
-      (regs30, c1) = adder<word>(regs30, z, 1);
-      (regs31, c2) = adder<word>(regs31, z, c1);
+      (regs30, c1) = nadder<word>(regs30, z, 1);
+      (regs31, c2) = nadder<word>(regs31, z, c1);
     else
       if o1 = 1 then # -Z
         z = zero<word>();
     	o = one<word>();
-	(regs30, c) = subtracter<word>(regs30, o);
+	(regs30, c) = nsubber<word>(regs30, o, 0);
   	carry = z[0..(word-1)].c;
-  	(regs31, c2) = subtracter<word>(regs31, carry);
+  	(regs31, c2) = nsubber<word>(regs31, carry, 0);
     	(regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs[16-31], S, PC, SP)
       else # Z
         (regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs[16-31], S, PC, SP)
@@ -34,15 +34,15 @@ ld(d:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+
       if o0 = 1 then # X+
         (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs[16-31], S, PC, SP);
         z = zero<word>();
-        (regs26, c1) = adder<word>(regs26, z, 1);
-        (regs27, c2) = adder<word>(regs27, z, c1);
+        (regs26, c1) = nadder<word>(regs26, z, 1);
+        (regs27, c2) = nadder<word>(regs27, z, c1);
       else
         if o1 = 1 then # -X
   	  z = zero<word>();
     	  o = one<word>();
-	  (regs26, c) = subtracter<word>(regs26, o);
+	  (regs26, c) = nsubber<word>(regs26, o, 0);
   	  carry = z[0..(word-1)].c;
-  	  (regs27, c2) = subtracter<word>(regs27, carry);
+  	  (regs27, c2) = nsubber<word>(regs27, carry, 0);
     	  (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs[16-31], S, PC, SP)
         else # X
           (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs[16-31], S, PC, SP)
@@ -52,15 +52,15 @@ ld(d:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+
       if o0 = 1 then # Y+
         (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs[16-31], S, PC, SP);
         z = zero<word>();
-        (regs28, c1) = adder<word>(regs28, z, 1);
-        (regs29, c2) = adder<word>(regs29, z, c1);
+        (regs28, c1) = nadder<word>(regs28, z, 1);
+        (regs29, c2) = nadder<word>(regs29, z, c1);
       else
         if o1 = 1 then # -Y
   	  z = zero<word>();
     	  o = one<word>();
-	  (regs28, c) = subtracter<word>(regs28, o);
+	  (regs28, c) = nsubber<word>(regs28, o, 0);
   	  carry = z[0..(word-1)].c;
-  	  (regs29, c2) = subtracter<word>(regs29, carry);
+  	  (regs29, c2) = nsubber<word>(regs29, carry, 0);
     	  (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs[16-31], S, PC, SP)
         else # Y
           (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs[16-31], S, PC, SP)
@@ -95,15 +95,15 @@ st_annex(w:[word], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[wor
     if o0 = 1 then # Z+
       (regs[16-31], S, PC, SP) = std(w, regs31.regs30, regs[16-31], S, PC, SP);
       z = zero<word>();
-      (regs30, c1) = adder<word>(regs30, z, 1);
-      (regs31, c2) = adder<word>(regs31, z, c1);
+      (regs30, c1) = nadder<word>(regs30, z, 1);
+      (regs31, c2) = nadder<word>(regs31, z, c1);
     else
       if o1 = 1 then # -Z
         z = zero<word>();
     	o = one<word>();
-	(regs30, c) = subtracter<word>(regs30, o);
+	(regs30, c) = nsubber<word>(regs30, o, 0);
   	carry = z[0..(word-1)].c;
-  	(regs31, c2) = subtracter<word>(regs31, carry);
+  	(regs31, c2) = nsubber<word>(regs31, carry, 0);
     	(regs[16-31], S, PC, SP) = std(w, regs31.regs30, regs[16-31], S, PC, SP)
       else # Z
         (regs[16-31], S, PC, SP) = std(w, regs31.regs30, regs[16-31], S, PC, SP)
@@ -114,15 +114,15 @@ st_annex(w:[word], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[wor
       if o0 = 1 then # X+
         (regs[16-31], S, PC, SP) = std(w, regs27.regs26, regs[16-31], S, PC, SP);
         z = zero<word>();
-        (regs26, c1) = adder<word>(regs26, z, 1);
-        (regs27, c2) = adder<word>(regs27, z, c1);
+        (regs26, c1) = nadder<word>(regs26, z, 1);
+        (regs27, c2) = nadder<word>(regs27, z, c1);
       else
         if o1 = 1 then # -X
   	  z = zero<word>();
     	  o = one<word>();
-	  (regs26, c) = subtracter<word>(regs26, o);
+	  (regs26, c) = nsubber<word>(regs26, o, 0);
   	  carry = z[0..(word-1)].c;
-  	  (regs27, c2) = subtracter<word>(regs27, carry);
+  	  (regs27, c2) = nsubber<word>(regs27, carry, 0);
     	  (regs[16-31], S, PC, SP) = std(w, regs27.regs26, regs[16-31], S, PC, SP)
         else # X
           (regs[16-31], S, PC, SP) = std(w, regs27.regs26, regs[16-31], S, PC, SP)
@@ -132,15 +132,15 @@ st_annex(w:[word], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[wor
       if o0 = 1 then # Y+
         (regs[16-31], S, PC, SP) = std(w, regs29.regs28, regs[16-31], S, PC, SP);
         z = zero<word>();
-        (regs28, c1) = adder<word>(regs28, z, 1);
-        (regs29, c2) = adder<word>(regs29, z, c1);
+        (regs28, c1) = nadder<word>(regs28, z, 1);
+        (regs29, c2) = nadder<word>(regs29, z, c1);
       else
         if o1 = 1 then # -Y
   	  z = zero<word>();
     	  o = one<word>();
-	  (regs28, c) = subtracter<word>(regs28, o);
+	  (regs28, c) = nsubber<word>(regs28, o, 0);
   	  carry = z[0..(word-1)].c;
-  	  (regs29, c2) = subtracter<word>(regs29, carry);
+  	  (regs29, c2) = nsubber<word>(regs29, carry, 0);
     	  (regs[16-31], S, PC, SP) = std(w, regs29.regs28, regs[16-31], S, PC, SP)
         else # Y
           (regs[16-31], S, PC, SP) = std(w, regs29.regs28, regs[16-31], S, PC, SP)
