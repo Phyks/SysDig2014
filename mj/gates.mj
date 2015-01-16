@@ -32,7 +32,7 @@ nadder<n>(a:[n], b:[n], r_in) = (o:[n], r_out) where
   (o,r_out) = addsuber<n>(a,b,r_in,0);
 end where
 
-add<n>(a:[n], b:[n]) = (o:[n], r) where
+add_n<n>(a:[n], b:[n]) = (o:[n], r) where
   (o, r) = nadder<n>(a, b, 0);
 end where
 
@@ -42,12 +42,4 @@ end where
 
 nsubber<n>(a:[n], b:[n], r_in) = (o:[n], r_out) where
   (o,r_out) = addsuber<n>(a,b,r_in,1);
-end where
-
-sub<n>(a:[n], b:[n]) = (o:[n], r) where
-  (o, r) = nsubber<n>(a, b, 0)
-end where
-
-addsub<n>( a:[n] , b:[n] , op ) = ( o:[n] , r_out ) where
-  ( o , r_out ) = addsuber<n>( a , b , 0 , op )
 end where
