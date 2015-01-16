@@ -492,3 +492,41 @@ pop_stack(SP:[ram_addr_size]) = (SP:[ram_addr_size], o:[word]) where
 
   SP = increase<ram_addr_size>(SP);
 end where
+
+pop_register(a:[reg_addr], R[16-31]:[word]) = (Rout:[word]) where
+  Rout   = mux_n<word>(r1,        r0,    a[0]);
+
+  r1     = mux_n<word>(r11,      r10,    a[1]);
+  r0     = mux_n<word>(r01,      r00,    a[1]);
+
+  r11    = mux_n<word>(r111,    r110,    a[2]);
+  r10    = mux_n<word>(r101,    r100,    a[2]);
+  r01    = mux_n<word>(r011,    r010,    a[2]);
+  r00    = mux_n<word>(r001,    r000,    a[2]);
+
+  r111   = mux_n<word>(r1111,   r1110,   a[3]);
+  r110   = mux_n<word>(r1101,   r1110,   a[3]);
+  r101   = mux_n<word>(r1011,   r1010,   a[3]);
+  r100   = mux_n<word>(r1001,   r1010,   a[3]);
+  r011   = mux_n<word>(r0111,   r0110,   a[3]);
+  r010   = mux_n<word>(r0101,   r0110,   a[3]);
+  r001   = mux_n<word>(r0011,   r0010,   a[3]);
+  r000   = mux_n<word>(r0001,   r0000,   a[3]);
+
+  r1111  = mux_n<word>(R31,        R30,  a[4]);
+  r1110  = mux_n<word>(R29,        R28,  a[4]);
+  r1101  = mux_n<word>(R27,        R26,  a[4]);
+  r1100  = mux_n<word>(R25,        R24,  a[4]);
+  r1011  = mux_n<word>(R23,        R22,  a[4]);
+  r1010  = mux_n<word>(R21,        R20,  a[4]);
+  r1001  = mux_n<word>(R19,        R18,  a[4]);
+  r1000  = mux_n<word>(R17,        R16,  a[4]);
+  r0111  = mux_n<word>(R15,        R14,  a[4]);
+  r0110  = mux_n<word>(R13,        R12,  a[4]);
+  r0101  = mux_n<word>(R11,        R10,  a[4]);
+  r0100  = mux_n<word>(R9,          R8,  a[4]);
+  r0011  = mux_n<word>(R7,          R6,  a[4]);
+  r0010  = mux_n<word>(R5,          R4,  a[4]);
+  r0001  = mux_n<word>(R3,          R2,  a[4]);
+  r0000  = mux_n<word>(R1,          R0,  a[4]);
+end where
