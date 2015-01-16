@@ -6,17 +6,9 @@ not_n<n>(a:[n]) = (b:[n]) where
   end if
 end where
 
-or_n<n>(a:[n], b:[n]) = (c:[n]) where
-  if n = 0 then
-    []
-  else
-    c = (a[0] or b[0]).or_n<n-1>(a, b)
-  end if
-end where
-
-full_as ( a , b , c , op ) = ( s , r ) where
+full_as( a , b , c , op ) = ( s , r ) where
   s = (a xor b) xor c;
-  a' = op xor a; (* 0 xor a = a, 1 xor a = not a *)
+  a' = op xor a; # 0 xor a = a, 1 xor a = not a
   r = (a' and b) or ((a' xor b) and c)
 end where
 
