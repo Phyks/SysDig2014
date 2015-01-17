@@ -35,12 +35,12 @@ adc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
 
   S7 = S[7];
   S6 = S[6];
-  S5 = cH(R[3], Rd[3], Rr[3]);	# H
-  S4 = cS(S2, S3);	# S
-  S3 = cV(R[7], Rd[7], Rr[7]); # V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = cC(R[7], Rd[7], Rr[7]);	# C
+  S5 = cH(R[3], Rd[3], Rr[3]);	(*  H *)
+  S4 = cS(S2, S3);	(*  S *)
+  S3 = cV(R[7], Rd[7], Rr[7]); (*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = cC(R[7], Rd[7], Rr[7]);	(*  C *)
 
   Sout = setStatus(S[0-7]);
 
@@ -68,12 +68,12 @@ and_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word],
 
   S7 = S[7];
   S6 = S[6];
-  S5 = S[5] ;			# H
-  S3 = 0;			# V
+  S5 = S[5] ;			(*  H *)
+  S3 = 0;			(*  V *)
   S4 = cS(S2, S3);
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = S[0]; 			# C
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = S[0]; 			(*  C *)
 
   Sout = setStatus(S[0-7]);
 
@@ -91,12 +91,12 @@ andi(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:
 
   S7 = S[7];
   S6 = S[6];
-  S5 = S[5]; 			# H
-  S3 = 0;			# V
+  S5 = S[5]; 			(*  H *)
+  S3 = 0;			(*  V *)
   S4 = cS(S2, S3);
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = S[0];			# C
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = S[0];			(*  C *)
 
   Sout = setStatus(S[0-7]);
 
@@ -125,11 +125,11 @@ or_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], 
 
   S7 = S[7];
   S6 = S[6];
-  S5 = S[5]; 			# H
-  S4 = cS(S2, S3);		# S
-  S3 = 0;			# V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
+  S5 = S[5]; 			(*  H *)
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = 0;			(*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
   S0 = S[0];
 
   Sout = setStatus(S[0-7]);
@@ -149,10 +149,10 @@ ori(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[
   S7 = S[7];
   S6 = S[6];
   S5 = S[5];
-  S4 = cS(S2, S3);		# S
-  S3 = 0;			# V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = 0;			(*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
   S0 = S[0];
 
   Sout = setStatus(S[0-7]);
@@ -182,12 +182,12 @@ eor(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
 
   S7 = S[7];
   S6 = S[6];
-  S5 = S[5];			# H
-  S4 = cS(S2, S3);		# S
-  S3 = 0;			# V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = S[0];			# C
+  S5 = S[5];			(*  H *)
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = 0;			(*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = S[0];			(*  C *)
 
   Sout = setStatus(S[0-7]);
 
@@ -213,11 +213,11 @@ com(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S7 = S[7];
   S6 = S[6];
   S5 = S[5];
-  S4 = cS(S2, S3);		# S
-  S3 = 0;			# V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = 1;			# C
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = 0;			(*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = 1;			(*  C *)
 
   Sout = setStatus(S[0-7]);
 
@@ -246,11 +246,11 @@ inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S7 = S[7];
   S6 = S[6];
   S5 = S[5];
-  S4 = cS(S2, S3);		# S
-  S3 = cV2(R);			# V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = S[0];			# C
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = cV2(R);			(*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = S[0];			(*  C *)
 
   Sout = setStatus(S[0-7]);
 
@@ -268,11 +268,11 @@ tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S7 = S[7];
   S6 = S[6];
   S5 = S[5];
-  S4 = cS(S2, S3);		# S
-  S3 = 0;			# V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = S[0]; 			# C
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = 0;			(*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = S[0]; 			(*  C *)
 
   Sout = setStatus(S[0-7]);
   (Rdout, Sout, PCout, SPout, w) = and_op(d, d, regs[16-31], S, PC, SP)
@@ -280,14 +280,14 @@ tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
 end where
 
 clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], Sout:[word], PCout:[word+word], SPout:[word+word], w) where
-  S7 = S[7]; 			# I
-  S6 = S[6];			# T
-  S5 = S[5];			# H
-  S4 = 0;			# S
-  S3 = 0;			# V
-  S2 = 0;			# N
-  S1 = 1;			# Z
-  S0 = S[0]; 			# C
+  S7 = S[7]; 			(*  I *)
+  S6 = S[6];			(*  T *)
+  S5 = S[5];			(*  H *)
+  S4 = 0;			(*  S *)
+  S3 = 0;			(*  V *)
+  S2 = 0;			(*  N *)
+  S1 = 1;			(*  Z *)
+  S0 = S[0]; 			(*  C *)
 
   Sout = setStatus(S[0-7]);
   (Rdout, Sout, PCout, SPout, w) = eor(d, d, regs[16-31], S, PC, SP)
@@ -312,12 +312,12 @@ sub(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
 
   S7 = S[7];
   S6 = S[6];
-  S5 = cH(not R[3], not Rd[3], Rr[3]);	# H
-  S4 = cS(S2, S3);		# S
-  S3 = cV(R[7], Rd[7], not Rr[7]); # V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = cC(not R[7], not Rd[7], Rr[7]); # C
+  S5 = cH(not R[3], not Rd[3], Rr[3]);	(*  H *)
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = cV(R[7], Rd[7], not Rr[7]); (*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = cC(not R[7], not Rd[7], Rr[7]); (*  C *)
 
   Sout = setStatus(S[0-7]);
 
@@ -333,14 +333,14 @@ subi(d:[4], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+wor
 
   (R, c) = nsubber<word>(Rd, K, 0);
 
-  S7 = S[7];			# I
-  S6 = S[6];			# T
-  S5 = cH(not R[3], not Rd[3], K[3]);	# H
-  S4 = cS(S2, S3);		# S
-  S3 = cV(R[7], Rd[7], not K[7]); # V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = cC(not R[7], not Rd[7], K[7]); # C
+  S7 = S[7];			(*  I *)
+  S6 = S[6];			(*  T *)
+  S5 = cH(not R[3], not Rd[3], K[3]);	(*  H *)
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = cV(R[7], Rd[7], not K[7]); (*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = cC(not R[7], not Rd[7], K[7]); (*  C *)
 
   Sout = setStatus(S[0-7]);
 
@@ -351,20 +351,20 @@ subi(d:[4], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+wor
   SPout = SP;
 end where
 
-sbc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], Sout:[word], PCout:[word+word], SPout:[word+word], w) where # TODO
-  Rd = pop_register(1.d, regs[16-31]);
+sbc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], Sout:[word], PCout:[word+word], SPout:[word+word], w) where (*  TODO *)
+  Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
   (R, c) = nsubber<word>(Rd, Rr, S[0]);
 
   S7 = S[7];
   S6 = S[6];
-  S5 = cH(not R[3], not Rd[3], Rr[3]);	# H
-  S4 = cS(S2, S3);		# S
-  S3 = cV(R[7], Rd[7], not Rr[7]); # V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = cC(not R[7], not Rd[7], Rr[7]); # C
+  S5 = cH(not R[3], not Rd[3], Rr[3]);	(*  H *)
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = cV(R[7], Rd[7], not Rr[7]); (*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = cC(not R[7], not Rd[7], Rr[7]); (*  C *)
 
   Sout = setStatus(S[0-7]);
 
@@ -380,14 +380,14 @@ sbci(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:
 
   (R, c) = nsubber<word>(Rd, K, S[0]);
 
-  S7 = S[7];			# I
-  S6 = S[6];			# T
-  S5 = cH(not R[3], not Rd[3], K[3]);	# H
-  S4 = cS(S2, S3);		# S
-  S3 = cV(R[7], Rd[7], not K[7]); # V
-  S2 = R[7];			# N
-  S1 = cZ(R);			# Z
-  S0 = cC(not R[7], not Rd[7], K[7]); # C
+  S7 = S[7];			(*  I *)
+  S6 = S[6];			(*  T *)
+  S5 = cH(not R[3], not Rd[3], K[3]);	(*  H *)
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = cV(R[7], Rd[7], not K[7]); (*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = cC(not R[7], not Rd[7], K[7]); (*  C *)
 
   Sout = setStatus(S[0-7]);
 
@@ -404,14 +404,14 @@ neg(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
 
   (R, c) = nsubber<word>(zero, Rd, 0);
 
-  S7 = S[7];			# I
-  S6 = S[6];			# T
-  S5 = R[3] or Rd[3];		# H
-  S4 = cS(S2, S3);      		# S
-  S3 = cV2(R);			# V
-  S2 = R[7]; 			# N
-  S1 = cZ(R);			# Z
-  S0 = R[7] or R[6] or R[5] or R[4] or R[3] or R[2] or R[1] or R[0]; # C
+  S7 = S[7];			(*  I *)
+  S6 = S[6];			(*  T *)
+  S5 = R[3] or Rd[3];		(*  H *)
+  S4 = cS(S2, S3);      		(*  S *)
+  S3 = cV2(R);			(*  V *)
+  S2 = R[7]; 			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = R[7] or R[6] or R[5] or R[4] or R[3] or R[2] or R[1] or R[0]; (*  C *)
 
   Sout = setStatus(S[0-7]);
     Rdout = R;
@@ -430,10 +430,10 @@ dec(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S7 = S[7];
   S6 = S[6];
   S5 = S[5];
-  S4 = cS(S2, S3);      		# S
-  S3 = cV3(R);			# V
-  S2 = R[7]; 			# N
-  S1 = cZ(R);			# Z
+  S4 = cS(S2, S3);      		(*  S *)
+  S3 = cV3(R);			(*  V *)
+  S2 = R[7]; 			(*  N *)
+  S1 = cZ(R);			(*  Z *)
   S0 = S[0];
 
   Sout = setStatus(S[0-7]);

@@ -1,30 +1,34 @@
-break(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # NOT implemented on simulator, TODO
-  PC = increase<ram_addr_size>(PC);
- (regs[16-31]) = regs_identity(regs[16-31]);
-  SP = SP;
-  S = S;
+break(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], Sout:[word], PCout:[word+word], SPout:[word+word], w) where
+  (*  NOT implemented on simulator, TODO *)
+  PCout = increase<ram_addr_size>(PC);
+  Rdout = regs16;
+  w = 0;
+  SPout = SP;
+  Sout = S;
 end where
 
-nop(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
- PC = increase<ram_addr_size>(PC);
- (regs[16-31]) = regs_identity(regs[16-31]);
-  SP = SP;
-  S = S;
+nop(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], Sout:[word], PCout:[word+word], SPout:[word+word], w) where
+  PCout = increase<ram_addr_size>(PC);
+  Rdout = regs16;
+  w = 0;
+  SPout = SP;
+  Sout = S;
 end where
 
-sleep(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # NOT implemented on simulator, TODO
-  PC = increase<ram_addr_size>(PC);
- (regs[16-31]) = regs_identity(regs[16-31]);
-  SP = SP;
-  S = S;
+sleep(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], Sout:[word], PCout:[word+word], SPout:[word+word], w) where
+  (*  NOT implemented on simulator, TODO *)
+  PCout = increase<ram_addr_size>(PC);
+  Rdout = regs16;
+  w = 0;
+  SPout = SP;
+  Sout = S;
 end where
 
-wdr(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # NOT implemented on simulator, TODO
-  PC = increase<ram_addr_size>(PC);
- (regs[16-31]) = regs_identity(regs[16-31]);
-  SP = SP;
-  S = S;
+wdr(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], Sout:[word], PCout:[word+word], SPout:[word+word], w) where
+  (*  NOT implemented on simulator, TODO *)
+  PCout = increase<ram_addr_size>(PC);
+  Rdout = regs16;
+  w = 0;
+  SPout = SP;
+  Sout = S;
 end where

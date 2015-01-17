@@ -20,12 +20,12 @@ end where
 
 rcall(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  # save PC+1 on the stack
+  (*  save PC+1 on the stack *)
   PCtmp = increase<ram_addr_size>(PC);
   SP0 = push_stack(SP, PCtmp[..7]);
   SP = push_stack(SP0, PCtmp[8..]);
 
-  (PC, c) = nadder<word+word>(PC, 0.0.0.0.k, 1); # PC ← PC+k+1
+  (PC, c) = nadder<word+word>(PC, 0.0.0.0.k, 1); (*  PC ← PC+k+1 *)
   Rdout = regs16;
   w = 0;
   S = S;
@@ -34,7 +34,7 @@ end where
 icall(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
   PC = regs31.regs30;
 
-  # save PC+1 on the stack
+  (*  save PC+1 on the stack *)
   PCtmp = increase<ram_addr_size>(PC);
   SP0 = push_stack(SP, PCtmp[..7]);
   SP = push_stack(SP0, PCtmp[8..]);
@@ -46,7 +46,7 @@ end where
 
 ret(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  # PC ← STACK(SP)
+  (*  PC ← STACK(SP) *)
   (SP0, PC815) = pop_stack(SP);
   (SP, PC07) = pop_stack(SP0);
 
@@ -60,7 +60,7 @@ end where
 reti(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
   two = one<word+word-1>().0;
 
-  # PC ← STACK(SP)
+  (*  PC ← STACK(SP) *)
   (SP0, PC815) = pop_stack(SP);
   (SP, PC07) = pop_stack(SP0);
 
@@ -107,23 +107,23 @@ cp(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:
   PC = increase<ram_addr_size>(PC);
 end where
 
-cpc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where # TODO
+cpc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where (*  TODO *)
   Rdout = regs16;
   w = 0;
   S = S;
   PC = PC;
   SP = SP
 
-#   S5 = cH(R[3], (not Rd[3]), Rr[3]);
-#   S4 = cS(S2, S3);
-#   S3 = cV((not R[7]), Rd[7], (not Rr[7]));
-#   S2 = R[7];
-#   S1 = cZ(R);
-#   S0 = cC(R[7], (not Rd[7]), Rr[7]);
+(*    S5 = cH(R[3], (not Rd[3]), Rr[3]); *)
+(*    S4 = cS(S2, S3); *)
+(*    S3 = cV((not R[7]), Rd[7], (not Rr[7])); *)
+(*    S2 = R[7]; *)
+(*    S1 = cZ(R); *)
+(*    S0 = cC(R[7], (not Rd[7]), Rr[7]); *)
 
-#   S = setStatus(S[0-5], S[6], S[7]);
+(*    S = setStatus(S[0-5], S[6], S[7]); *)
 
-#   PC = increase<ram_addr_size>(PC);
+(*    PC = increase<ram_addr_size>(PC); *)
 end where
 
 cpi(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
@@ -176,16 +176,16 @@ sbrs(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word
   S = S;
 end where
 
-# sbic(k)
-# end where
+(*  sbic(k) *)
+(*  end where *)
 
-# sbis() = () where # TODO
-# end where
+(*  sbis() = () where (* TODO *) *)
+(*  end where *)
 
 brb_annex(PC:[word+word], k:[7], cond, val) = (PC:[word+word]) where
-    # rewrite k in two complement's form on 16 bits
+    (*  rewrite k in two complement's form on 16 bits *)
     k16 = k[0].0.0.0.0.0.0.0.0.0.0.k[1].k[2].k[3].k[4].k[5];
-    (PC1, c1) = nadder<word+word>(PC, k16, 1); # TODO: check little/big endian
+    (PC1, c1) = nadder<word+word>(PC, k16, 1); (*  TODO: check little/big endian *)
     PC = mux_n<word+word>(PC1, increase<ram_addr_size>(PC), not (cond xor val))
 end where
 
@@ -211,28 +211,28 @@ end where
 
 breq(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  # S[0] = S[110] = Z
+  (*  S[0] = S[110] = Z *)
   (Rdout, S, PC, SP, w) = brbs(k, 0.0.1, regs[16-31], S, PC, SP)
 
 end where
 
 brne(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  # S[0] = S[110] = Z
+  (*  S[0] = S[110] = Z *)
   (Rdout, S, PC, SP, w) = brbc(k, 0.0.1, regs[16-31], S, PC, SP)
 
 end where
 
 brcs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  # S[8] = S[118] = S
+  (*  S[8] = S[118] = S *)
   (Rdout, S, PC, SP, w) = brbs(k, 0.0.0, regs[16-31], S, PC, SP)
 
 end where
 
 brcc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  # S[8] = S[118] = S
+  (*  S[8] = S[118] = S *)
   (Rdout, S, PC, SP, w) = brbc(k, 0.0.0, regs[16-31], S, PC, SP)
 
 end where

@@ -206,17 +206,17 @@ pop_register(raddr:[reg_addr], regs[16-31]:[word]) = (w:[word]) where
   w = poper(r[0-4], regs[16-31])
 end where
 
-increase<n>(R:[n]) = (R:[n]) where	# simple increase
+increase<n>(R:[n]) = (R:[n]) where	(*  simple increase *)
   o = one<n>();
   (R, c) = nadder<n>(R, o, 0);
 end where
 
-iincrease<n>(R:[n]) = (R:[n]) where	# double increase
+iincrease<n>(R:[n]) = (R:[n]) where	(*  double increase *)
   two = one<n-1>().0;
   (R, c) = nadder<n>(R, two, 0);
 end where
 
-decrease<n>(R:[n]) = (R:[n]) where 	# simple decrease
+decrease<n>(R:[n]) = (R:[n]) where 	(*  simple decrease *)
   o = one<n>();
   (R, c) = nsubber<n>(R, o, 0);
 end where
@@ -233,16 +233,16 @@ end where
 
 
 push_stack(SP:[ram_addr_size], w:[word]) = (SP:[ram_addr_size]) where
-  #o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data);
+  (* o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data); *)
   o = ram<ram_addr_size, word>(SP, 1, SP, w);
 
-  # decrease SP by the right amount
+  (*  decrease SP by the right amount *)
   SP = decrease<ram_addr_size>(SP);
 
 end where
 
 pop_stack(SP:[ram_addr_size]) = (SP:[ram_addr_size], o:[word]) where
-  #o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data);
+  (* o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data); *)
   o = ram<ram_addr_size, word>(SP, 0, SP, zero<word>());
 
   SP = increase<ram_addr_size>(SP);
