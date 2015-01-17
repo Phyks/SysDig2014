@@ -74,6 +74,26 @@ regs_identity(regs[16-31]:[word]) = (regs[16-31]:[word]) where
   regs31 = regs31;
 end where
 
+store_registers(regsOut[16-31]:[word]) = (regsIn[16-31]:[word]) where
+  regsIn16 = reg_n<word>(regsOut16);
+  regsIn17 = reg_n<word>(regsOut17);
+  regsIn18 = reg_n<word>(regsOut18);
+  regsIn19 = reg_n<word>(regsOut19);
+  regsIn20 = reg_n<word>(regsOut20);
+  regsIn21 = reg_n<word>(regsOut21);
+  regsIn22 = reg_n<word>(regsOut22);
+  regsIn23 = reg_n<word>(regsOut23);
+  regsIn24 = reg_n<word>(regsOut24);
+  regsIn25 = reg_n<word>(regsOut25);
+  regsIn26 = reg_n<word>(regsOut26);
+  regsIn27 = reg_n<word>(regsOut27);
+  regsIn28 = reg_n<word>(regsOut28);
+  regsIn29 = reg_n<word>(regsOut29);
+  regsIn30 = reg_n<word>(regsOut30);
+  regsIn31 = reg_n<word>(regsOut31);
+end where
+
+
 allone<n>() = (o:[n]) where
   if n = 0 then
     o = []
