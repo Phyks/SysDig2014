@@ -90,7 +90,7 @@ sts(r:[reg_addr], k:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word
 end where
 
 in(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # Not implemented
+  (*  Not implemented *)
   PC = increase<ram_addr_size>(PC);
   S = S;
   SP = SP;
@@ -99,7 +99,7 @@ in(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:
 end where
 
 out(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # Not implemented
+  (*  Not implemented *)
   PC = increase<ram_addr_size>(PC);
   S = S;
   SP = SP;
@@ -120,14 +120,14 @@ end where
 pop(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   SP = increase<ram_addr_size>(SP);
 
-  out = ram<instr_size, word>(SP, 0, SP, one<word>()); # le one ne sert à rien à part à compléter la ram
+  out = ram<instr_size, word>(SP, 0, SP, one<word>()); (*  le one ne sert à rien à part à compléter la ram *)
 
   (regs[16-31]) = push_register(d, out, regs[16-31]);
   S = S;
   PC = increase<ram_addr_size>(PC);
 end where
 
-mov(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
+mov(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where (*  TODO *)
   (regs[16-31]) = regs_identity(regs[16-31]);
   S = S;
   SP = SP;

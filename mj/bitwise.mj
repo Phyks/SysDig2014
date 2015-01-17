@@ -14,14 +14,14 @@ lsr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   w = 0. w1[0..(wordm2)];
 
 
-  S7 = S[7]; #I
-  S6 = S[6]; #T
-  S5 = S[5]; #H
-  S4 = cS(S2, S3); #S
-  S3 = not a; #V
-  S2 = 0; #N
-  S1 = cZ(w); #Z
-  S0 = a; #C
+  S7 = S[7]; (* I *)
+  S6 = S[6]; (* T *)
+  S5 = S[5]; (* H *)
+  S4 = cS(S2, S3); (* S *)
+  S3 = not a; (* V *)
+  S2 = 0; (* N *)
+  S1 = cZ(w); (* Z *)
+  S0 = a; (* C *)
 
   S = setStatus(S[0-7]);
 
@@ -37,14 +37,14 @@ rol(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   c = S[0];
   w = w1[1..].c;
 
-  S7 = S[7]; #I
-  S6 = S[6]; #T
-  S5 = w1[4]; #H
-  S4 = cS(S2, S3); #S
-  S3 = w[0] xor w1[0]; #V
-  S2 = w[0]; #N
-  S1 = cZ(w); #Z
-  S0 = w1[0]; #C
+  S7 = S[7]; (* I *)
+  S6 = S[6]; (* T *)
+  S5 = w1[4]; (* H *)
+  S4 = cS(S2, S3); (* S *)
+  S3 = w[0] xor w1[0]; (* V *)
+  S2 = w[0]; (* N *)
+  S1 = cZ(w); (* Z *)
+  S0 = w1[0]; (* C *)
 
   S = setStatus(S[0-7]);
 
@@ -60,14 +60,14 @@ ror(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   c = S[0];
   w = c.w1[0..(wordm2)];
 
-  S7 = S[7]; #I
-  S6 = S[6]; #T
-  S5 = S[5]; #H
-  S4 = cS(S2, S3); #S
-  S3 = w[0] xor w1[7]; #V
-  S2 = w[0]; #N
-  S1 = cZ(w); #Z
-  S0 = w1[7]; #C
+  S7 = S[7]; (* I *)
+  S6 = S[6]; (* T *)
+  S5 = S[5]; (* H *)
+  S4 = cS(S2, S3); (* S *)
+  S3 = w[0] xor w1[7]; (* V *)
+  S2 = w[0]; (* N *)
+  S1 = cZ(w); (* Z *)
+  S0 = w1[7]; (* C *)
 
   S = setStatus(S[0-7]);
 
@@ -82,14 +82,14 @@ asr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
 
   w = w1[0].w1[0..(wordm2)];
 
-  S7 = S[7]; #I
-  S6 = S[6]; #T
-  S5 = S[5]; #H
-  S4 = cS(S2, S3); #S
-  S3 = w[0] xor w1[7]; #V
-  S2 = w[0]; #N
-  S1 = cZ(w); #Z
-  S0 = w1[7]; #C
+  S7 = S[7]; (* I *)
+  S6 = S[6]; (* T *)
+  S5 = S[5]; (* H *)
+  S4 = cS(S2, S3); (* S *)
+  S3 = w[0] xor w1[7]; (* V *)
+  S2 = w[0]; (* N *)
+  S1 = cZ(w); (* Z *)
+  S0 = w1[7]; (* C *)
 
   S = setStatus(S[0-7]);
 
@@ -104,14 +104,14 @@ swap(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
 
   w = w1[4].w1[5].w1[6].w1[7].w1[0].w1[1].w1[2].w1[3];
 
-  S7 = S[7]; #I
-  S6 = S[6]; #T
-  S5 = S[5]; #H
-  S4 = S[4]; #S
-  S3 = S[3]; #V
-  S2 = S[2]; #N
-  S1 = S[1]; #Z
-  S0 = S[0]; #C
+  S7 = S[7]; (* I *)
+  S6 = S[6]; (* T *)
+  S5 = S[5]; (* H *)
+  S4 = S[4]; (* S *)
+  S3 = S[3]; (* V *)
+  S2 = S[2]; (* N *)
+  S1 = S[1]; (* Z *)
+  S0 = S[0]; (* C *)
 
   S = setStatus(S[0-7]);
 
@@ -165,11 +165,11 @@ bclr(s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (reg
   SP = SP;
 end where
 
-sbi() = (caca) where # TODO
+sbi() = (caca) where (*  TODO *)
   caca = 0
 end where
 
-cbi() = (caca) where # TODO
+cbi() = (caca) where (*  TODO *)
   caca = 0
 end where
 
@@ -180,14 +180,14 @@ end where
 bst(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
 
-  S7 = S[7]; #I
-  S6 = bst_brancher(Rd, b[0..2]); #T
-  S5 = S[5]; #H
-  S4 = S[4]; #S
-  S3 = S[3]; #V
-  S2 = S[2]; #N
-  S1 = S[1]; #Z
-  S0 = S[0]; #C
+  S7 = S[7]; (* I *)
+  S6 = bst_brancher(Rd, b[0..2]); (* T *)
+  S5 = S[5]; (* H *)
+  S4 = S[4]; (* S *)
+  S3 = S[3]; (* V *)
+  S2 = S[2]; (* N *)
+  S1 = S[1]; (* Z *)
+  S0 = S[0]; (* C *)
 
   S = setStatus(S[0-7]);
 
