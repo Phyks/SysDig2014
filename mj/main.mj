@@ -7,35 +7,35 @@ require others.mj
 require transfer.mj
 
 
-route00010(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route00010(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = cpse(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = cp(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
 end where
 
-route00011(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route00011(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = sub(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = adc(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
 end where
 
-route0011(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = cpi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP);
+route0011(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+  (regsOut[16-31], Sout, PCout, SPout) = cpi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP);
 end where
 
-route00100(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route00100(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = and_op(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = eor(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
 end where
 
-route00001(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route00001(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = sbc(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = add(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
 end where
 
-route00000(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route00000(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = nop(regs[16-31], S, PC, SP);
     # (regs[16-31]) = regs_identity(regs[16-31]);
     # S = S;
@@ -43,354 +43,352 @@ route00000(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]
 
     (regs2[16-31], S2, PC2, SP2) = cpc(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
 end where
 
-route00101(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route00101(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = or_op(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = mov(o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP);
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
 end where
 
-route0001(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route0001(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route00010(o[0-10], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route00011(o[0-10], regs[16-31], S, PC, SP);
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11);
 end where
 
-route0010(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route0010(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route00100(o[0-10], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route00101(o[0-10], regs[16-31], S, PC, SP);
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11);
 end where
 
-route0000(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route0000(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route00000(o[0-10], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route00001(o[0-10], regs[16-31], S, PC, SP);
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11);
 end where
 
-route0101(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = subi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP);
+route0101(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+  (regsOut[16-31], Sout, PCout, SPout) = subi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP);
 end where
 
-route0100(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = sbci(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP);
+route0100(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+  (regsOut[16-31], Sout, PCout, SPout) = sbci(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP);
 end where
 
-route0111(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = andi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP);
+route0111(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+  (regsOut[16-31], Sout, PCout, SPout) = andi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP);
 end where
 
-route0110(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = sbr(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP);
+route0110(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+  (regsOut[16-31], Sout, PCout, SPout) = sbr(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP);
 end where
 
-route001(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route001(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route0010(o[0-11], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route0011(o[0-11], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
 end where
 
-route000(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route000(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route0000(o[0-11], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route0001(o[0-11], regs[16-31], S, PC, SP);
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
 end where
 
-route010(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route010(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route0100(o[0-11], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route0101(o[0-11], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
 end where
 
-route011(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route011(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route0110(o[0-11], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route0111(o[0-11], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
 end where
 
-route00(o[0-13], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route00(o[0-13], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route000(o[0-12], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route001(o[0-12], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o13);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o13);
 end where
 
-route01(o[0-13], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route01(o[0-13], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route010(o[0-12], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route011(o[0-12], regs[16-31], S, PC, SP);
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o13);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o13);
 end where
 
-route0(o[0-14], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route0(o[0-14], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route00(o[0-13], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route01(o[0-13], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o14);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o14);
 end where
 
 route111100_00(o0, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = brlo(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = breq(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
 end where
 
 route111100_01(o0, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = brmi(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = brvs(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
 end where
 
 route111100_10(o0, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = brlt(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = brhs(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
 end where
 
 route111100_11(o0, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = brts(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = nop(regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
 end where
 
 route111100_0(o0, o1, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = route111100_00(o0, o[3-9], regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = route111100_01(o0, o[3-9], regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o1);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o1);
 end where
 
 route111100_1(o0, o1, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = route111100_10(o0, o[3-9], regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = route111100_11(o0, o[3-9], regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o1);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o1);
 end where
 
 route111100(o[0-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = route111100_0(o0, o1, o[3-9], regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = route111100_1(o0, o1, o[3-9], regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o2);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o2);
 end where
 
-route111110(o[0-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route111110(o[0-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = bld(o8.o7.o6.o5.o4, o2.o1.o0, regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = bst(o8.o7.o6.o5.o4, o2.o1.o0, regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o9);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o9);
 end where
 
 route111101_00(o0, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = brsh(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = brne(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
 end where
 
 route111101_01(o0, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = brpl(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = brie(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
 end where
 
 route111101_10(o0, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = brge(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = brhc(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
 end where
 
 route111101_11(o0, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = brtc(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = brid(o9.o8.o7.o6.o5.o4.o3, regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o0);
 end where
 
 route111101_0(o0, o1, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = route111101_00(o0, o[3-9], regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = route111101_01(o0, o[3-9], regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o1);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o1);
 end where
 
 route111101_1(o0, o1, o[3-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = route111101_10(o0, o[3-9], regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = route111101_11(o0, o[3-9], regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o1);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o1);
 end where
 
 route111101(o[0-9], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
-  = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   (regs1[16-31], S1, PC1, SP1) = route111101_0(o0, o1, o[3-9], regs[16-31], S, PC, SP);
   (regs2[16-31], S2, PC2, SP2) = route111101_1(o0, o1, o[3-9], regs[16-31], S, PC, SP);
 
-  (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o2);
+  (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o2);
 end where
 
-route11111(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route11111(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route111110(o[0-9], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = sbrs(o8.o7.o6.o5.o4, o2.o1.o0, regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
 end where
 
-route11110(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route11110(o[0-10], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route111100(o[0-9], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route111101(o[0-9], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o10);
 end where
 
-route1111(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route1111(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route11110(o[0-10], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route11111(o[0-10], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11);
 end where
 
-route1001(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = ld(o8.o7.o6.o5.o4, o3, o2, o1, o0, regs[16-31], S, PC, SP)
+route1001(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+  (regsOut[16-31], Sout, PCout, SPout) = ld(o8.o7.o6.o5.o4, o3, o2, o1, o0, regs[16-31], S, PC, SP)
 end where
 
-route1000(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route1000(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = ld(o8.o7.o6.o5.o4, o3, o2, o1, o0, regs[16-31], S, PC, SP);
 
     (regs2[16-31], S2, PC2, SP2) = st(o8.o7.o6.o5.o4, o3, o2, o1, o0, regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o9)
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o9)
 end where
 
-route1010(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route1010(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
 
     next = rom<instr_addr_size, instr_size>(increase<word+word>(PC));
     (regs1[16-31], S1, PC1, SP1) = lds(o8.o7.o6.o5.o4, next, regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = sts(o8.o7.o6.o5.o4, next, regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11)
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11)
 end where
 
-route1011(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-    # (regs[16-31], S, PC, SP) = in(o10.o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP)
+route1011(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+    # (regsOut[16-31], Sout, PCout, SPout) = in(o10.o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP)
     (regs1[16-31], S1, PC1, SP1) = in(regs[16-31], S, PC, SP);
 
-    # (regs[16-31], S, PC, SP) = out(o10.o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP)
+    # (regsOut[16-31], Sout, PCout, SPout) = out(o10.o9.o3.o2.o1.o0, o8.o7.o6.o5.o4, regs[16-31], S, PC, SP)
     (regs2[16-31], S2, PC2, SP2) = out(regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11)
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o11)
 end where
 
-route1110(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # (regs[16-31], S, PC, SP) = ldi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP)
-  (regs[16-31], S, PC, SP) = nop(regs[16-31], S, PC, SP); # TODO : This should be ldi
+route1110(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+  # (regsOut[16-31], Sout, PCout, SPout) = ldi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP)
+  (regsOut[16-31], Sout, PCout, SPout) = nop(regs[16-31], S, PC, SP); # TODO : This should be ldi
 end where
 
-route1101(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = rcall(o11.o10.o9.o8.o7.o6.o5.o4.o3.o2.o1.o0, regs[16-31], S, PC, SP);
+route1101(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+  (regsOut[16-31], Sout, PCout, SPout) = rcall(o11.o10.o9.o8.o7.o6.o5.o4.o3.o2.o1.o0, regs[16-31], S, PC, SP);
 end where
 
-route1100(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = rjmp(o11.o10.o9.o8.o7.o6.o5.o4.o3.o2.o1.o0, regs[16-31], S, PC, SP);
+route1100(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+  (regsOut[16-31], Sout, PCout, SPout) = rjmp(o11.o10.o9.o8.o7.o6.o5.o4.o3.o2.o1.o0, regs[16-31], S, PC, SP);
 end where
 
-route101(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route101(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route1010(o[0-11], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route1011(o[0-11], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
 end where
 
-route100(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route100(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route1000(o[0-11], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route1001(o[0-11], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
 end where
 
-route110(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route110(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route1100(o[0-11], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route1101(o[0-11], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
 end where
 
-route111(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route111(o[0-12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route1110(o[0-11], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route1111(o[0-11], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
 end where
 
-route11(o[0-13], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route11(o[0-13], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route110(o[0-12], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route111(o[0-12], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o12);
 end where
 
-route10(o[0-13], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route10(o[0-13], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route100(o[0-12], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route101(o[0-12], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o13);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o13);
 end where
 
-route1(o[0-14], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route1(o[0-14], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route10(o[0-13], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route11(o[0-13], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o14);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o14);
 end where
 
 
-route(o[0-15], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+route(o[0-15], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
     (regs1[16-31], S1, PC1, SP1) = route0(o[0-14], regs[16-31], S, PC, SP);
     (regs2[16-31], S2, PC2, SP2) = route1(o[0-14], regs[16-31], S, PC, SP);
 
-    (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o15);
-end where
-
-mainLoop(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # Get the opcode of the instruction
-  opcode = rom<instr_addr_size, instr_size>(PC);
-  (op[0-15]) = op_decomposer(opcode);
-
-  # Route it to the instruction
-  (regs[16-31], S, PC, SP) = route(op[0-15], regs[16-31], S, PC, SP);
-
-  # Loop
-  # (regs[16-31], S, PC, SP) = mainLoop(regs[16-31], S, PC, SP);
+    (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o15);
 end where
 
 main() = () where
-  # Initialize everything to zero, except SP which is RAMEND
-  RAMEND = zero<7>().1.zero<8>(); #RAMEND = 512
+  (*  Initialize everything to zero, except SP which is RAMEND *)
+  RAMEND = zero<7>().1.zero<8>(); (* RAMEND = 512 *)
   z = 0;
-  (regs[16-31], S, PC, SP) = init_register(z, RAMEND);
 
-  (regs[16-31], S, PC, SP) = mainLoop(regs[16-31], S, PC, SP);
+  (*  Get the opcode of the instruction *)
+  opcode = rom<instr_addr_size, instr_size>(PC);
+  (op[0-15]) = op_decomposer(opcode);
+
+  (*  Route it to the instruction *)
+  (regsOut[16-31], Sout, PCout, SPout) = route(op[0-15], regsIn[16-31], S, PC, SP);
+
+  (*  Store the registers *)
+  (regsIn[16-31]) = store_registers(regsOut[16-31]);
+  S = reg_n<word>(Sout);
+  PC = reg_n<word+word>(PCout);
+  SP = reg_n<word+word>(SPout);
 end where
