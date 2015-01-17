@@ -1,22 +1,24 @@
-rjmp(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+rjmp(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
   (PC, c) = nadder<word+word>(PC, 0.0.0.0.k, 1);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   S = S;
   SP = SP;
 end where
 
-ijmp(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+ijmp(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
   Z = regs31.regs30;
 
   (PC, c) = nadder<word+word>(PC, Z, 0);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   S = S;
   SP = SP;
 end where
 
-rcall(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+rcall(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
   # save PC+1 on the stack
   PCtmp = increase<ram_addr_size>(PC);
@@ -24,11 +26,12 @@ rcall(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (r
   SP = push_stack(SP0, PCtmp[8..]);
 
   (PC, c) = nadder<word+word>(PC, 0.0.0.0.k, 1); # PC ← PC+k+1
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   S = S;
 end where
 
-icall(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+icall(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
   PC = regs31.regs30;
 
   # save PC+1 on the stack
@@ -36,11 +39,12 @@ icall(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-3
   SP0 = push_stack(SP, PCtmp[..7]);
   SP = push_stack(SP0, PCtmp[8..]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   S = S;
 end where
 
-ret(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+ret(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
   # PC ← STACK(SP)
   (SP0, PC815) = pop_stack(SP);
@@ -48,11 +52,12 @@ ret(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]
 
   PC = PC815.PC07;
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   S = S;
 end where
 
-reti(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+reti(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
   two = one<word+word-1>().0;
 
   # PC ← STACK(SP)
@@ -62,24 +67,26 @@ reti(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31
   PC = PC815.PC07;
 
   S = setStatus(S[0..6], 1);
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
 end where
 
 cpse_brancher(Rd:[word], Rr:[word]) = (PC:[ram_addr_size]) where
   PC = mux_n<ram_addr_size>(iincrease<ram_addr_size>(PC), increase<ram_addr_size>(PC), equals<word>(Rd, Rr))
 end where
 
-cpse(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+cpse(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
   PC = cpse_brancher(Rd, Rr);
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   S = S;
   SP = SP;
 end where
 
-cp(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+cp(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -94,13 +101,15 @@ cp(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:
 
   S = setStatus(S[0-5], S[6], S[7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   SP = SP;
   PC = increase<ram_addr_size>(PC);
 end where
 
-cpc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where # TODO
-  (regs[16-31]) = regs_identity(regs[16-31]);
+cpc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where # TODO
+  Rdout = regs16;
+  w = 0;
   S = S;
   PC = PC;
   SP = SP
@@ -117,7 +126,7 @@ cpc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
 #   PC = increase<ram_addr_size>(PC);
 end where
 
-cpi(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+cpi(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
   Rd = pop_register(1.d, regs[16-31]);
 
@@ -131,7 +140,8 @@ cpi(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[wor
   S0 = cC(R[7], (not Rd[7]), K[7]);
 
   S = setStatus(S[0-5], S[6], S[7]);
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   SP = SP;
   PC = increase<ram_addr_size>(PC);
 end where
@@ -140,7 +150,7 @@ sbr_comparator(r, PC:[ram_addr_size], v) = (PC:[ram_addr_size]) where
   PC = mux_n<ram_addr_size>(iincrease<ram_addr_size>(PC), increase<ram_addr_size>(PC), not(r xor v))
 end where
 
-sbrc(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+sbrc(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
   Rr = pop_register(r, regs[16-31]);
 
@@ -148,18 +158,20 @@ sbrc(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word
 
   PC = sbr_comparator(r2, PC, 0);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   SP = SP;
   S = S;
 end where
 
-sbrs(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+sbrs(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
   Rr = pop_register(r, regs[16-31]);
   r2 = getBit(Rr, b[0..2]);
 
   PC = sbr_comparator(r2, PC, 1);
- (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   SP = SP;
   S = S;
 end where
@@ -177,118 +189,120 @@ brb_annex(PC:[word+word], k:[7], cond, val) = (PC:[word+word]) where
     PC = mux_n<word+word>(PC1, increase<ram_addr_size>(PC), not (cond xor val))
 end where
 
-brbs(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brbs(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
   r = getBit(S, s[0..2]);
   PC = brb_annex(PC, k, r, 1);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   SP = SP;
   S = S;
 end where
 
-brbc(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brbc(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
   r = getBit(S, s[0], s[1], s[2]);
   PC = brb_annex(PC, k, r, 0);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  Rdout = regs16;
+  w = 0;
   SP = SP;
   S = S;
 end where
 
-breq(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+breq(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
   # S[0] = S[110] = Z
-  (regs[16-31], S, PC, SP) = brbs(k, 0.0.1, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbs(k, 0.0.1, regs[16-31], S, PC, SP)
 
 end where
 
-brne(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brne(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
   # S[0] = S[110] = Z
-  (regs[16-31], S, PC, SP) = brbc(k, 0.0.1, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbc(k, 0.0.1, regs[16-31], S, PC, SP)
 
 end where
 
-brcs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brcs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
   # S[8] = S[118] = S
-  (regs[16-31], S, PC, SP) = brbs(k, 0.0.0, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbs(k, 0.0.0, regs[16-31], S, PC, SP)
 
 end where
 
-brcc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brcc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
   # S[8] = S[118] = S
-  (regs[16-31], S, PC, SP) = brbc(k, 0.0.0, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbc(k, 0.0.0, regs[16-31], S, PC, SP)
 
 end where
 
-brsh(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brsh(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 0.0.0, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbc(k, 0.0.0, regs[16-31], S, PC, SP)
 end where
 
-brlo(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brlo(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 0.0.0, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbs(k, 0.0.0, regs[16-31], S, PC, SP)
 end where
 
-brmi(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brmi(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 0.1.0, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbs(k, 0.1.0, regs[16-31], S, PC, SP)
 end where
 
-brpl(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brpl(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 0.1.0, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbc(k, 0.1.0, regs[16-31], S, PC, SP)
 end where
 
-brge(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brge(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 1.0.0, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbc(k, 1.0.0, regs[16-31], S, PC, SP)
 end where
 
-brlt(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brlt(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 1.0.0, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbs(k, 1.0.0, regs[16-31], S, PC, SP)
 end where
 
-brhs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brhs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 1.0.1, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbs(k, 1.0.1, regs[16-31], S, PC, SP)
 end where
 
-brhc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brhc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 1.0.1, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbc(k, 1.0.1, regs[16-31], S, PC, SP)
 end where
 
-brts(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brts(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 1.1.0, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbs(k, 1.1.0, regs[16-31], S, PC, SP)
 end where
 
-brtc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brtc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 1.1.0, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbc(k, 1.1.0, regs[16-31], S, PC, SP)
 end where
 
-brvs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brvs(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 0.1.1, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbs(k, 0.1.1, regs[16-31], S, PC, SP)
 end where
 
-brvc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brvc(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 0.1.1, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbc(k, 0.1.1, regs[16-31], S, PC, SP)
 end where
 
-brie(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brie(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbs(k, 1.1.1, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbs(k, 1.1.1, regs[16-31], S, PC, SP)
 end where
 
-brid(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+brid(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
 
-  (regs[16-31], S, PC, SP) = brbc(k, 1.1.1, regs[16-31], S, PC, SP)
+  (Rdout, S, PC, SP, w) = brbc(k, 1.1.1, regs[16-31], S, PC, SP)
 end where

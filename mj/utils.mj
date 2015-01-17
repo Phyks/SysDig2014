@@ -30,29 +30,15 @@ enableReg<n>(writeVal:[n], enable) = (val:[n]) where
   val = reg_n<n>(newVal);
 end where
 
-muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word],
-      regs_2_[16-31]:[word], S2:[word], PC2:[word+word], SP2:[word+word],
+muxer(Rdout1:[word], S1:[word], PC1:[word+word], SP1:[word+word], w1,
+      Rdout2:[word], S2:[word], PC2:[word+word], SP2:[word+word], w2,
       v)
-       = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  regs16 = mux_n<word>(regs_1_16, regs_2_26, v);
-  regs17 = mux_n<word>(regs_1_17, regs_2_27, v);
-  regs18 = mux_n<word>(regs_1_18, regs_2_28, v);
-  regs19 = mux_n<word>(regs_1_19, regs_2_29, v);
-  regs20 = mux_n<word>(regs_1_20, regs_2_20, v);
-  regs21 = mux_n<word>(regs_1_21, regs_2_21, v);
-  regs22 = mux_n<word>(regs_1_22, regs_2_22, v);
-  regs23 = mux_n<word>(regs_1_23, regs_2_23, v);
-  regs24 = mux_n<word>(regs_1_24, regs_2_24, v);
-  regs25 = mux_n<word>(regs_1_25, regs_2_25, v);
-  regs26 = mux_n<word>(regs_1_26, regs_2_26, v);
-  regs27 = mux_n<word>(regs_1_27, regs_2_27, v);
-  regs28 = mux_n<word>(regs_1_28, regs_2_28, v);
-  regs29 = mux_n<word>(regs_1_29, regs_2_29, v);
-  regs30 = mux_n<word>(regs_1_30, regs_2_30, v);
-  regs31 = mux_n<word>(regs_1_31, regs_2_31, v);
+       = (Rdout:[word], S:[word], PC:[word+word], SP:[word+word], w) where
+  Rdout = mux_n<word>(Rdout1, Rdout2, v);
   S = mux_n<word>(S1, S2, v);
   PC = mux_n<word+word>(PC1, PC2, v);
   SP = mux_n<word+word>(SP1, SP2, v);
+  w = mux(w1, w2, v);
 end where
 
 regs_identity(regs[16-31]:[word]) = (regs[16-31]:[word]) where
