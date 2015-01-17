@@ -274,16 +274,13 @@ route1111(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
 end where
 
 route1001(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # (regs[16-31], S, PC, SP) = ld(o8.o7.o6.o5.o4, o3.o2.o1.o0, regs[16-31], S, PC, SP)
-  (regs[16-31], S, PC, SP) = nop(regs[16-31], S, PC, SP); # TODO : This should be ld
+  (regs[16-31], S, PC, SP) = ld(o8.o7.o6.o5.o4, o3, o2, o1, o0, regs[16-31], S, PC, SP)
 end where
 
 route1000(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-    # (regs[16-31], S, PC, SP) = ld(o8.o7.o6.o5.o4, o3.o2.o1.o0, regs[16-31], S, PC, SP)
-    (regs1[16-31], S1, PC1, SP1) = nop(regs[16-31], S, PC, SP); # TODO : This should be ld
+    (regs1[16-31], S1, PC1, SP1) = ld(o8.o7.o6.o5.o4, o3, o2, o1, o0, regs[16-31], S, PC, SP);
 
-    # (regs[16-31], S, PC, SP) = st(o8.o7.o6.o5.o4, o3.o2.o1.o0, regs[16-31], S, PC, SP);
-    (regs2[16-31], S2, PC2, SP2) = nop(regs[16-31], S, PC, SP); # TODO : This should be st
+    (regs2[16-31], S2, PC2, SP2) = st(o8.o7.o6.o5.o4, o3, o2, o1, o0, regs[16-31], S, PC, SP);
 
     (regs[16-31], S, PC, SP) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o9)
 end where

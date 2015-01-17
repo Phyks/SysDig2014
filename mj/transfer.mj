@@ -10,64 +10,34 @@ ldd(d:[reg_addr], address:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[wor
   S = S;
 end where
 
+ld_st_minus(xyz:[word+word]) = (xyz:[word+word]) where
+  z = zero<word>();
+  o = one<word>();
+  (reg1, c) = nsubber<word>(xyz[word..], o, 0);
+  carry = z[0..(word-2)].c;
+  (reg2, c2) = nsubber<word>(xyz[..(word-1)], carry, 0);
+  xyz = reg2.reg1
+end where
+
+ld_st_plus(xyz:[word+word]) = (xyz:[word+word]) where
+  z = zero<word>();
+  (reg1, c1) = nadder<word>(xyz[word..], z, 1);
+  (reg2, c2) = nadder<word>(xyz[..(word-1)], z, c1);
+  xyz = reg2.reg1
+end where
+
 ld(d:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  if o3 = 0 then # Z cases
-    if o0 = 1 then # Z+
-      (regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs[16-31], S, PC, SP);
-      z = zero<word>();
-      (regs30, c1) = nadder<word>(regs30, z, 1);
-      (regs31, c2) = nadder<word>(regs31, z, c1);
-    else
-      if o1 = 1 then # -Z
-        z = zero<word>();
-    	o = one<word>();
-	(regs30, c) = nsubber<word>(regs30, o, 0);
-  	carry = z[0..(word-1)].c;
-  	(regs31, c2) = nsubber<word>(regs31, carry, 0);
-    	(regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs[16-31], S, PC, SP)
-      else # Z
-        (regs[16-31], S, PC, SP) = ldd(d, regs31.regs30, regs[16-31], S, PC, SP)
-      end if
-    end if
-  else
-    if o2 = 1 then # X cases
-      if o0 = 1 then # X+
-        (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs[16-31], S, PC, SP);
-        z = zero<word>();
-        (regs26, c1) = nadder<word>(regs26, z, 1);
-        (regs27, c2) = nadder<word>(regs27, z, c1);
-      else
-        if o1 = 1 then # -X
-  	  z = zero<word>();
-    	  o = one<word>();
-	  (regs26, c) = nsubber<word>(regs26, o, 0);
-  	  carry = z[0..(word-1)].c;
-  	  (regs27, c2) = nsubber<word>(regs27, carry, 0);
-    	  (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs[16-31], S, PC, SP)
-        else # X
-          (regs[16-31], S, PC, SP) = ldd(d, regs27.regs26, regs[16-31], S, PC, SP)
-	end if
-      end if
-    else # Y cases
-      if o0 = 1 then # Y+
-        (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs[16-31], S, PC, SP);
-        z = zero<word>();
-        (regs28, c1) = nadder<word>(regs28, z, 1);
-        (regs29, c2) = nadder<word>(regs29, z, c1);
-      else
-        if o1 = 1 then # -Y
-  	  z = zero<word>();
-    	  o = one<word>();
-	  (regs28, c) = nsubber<word>(regs28, o, 0);
-  	  carry = z[0..(word-1)].c;
-  	  (regs29, c2) = nsubber<word>(regs29, carry, 0);
-    	  (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs[16-31], S, PC, SP)
-        else # Y
-          (regs[16-31], S, PC, SP) = ldd(d, regs29.regs28, regs[16-31], S, PC, SP)
-	end if
-      end if
-    end if
-  end if
+  xyz = mux_n<word+word>(mux_n<word+word>(regs27.regs26, regs29.regs28, o2), regs31.regs30, o3);
+  xyz = mux_n<word+word>(ld_st_minus(xyz), xyz, (not o0) and o1);
+  (regs[16-31], S, PC, SP) = ldd(d, xyz, regs[16-31], S, PC, SP);
+  xyz = mux_n<word+word>(ld_st_plus(xyz), xyz, o0);
+
+  regs26 = mux_n<word>(xyz[word..], regs26, o3 and o2);
+  regs27 = mux_n<word>(xyz[..(word-1)], regs27, o3 and o2);
+  regs28 = mux_n<word>(xyz[word..], regs28, o3 and (not o2));
+  regs29 = mux_n<word>(xyz[..(word-1)], regs29, o3 and (not o2));
+  regs30 = mux_n<word>(xyz[word..], regs30, not o3);
+  regs31 = mux_n<word>(xyz[..(word-1)], regs31, not o3);
 end where
 
 lds(d:[reg_addr], k:[instr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
@@ -75,9 +45,9 @@ lds(d:[reg_addr], k:[instr_size], regs[16-31]:[word], S:[word], PC:[word+word], 
 
   (regs[16-31]) = push_register(d, w, regs[16-31]);
   SP = SP;
-  S = S;  
+  S = S;
   PC = iincrease<ram_addr_size>(PC)
-  
+
 end where
 
 std(w:[word], address:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
@@ -91,63 +61,17 @@ std(w:[word], address:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+wo
 end where
 
 st_annex(w:[word], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  if o3 = 0 then # Z cases
-    if o0 = 1 then # Z+
-      (regs[16-31], S, PC, SP) = std(w, regs31.regs30, regs[16-31], S, PC, SP);
-      z = zero<word>();
-      (regs30, c1) = nadder<word>(regs30, z, 1);
-      (regs31, c2) = nadder<word>(regs31, z, c1);
-    else
-      if o1 = 1 then # -Z
-        z = zero<word>();
-    	o = one<word>();
-	(regs30, c) = nsubber<word>(regs30, o, 0);
-  	carry = z[0..(word-1)].c;
-  	(regs31, c2) = nsubber<word>(regs31, carry, 0);
-    	(regs[16-31], S, PC, SP) = std(w, regs31.regs30, regs[16-31], S, PC, SP)
-      else # Z
-        (regs[16-31], S, PC, SP) = std(w, regs31.regs30, regs[16-31], S, PC, SP)
-      end if
-    end if
-  else
-    if o2 = 1 then # X cases
-      if o0 = 1 then # X+
-        (regs[16-31], S, PC, SP) = std(w, regs27.regs26, regs[16-31], S, PC, SP);
-        z = zero<word>();
-        (regs26, c1) = nadder<word>(regs26, z, 1);
-        (regs27, c2) = nadder<word>(regs27, z, c1);
-      else
-        if o1 = 1 then # -X
-  	  z = zero<word>();
-    	  o = one<word>();
-	  (regs26, c) = nsubber<word>(regs26, o, 0);
-  	  carry = z[0..(word-1)].c;
-  	  (regs27, c2) = nsubber<word>(regs27, carry, 0);
-    	  (regs[16-31], S, PC, SP) = std(w, regs27.regs26, regs[16-31], S, PC, SP)
-        else # X
-          (regs[16-31], S, PC, SP) = std(w, regs27.regs26, regs[16-31], S, PC, SP)
-	end if
-      end if
-    else # Y cases
-      if o0 = 1 then # Y+
-        (regs[16-31], S, PC, SP) = std(w, regs29.regs28, regs[16-31], S, PC, SP);
-        z = zero<word>();
-        (regs28, c1) = nadder<word>(regs28, z, 1);
-        (regs29, c2) = nadder<word>(regs29, z, c1);
-      else
-        if o1 = 1 then # -Y
-  	  z = zero<word>();
-    	  o = one<word>();
-	  (regs28, c) = nsubber<word>(regs28, o, 0);
-  	  carry = z[0..(word-1)].c;
-  	  (regs29, c2) = nsubber<word>(regs29, carry, 0);
-    	  (regs[16-31], S, PC, SP) = std(w, regs29.regs28, regs[16-31], S, PC, SP)
-        else # Y
-          (regs[16-31], S, PC, SP) = std(w, regs29.regs28, regs[16-31], S, PC, SP)
-	end if
-      end if
-    end if
-  end if
+  xyz = mux_n<word+word>(mux_n<word+word>(regs27.regs26, regs29.regs28, o2), regs31.regs30, o3);
+  xyz = mux_n<word+word>(ld_st_minus(xyz), xyz, (not o0) and o1);
+  (regs[16-31], S, PC, SP) = std(w, xyz, regs[16-31], S, PC, SP);
+  xyz = mux_n<word+word>(ld_st_plus(xyz), xyz, o0);
+
+  regs26 = mux_n<word>(xyz[word..], regs26, o3 and o2);
+  regs27 = mux_n<word>(xyz[..(word-1)], regs27, o3 and o2);
+  regs28 = mux_n<word>(xyz[word..], regs28, o3 and (not o2));
+  regs29 = mux_n<word>(xyz[..(word-1)], regs29, o3 and (not o2));
+  regs30 = mux_n<word>(xyz[word..], regs30, not o3);
+  regs31 = mux_n<word>(xyz[..(word-1)], regs31, not o3);
 end where
 
 st(r:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
