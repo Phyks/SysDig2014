@@ -1,4 +1,4 @@
-(* !/usr/bin/env python3 *)
+#!/usr/bin/env python3
 
 import re
 import sys
@@ -9,28 +9,28 @@ already_included = []
 def compute_includes(file):
     with open(file, 'r') as fh:
         generated = fh.readlines()
-    (*  remove comments *)
-    generated = [re.sub(r"(* .*", "", i) for i in generated] *)
-    
+    # remove comments
+    # generated = [re.sub(r"(* .*", "", i) for i in generated]
+
     def subfunction(pre, i_start, i_end, suff="", sep=("", "")):
         i_start = int(i_start)
         i_end = int(i_end) + 1
         return ", ".join([pre + sep[0] + str(i) + sep[1] + suff
                           for i in range(i_start, i_end)])
 
-    (*  replace "foo[0-n]:[bar]" by "foo0:[bar], foo1:[bar], …, foon:[bar]" *)
+    # replace "foo[0-n]:[bar]" by "foo0:[bar], foo1:[bar], …, foon:[bar]"
     generated = [re.sub(r"(\w+)\[(\d+)-(\d+)\](:\[\w+\])",
                         lambda m: subfunction(m.group(1), m.group(2),
                                               m.group(3), suff=m.group(4)),
                         string)
                  for string in generated]
-    (*  replace "foo[0-n]" by "foo0, foo1, …, foon" *)
+    # replace "foo[0-n]" by "foo0, foo1, …, foon"
     generated = [re.sub(r"(\w+)\[(\d+)-(\d+)\]",
                         lambda m: subfunction(m.group(1), m.group(2),
                                               m.group(3)),
                         string)
                  for string in generated]
-    (*  replace "foo[0..n]" by "foo[0], foo[1], …, foo[n]" *)
+    #  replace "foo[0..n]" by "foo[0], foo[1], …, foo[n]"
     generated = [re.sub(r"(\w+)\[(\d+)\.\.(\d+)\]",
                         lambda m: subfunction(m.group(1), m.group(2),
                                               m.group(3), sep=("[", "]")),

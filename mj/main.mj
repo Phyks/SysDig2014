@@ -374,13 +374,14 @@ route(o[0-15], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (
     (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o15);
 end where
 
-main() = () where
+main() = (regsOut[16-31]:[word]) where (* TODO : Remove outputs *)
   (*  Initialize everything to zero, except SP which is RAMEND *)
   RAMEND = zero<7>().1.zero<8>(); (* RAMEND = 512 *)
   z = 0;
 
   (*  Get the opcode of the instruction *)
-  opcode = rom<instr_addr_size, instr_size>(PC);
+  (* TODO : opcode = rom<instr_addr_size, instr_size>(PC); *)
+  opcode = 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0;
   (op[0-15]) = op_decomposer(opcode);
 
   (*  Route it to the instruction *)
