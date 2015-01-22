@@ -14,14 +14,14 @@ lsr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   w = 0. w1[0..(wordm2)];
 
 
-  S7 = S[7]; #I
-  S6 = S[6]; #T
-  S5 = S[5]; #H
-  S4 = cS(S2, S3); #S
-  S3 = not a; #V
-  S2 = 0; #N
-  S1 = cZ(w); #Z
-  S0 = a; #C
+  S7 = S[7]; (* I *)
+  S6 = S[6]; (* T *)
+  S5 = S[5]; (* H *)
+  S4 = cS(S2, S3); (* S *)
+  S3 = not a; (* V *)
+  S2 = 0; (* N *)
+  S1 = cZ(w); (* Z *)
+  S0 = a; (* C *)
 
   S = setStatus(S[0-7]);
 
@@ -37,14 +37,14 @@ rol(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   c = S[0];
   w = w1[1..].c;
 
-  S7 = S[7]; #I
-  S6 = S[6]; #T
-  S5 = w1[4]; #H
-  S4 = cS(S2, S3); #S
-  S3 = w[0] xor w1[0]; #V
-  S2 = w[0]; #N
-  S1 = cZ(w); #Z
-  S0 = w1[0]; #C
+  S7 = S[7]; (* I *)
+  S6 = S[6]; (* T *)
+  S5 = w1[4]; (* H *)
+  S4 = cS(S2, S3); (* S *)
+  S3 = w[0] xor w1[0]; (* V *)
+  S2 = w[0]; (* N *)
+  S1 = cZ(w); (* Z *)
+  S0 = w1[0]; (* C *)
 
   S = setStatus(S[0-7]);
 
@@ -60,14 +60,14 @@ ror(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   c = S[0];
   w = c.w1[0..(wordm2)];
 
-  S7 = S[7]; #I
-  S6 = S[6]; #T
-  S5 = S[5]; #H
-  S4 = cS(S2, S3); #S
-  S3 = w[0] xor w1[7]; #V
-  S2 = w[0]; #N
-  S1 = cZ(w); #Z
-  S0 = w1[7]; #C
+  S7 = S[7]; (* I *)
+  S6 = S[6]; (* T *)
+  S5 = S[5]; (* H *)
+  S4 = cS(S2, S3); (* S *)
+  S3 = w[0] xor w1[7]; (* V *)
+  S2 = w[0]; (* N *)
+  S1 = cZ(w); (* Z *)
+  S0 = w1[7]; (* C *)
 
   S = setStatus(S[0-7]);
 
@@ -82,14 +82,14 @@ asr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
 
   w = w1[0].w1[0..(wordm2)];
 
-  S7 = S[7]; #I
-  S6 = S[6]; #T
-  S5 = S[5]; #H
-  S4 = cS(S2, S3); #S
-  S3 = w[0] xor w1[7]; #V
-  S2 = w[0]; #N
-  S1 = cZ(w); #Z
-  S0 = w1[7]; #C
+  S7 = S[7]; (* I *)
+  S6 = S[6]; (* T *)
+  S5 = S[5]; (* H *)
+  S4 = cS(S2, S3); (* S *)
+  S3 = w[0] xor w1[7]; (* V *)
+  S2 = w[0]; (* N *)
+  S1 = cZ(w); (* Z *)
+  S0 = w1[7]; (* C *)
 
   S = setStatus(S[0-7]);
 
@@ -104,17 +104,17 @@ swap(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
 
   w = w1[4].w1[5].w1[6].w1[7].w1[0].w1[1].w1[2].w1[3];
 
-  S7 = S[7]; #I
-  S6 = S[6]; #T
-  S5 = S[5]; #H
-  S4 = S[4]; #S
-  S3 = S[3]; #V
-  S2 = S[2]; #N
-  S1 = S[1]; #Z
-  S0 = S[0]; #C
+  S7 = S[7]; (* I *)
+  S6 = S[6]; (* T *)
+  S5 = S[5]; (* H *)
+  S4 = S[4]; (* S *)
+  S3 = S[3]; (* V *)
+  S2 = S[2]; (* N *)
+  S1 = S[1]; (* Z *)
+  S0 = S[0]; (* C *)
 
   S = setStatus(S[0-7]);
- 
+
 
   (regs[16-31]) = push_register(d,w, regs[16-31]);
 
@@ -134,48 +134,20 @@ bset_brancher_setter(S[0-7]) = (S[0-7]) where
 end where
 
 bset_brancher(v, s[0-2], S[0-7]) = (S[0-7]) where
-  if s0 = 0 then
-    if s1 = 0 then
-      if s2 = 0 then		# 000
-        (S[0-7]) = bset_brancher_setter(S[0-7]);        
-        S0 = v
-      else 			# 001
-        (S[0-7]) = bset_brancher_setter(S[0-7]);
-        S1 = v
-      end if
-    else
-      if s2 = 0 then		# 010
-        (S[0-7]) = bset_brancher_setter(S[0-7]);
-        S2 = v
-      else 			# 011
-        (S[0-7]) = bset_brancher_setter(S[0-7]);
-        S3 = v
-      end if
-    end if
-  else
-    if s1 = 0 then
-      if s2 = 0 then		# 100
-        (S[0-7]) = bset_brancher_setter(S[0-7]);
-        S4 = v
-      else 			# 101
-        (S[0-7]) = bset_brancher_setter(S[0-7]);
-        S5 = v
-      end if
-    else
-      if s2 = 0 then		# 110
-        (S[0-7]) = bset_brancher_setter(S[0-7]);
-        S6 = v
-      else 			# 111
-        (S[0-7]) = bset_brancher_setter(S[0-7]);
-        S7 = v
-      end if
-    end if
-  end if
+  (S[0-7]) = bset_brancher_setter(S[0-7]);
+  S0 = mux(v, S0, (not s0) and (not s1) and (not s2));
+  S1 = mux(v, S1, (not s0) and (not s1) and s2);
+  S2 = mux(v, S2, (not s0) and s1 and (not s2));
+  S3 = mux(v, S3, (not s0) and s1 and s2);
+  S4 = mux(v, S4, s0 and (not s1) and (not s2));
+  S5 = mux(v, S5, s0 and (not s1) and s2);
+  S6 = mux(v, S6, s0 and s1 and (not s2));
+  S7 = mux(v, S7, s0 and s1 and s2)
 end where
 
-bset(s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where 
+bset(s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   (S[0-7]) = bset_brancher(0, s[0..2], S[0..7]);
-  
+
   S = setStatus(S[0-7]);
 
   (regs[16-31]) = regs_identity(regs[16-31]);
@@ -183,7 +155,7 @@ bset(s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (reg
   SP = SP;
 end where
 
-bclr(s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where 
+bclr(s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   (S[0-7]) = bset_brancher(1, s[0..2], S[0..7]);
 
   S = setStatus(S[0-7]);
@@ -193,57 +165,29 @@ bclr(s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (reg
   SP = SP;
 end where
 
-sbi() = (caca) where # TODO
+sbi() = (caca) where (*  TODO *)
   caca = 0
 end where
 
-cbi() = (caca) where # TODO
+cbi() = (caca) where (*  TODO *)
   caca = 0
 end where
 
 bst_brancher(Rd:[word], b[0-2]) = (T) where
-  if b0 = 0 then
-    if b1 = 0 then
-      if b2 = 0 then		# 000
-        T = Rd[0]
-      else 			# 001
-        T = Rd[1]
-      end if
-    else
-      if b2 = 0 then		# 010
-        T = Rd[2]
-      else 			# 011
-        T = Rd[3]
-      end if
-    end if
-  else
-    if b1 = 0 then
-      if b2 = 0 then		# 100
-        T = Rd[4]
-      else 			# 101
-        T = Rd[5]
-      end if
-    else
-      if b2 = 0 then		# 110
-        T = Rd[6]
-      else 			# 111
-        T = Rd[7]
-      end if
-    end if
-  end if
+  T = mux(mux(mux(Rd[7], Rd[6], b2), mux(Rd[5], Rd[4], b2), b1), mux(mux(Rd[3], Rd[2], b2), mux(Rd[1], Rd[0], b2), b1), b0)
 end where
 
-bst(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where 
+bst(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
 
-  S7 = S[7]; #I
-  S6 = bst_brancher(Rd, b[0..2]); #T
-  S5 = S[5]; #H
-  S4 = S[4]; #S
-  S3 = S[3]; #V
-  S2 = S[2]; #N
-  S1 = S[1]; #Z
-  S0 = S[0]; #C
+  S7 = S[7]; (* I *)
+  S6 = bst_brancher(Rd, b[0..2]); (* T *)
+  S5 = S[5]; (* H *)
+  S4 = S[4]; (* S *)
+  S3 = S[3]; (* V *)
+  S2 = S[2]; (* N *)
+  S1 = S[1]; (* Z *)
+  S0 = S[0]; (* C *)
 
   S = setStatus(S[0-7]);
 
@@ -253,35 +197,7 @@ bst(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+
 end where
 
 bld_brancher(Rd:[word], T, b[0-2]) = (Rd:[word]) where
-  if b0 = 0 then
-    if b1 = 0 then
-      if b2 = 0 then		# 000
-        Rd = T.Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7]
-      else 			# 001
-        Rd = Rd[1].T.Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7]
-      end if
-    else
-      if b2 = 0 then		# 010
-        Rd = Rd[1].Rd[2].T.Rd[3].Rd[4].Rd[5].Rd[6].Rd[7]
-      else 			# 011
-        Rd = Rd[1].Rd[2].Rd[3].T.Rd[4].Rd[5].Rd[6].Rd[7]
-      end if
-    end if
-  else
-    if b1 = 0 then
-      if b2 = 0 then		# 100
-        Rd = Rd[1].Rd[2].Rd[3].Rd[4].T.Rd[5].Rd[6].Rd[7]
-      else 			# 101
-        Rd = Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].T.Rd[6].Rd[7]
-      end if
-    else
-      if b2 = 0 then		# 110
-        Rd = Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].T.Rd[7]
-      else 			# 111
-        Rd = Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7].T
-      end if
-    end if
-  end if
+  Rd = mux_n<word>(mux_n<word>(mux_n<word>(Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7].T, Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].T.Rd[7], b2), mux_n<word>(Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].T.Rd[6].Rd[7], Rd[1].Rd[2].Rd[3].Rd[4].T.Rd[5].Rd[6].Rd[7], b2), b1), mux_n<word>(mux_n<word>(Rd[1].Rd[2].Rd[3].T.Rd[4].Rd[5].Rd[6].Rd[7], Rd[1].Rd[2].T.Rd[3].Rd[4].Rd[5].Rd[6].Rd[7], b2), mux_n<word>(Rd[1].T.Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7], T.Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7], b2), b1), b0)
 end where
 
 bld(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
@@ -289,7 +205,7 @@ bld(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+
 
   Rd = bld_brancher(Rd, getT(S), b[0..2]);
 
-  (regs[16-31]) = push_register(d, Rd, regs[16-31]);  
+  (regs[16-31]) = push_register(d, Rd, regs[16-31]);
   S = S;
   PC = increase<ram_addr_size>(PC);
   SP = SP;
