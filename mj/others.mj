@@ -1,5 +1,5 @@
 break(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # NOT implemented on simulator, TODO
+  (*  NOT implemented on simulator, TODO *)
   PC = increase<ram_addr_size>(PC);
  (regs[16-31]) = regs_identity(regs[16-31]);
   SP = SP;
@@ -14,7 +14,7 @@ nop(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]
 end where
 
 sleep(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # NOT implemented on simulator, TODO
+  (*  NOT implemented on simulator, TODO *)
   PC = increase<ram_addr_size>(PC);
  (regs[16-31]) = regs_identity(regs[16-31]);
   SP = SP;
@@ -22,7 +22,7 @@ sleep(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-3
 end where
 
 wdr(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  # NOT implemented on simulator, TODO
+  (*  NOT implemented on simulator, TODO *)
   PC = increase<ram_addr_size>(PC);
  (regs[16-31]) = regs_identity(regs[16-31]);
   SP = SP;

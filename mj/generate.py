@@ -10,8 +10,8 @@ def compute_includes(file):
     with open(file, 'r') as fh:
         generated = fh.readlines()
     # remove comments
-    generated = [re.sub(r"#.*", "", i) for i in generated]
-    
+    # generated = [re.sub(r"(* .*", "", i) for i in generated]
+
     def subfunction(pre, i_start, i_end, suff="", sep=("", "")):
         i_start = int(i_start)
         i_end = int(i_end) + 1
@@ -30,7 +30,7 @@ def compute_includes(file):
                                               m.group(3)),
                         string)
                  for string in generated]
-    # replace "foo[0..n]" by "foo[0], foo[1], …, foo[n]"
+    #  replace "foo[0..n]" by "foo[0], foo[1], …, foo[n]"
     generated = [re.sub(r"(\w+)\[(\d+)\.\.(\d+)\]",
                         lambda m: subfunction(m.group(1), m.group(2),
                                               m.group(3), sep=("[", "]")),
