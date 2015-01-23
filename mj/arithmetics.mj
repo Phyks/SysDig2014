@@ -2,7 +2,7 @@ require utils.mj
 require gates.mj
 require flags.mj
 
-add(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+add(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
@@ -19,7 +19,7 @@ add(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
 
   Sout = setStatus(S[0-7]);
 
-  (regsout[16-31]) = push_register(d, R, regs[16-31]);
+  (regsOut[16-31]) = push_register(d, R, regs[16-31]);
 
   PCout = increase<ram_addr_size>(PC);
   SPout =  SP;
