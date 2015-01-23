@@ -55,23 +55,23 @@ muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word],
   SP = mux_n<word+word>(SP1, SP2, v);
 end where
 
-regs_identity(regs[16-31]:[word]) = (regs[16-31]:[word]) where
-  regs16 = regs16;
-  regs17 = regs17;
-  regs18 = regs18;
-  regs19 = regs19;
-  regs20 = regs20;
-  regs21 = regs21;
-  regs22 = regs22;
-  regs23 = regs23;
-  regs24 = regs24;
-  regs25 = regs25;
-  regs26 = regs26;
-  regs27 = regs27;
-  regs28 = regs28;
-  regs29 = regs29;
-  regs30 = regs30;
-  regs31 = regs31;
+regs_identity(regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
+  regsOut16 = regsIn16;
+  regsOut17 = regsIn17;
+  regsOut18 = regsIn18;
+  regsOut19 = regsIn19;
+  regsOut20 = regsIn20;
+  regsOut21 = regsIn21;
+  regsOut22 = regsIn22;
+  regsOut23 = regsIn23;
+  regsOut24 = regsIn24;
+  regsOut25 = regsIn25;
+  regsOut26 = regsIn26;
+  regsOut27 = regsIn27;
+  regsOut28 = regsIn28;
+  regsOut29 = regsIn29;
+  regsOut30 = regsIn30;
+  regsOut31 = regsIn31;
 end where
 
 store_registers(regsOut[16-31]:[word]) = (regsIn[16-31]:[word]) where
@@ -220,9 +220,9 @@ pop_register(raddr:[reg_addr], regs[16-31]:[word]) = (w:[word]) where
   w = poper(r[0-4], regs[16-31])
 end where
 
-increase<n>(R:[n]) = (R:[n]) where	(*  simple increase *)
+increase<n>(RIn:[n]) = (ROut:[n]) where	(*  simple increase *)
   o = one<n>();
-  (R, c) = nadder<n>(R, o, 0);
+  (ROut, c) = nadder<n>(RIn, o, 0);
 end where
 
 iincrease<n>(R:[n]) = (R:[n]) where	(*  double increase *)
