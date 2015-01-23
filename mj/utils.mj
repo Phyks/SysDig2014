@@ -8,11 +8,12 @@ equals<n>(a:[n], b:[n]) = c where
   end if
 end where
 
+(* mux_n(a, b, c) = b if c, else a *)
 mux_n<n>(a:[n], b:[n], v) = (c:[n]) where
   if n = 0 then
     c = []
   else
-    c = mux(a[0], b[0], v).mux_n<n-1>(a[1..], b[1..], v);
+    c = mux(v, b[0], a[0]).mux_n<n-1>(a[1..], b[1..], v);
   end if
 end where
 
@@ -154,31 +155,25 @@ pusher(r[0-4], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
 end where
 
 push_register(d:[reg_addr], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
-  d0 = d[0];
-  d1 = d[1];
-  d2 = d[2];
-  d3 = d[3];
-  d4 = d[4];
-
-  (regsOut[16-31]) = pusher(d[0-4], w, regsIn[16-31])
+  (regsOut[16-31]) = pusher(d[0..4], w, regsIn[16-31])
 end where
 
 poper(r[0-4], regs[16-31]:[word]) = (w:[word]) where
-  w = mux_n<word>( mux_n<word>( mux_n<word>( mux_n<word>(regs31, regs30, r4),
-                                             mux_n<word>(regs29, regs28, r4),
-					     r3),
-			  	mux_n<word>( mux_n<word>(regs27, regs26, r4),
-				             mux_n<word>(regs25, regs24, r4),
-					     r3),
+  w = mux_n<word>( mux_n<word>( mux_n<word>( mux_n<word>(regs31, regs30, r0),
+                                             mux_n<word>(regs29, regs28, r0),
+					     r1),
+			  	mux_n<word>( mux_n<word>(regs27, regs26, r0),
+				             mux_n<word>(regs25, regs24, r0),
+					     r1),
 				r2),
-		   mux_n<word>( mux_n<word>( mux_n<word>(regs23, regs22, r4),
-		                             mux_n<word>(regs21, regs20, r4),
-					     r3),
-			        mux_n<word>( mux_n<word>(regs19, regs18, r4),
-				             mux_n<word>(regs17, regs16, r4),
-					     r3),
+		   mux_n<word>( mux_n<word>( mux_n<word>(regs23, regs22, r0),
+		                             mux_n<word>(regs21, regs20, r0),
+					     r1),
+			        mux_n<word>( mux_n<word>(regs19, regs18, r0),
+				             mux_n<word>(regs17, regs16, r0),
+					     r1),
                                 r2),
-		   r1)
+		   r3)
 end where
 
 pop_register(raddr:[reg_addr], regs[16-31]:[word]) = (w:[word]) where
