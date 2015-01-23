@@ -1,0 +1,760 @@
+const word = 8;
+
+const wordm1 = 7;
+
+const wordm2 = 6;
+
+const reg_addr = 5;
+
+const instr_addr_size = 16; (*  512 Bytes of Flash and 2 bytes per instruction, address is on 16 bits *)
+
+const instr_size = 16;
+
+const ram_addr_size = 16;
+
+const nb_registers = 16;
+
+not_n<n>(a:[n]) = (b:[n]) where
+
+  if n = 0 then
+
+    b = []
+
+  else
+
+    b = (not a[0]).not_n<n-1>(a[1..]);
+
+  end if
+
+end where
+
+
+
+full_as( a , b , c , op ) = ( s , r ) where
+
+  s = (a xor b) xor c;
+
+  a' = op xor a; (*  0 xor a = a, 1 xor a = not a *)
+
+  r = (a' and b) or ((a' xor b) and c)
+
+end where
+
+
+
+addsuber<n>(a:[n], b:[n], r_in, op) = (o:[n], r_out) where
+
+  if n=0 then
+
+    o = [];
+
+    r_out = r_in
+
+  else
+
+    (s ,r ) = full_as( a[0] , b[0] , r_in , op );
+
+    (o',r') = addsuber<n-1>( a[1..] , b[1..] , r , op );
+
+    o = s . o';
+
+    r_out = r'
+
+  end if
+
+end where
+
+
+
+fulladder(a, b, c) = (s, r) where
+
+  (s,r) = full_as(a,b,c,0);
+
+end where
+
+
+
+nadder<n>(a:[n], b:[n], r_in) = (o:[n], r_out) where
+
+  (o,r_out) = addsuber<n>(a,b,r_in,0);
+
+end where
+
+
+
+add_n<n>(a:[n], b:[n]) = (o:[n], r) where
+
+  (o, r) = nadder<n>(a, b, 0);
+
+end where
+
+
+
+fullsubber(a, b, c) = (s, r) where
+
+  (s,r) = full_as(a,b,c,1)
+
+end where
+
+
+
+nsubber<n>(a:[n], b:[n], r_in) = (o:[n], r_out) where
+
+  (o,r_out) = addsuber<n>(a,b,r_in,1);
+
+end where
+
+
+
+equals<n>(a:[n], b:[n]) = c where
+
+  if n = 1 then
+
+    c = a[0] xor b[0]
+
+  else
+
+    c = mux(equals<n-1>(a[1..], b[1..]), 0, a[0] xor b[0])
+
+  end if
+
+end where
+
+
+
+mux_n<n>(a:[n], b:[n], v) = (c:[n]) where
+
+  if n = 0 then
+
+    c = []
+
+  else
+
+    c = mux(a[0], b[0], v).mux_n<n-1>(a[1..], b[1..], v);
+
+  end if
+
+end where
+
+
+
+reg_n<n>(a:[n]) = (o:[n]) where
+
+  if n = 0 then
+
+    o = []
+
+  else
+
+    o = (reg a[0]).reg_n<n-1>(a[1..])
+
+  end if
+
+end where
+
+
+
+
+
+enableReg<n>(writeVal:[n], enable) = (val:[n]) where
+
+  newVal = mux_n<n>(writeVal, val, enable);
+
+  val = reg_n<n>(newVal);
+
+end where
+
+
+
+muxer(regs_1_16:[word], regs_1_17:[word], regs_1_18:[word], regs_1_19:[word], regs_1_20:[word], regs_1_21:[word], regs_1_22:[word], regs_1_23:[word], regs_1_24:[word], regs_1_25:[word], regs_1_26:[word], regs_1_27:[word], regs_1_28:[word], regs_1_29:[word], regs_1_30:[word], regs_1_31:[word], S1:[word], PC1:[word+word], SP1:[word+word],
+
+      regs_2_16:[word], regs_2_17:[word], regs_2_18:[word], regs_2_19:[word], regs_2_20:[word], regs_2_21:[word], regs_2_22:[word], regs_2_23:[word], regs_2_24:[word], regs_2_25:[word], regs_2_26:[word], regs_2_27:[word], regs_2_28:[word], regs_2_29:[word], regs_2_30:[word], regs_2_31:[word], S2:[word], PC2:[word+word], SP2:[word+word],
+
+      v)
+
+       = (regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word], S:[word], PC:[word+word], SP:[word+word]) where
+
+  regs16 = mux_n<word>(regs_1_16, regs_2_26, v);
+
+  regs17 = mux_n<word>(regs_1_17, regs_2_27, v);
+
+  regs18 = mux_n<word>(regs_1_18, regs_2_28, v);
+
+  regs19 = mux_n<word>(regs_1_19, regs_2_29, v);
+
+  regs20 = mux_n<word>(regs_1_20, regs_2_20, v);
+
+  regs21 = mux_n<word>(regs_1_21, regs_2_21, v);
+
+  regs22 = mux_n<word>(regs_1_22, regs_2_22, v);
+
+  regs23 = mux_n<word>(regs_1_23, regs_2_23, v);
+
+  regs24 = mux_n<word>(regs_1_24, regs_2_24, v);
+
+  regs25 = mux_n<word>(regs_1_25, regs_2_25, v);
+
+  regs26 = mux_n<word>(regs_1_26, regs_2_26, v);
+
+  regs27 = mux_n<word>(regs_1_27, regs_2_27, v);
+
+  regs28 = mux_n<word>(regs_1_28, regs_2_28, v);
+
+  regs29 = mux_n<word>(regs_1_29, regs_2_29, v);
+
+  regs30 = mux_n<word>(regs_1_30, regs_2_30, v);
+
+  regs31 = mux_n<word>(regs_1_31, regs_2_31, v);
+
+  S = mux_n<word>(S1, S2, v);
+
+  PC = mux_n<word+word>(PC1, PC2, v);
+
+  SP = mux_n<word+word>(SP1, SP2, v);
+
+end where
+
+
+
+regs_identity(regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word]) = (regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word]) where
+
+  regs16 = regs16;
+
+  regs17 = regs17;
+
+  regs18 = regs18;
+
+  regs19 = regs19;
+
+  regs20 = regs20;
+
+  regs21 = regs21;
+
+  regs22 = regs22;
+
+  regs23 = regs23;
+
+  regs24 = regs24;
+
+  regs25 = regs25;
+
+  regs26 = regs26;
+
+  regs27 = regs27;
+
+  regs28 = regs28;
+
+  regs29 = regs29;
+
+  regs30 = regs30;
+
+  regs31 = regs31;
+
+end where
+
+
+
+store_registers(regsOut16:[word], regsOut17:[word], regsOut18:[word], regsOut19:[word], regsOut20:[word], regsOut21:[word], regsOut22:[word], regsOut23:[word], regsOut24:[word], regsOut25:[word], regsOut26:[word], regsOut27:[word], regsOut28:[word], regsOut29:[word], regsOut30:[word], regsOut31:[word]) = (regsIn16:[word], regsIn17:[word], regsIn18:[word], regsIn19:[word], regsIn20:[word], regsIn21:[word], regsIn22:[word], regsIn23:[word], regsIn24:[word], regsIn25:[word], regsIn26:[word], regsIn27:[word], regsIn28:[word], regsIn29:[word], regsIn30:[word], regsIn31:[word]) where
+
+  regsIn16 = reg_n<word>(regsOut16);
+
+  regsIn17 = reg_n<word>(regsOut17);
+
+  regsIn18 = reg_n<word>(regsOut18);
+
+  regsIn19 = reg_n<word>(regsOut19);
+
+  regsIn20 = reg_n<word>(regsOut20);
+
+  regsIn21 = reg_n<word>(regsOut21);
+
+  regsIn22 = reg_n<word>(regsOut22);
+
+  regsIn23 = reg_n<word>(regsOut23);
+
+  regsIn24 = reg_n<word>(regsOut24);
+
+  regsIn25 = reg_n<word>(regsOut25);
+
+  regsIn26 = reg_n<word>(regsOut26);
+
+  regsIn27 = reg_n<word>(regsOut27);
+
+  regsIn28 = reg_n<word>(regsOut28);
+
+  regsIn29 = reg_n<word>(regsOut29);
+
+  regsIn30 = reg_n<word>(regsOut30);
+
+  regsIn31 = reg_n<word>(regsOut31);
+
+end where
+
+
+
+
+
+allone<n>() = (o:[n]) where
+
+  if n = 0 then
+
+    o = []
+
+  else
+
+    o = 1.allone<n-1>()
+
+  end if
+
+end where
+
+
+
+zero<n>() = (o:[n]) where
+
+  if n = 0 then
+
+    o = []
+
+  else
+
+    o = 0.allone<n-1>()
+
+  end if
+
+end where
+
+
+
+one<n>() = (o:[n]) where
+
+  if n = 0 then
+
+    o = []
+
+  else if n = 1 then
+
+    o = 1
+
+  else
+
+    o = 0.one<n-1>()
+
+  end if
+
+  end if
+
+end where
+
+
+
+init_register(z, SP_init:[word+word]) = (regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word], S:[word], PC:[word+word], SP:[word+word]) where
+
+  regs16 = z.z.z.z.z.z.z.z;
+
+  regs17 = z.z.z.z.z.z.z.z;
+
+  regs18 = z.z.z.z.z.z.z.z;
+
+  regs19 = z.z.z.z.z.z.z.z;
+
+  regs20 = z.z.z.z.z.z.z.z;
+
+  regs21 = z.z.z.z.z.z.z.z;
+
+  regs22 = z.z.z.z.z.z.z.z;
+
+  regs23 = z.z.z.z.z.z.z.z;
+
+  regs24 = z.z.z.z.z.z.z.z;
+
+  regs25 = z.z.z.z.z.z.z.z;
+
+  regs26 = z.z.z.z.z.z.z.z;
+
+  regs27 = z.z.z.z.z.z.z.z;
+
+  regs28 = z.z.z.z.z.z.z.z;
+
+  regs29 = z.z.z.z.z.z.z.z;
+
+  regs30 = z.z.z.z.z.z.z.z;
+
+  regs31 = z.z.z.z.z.z.z.z;
+
+  z2 = zero<word>();
+
+  S = z2;
+
+  PC = z2.z2;
+
+  SP = SP_init;
+
+end where
+
+
+
+op_decomposer(opcode:[instr_size]) = (op0, op1, op2, op3, op4, op5, op6, op7, op8, op9, op10, op11, op12, op13, op14, op15) where
+
+  op0 = opcode[0];
+
+  op1 = opcode[1];
+
+  op2 = opcode[2];
+
+  op3 = opcode[3];
+
+  op4 = opcode[4];
+
+  op5 = opcode[5];
+
+  op6 = opcode[6];
+
+  op7 = opcode[7];
+
+  op8 = opcode[8];
+
+  op9 = opcode[9];
+
+  op10 = opcode[10];
+
+  op11 = opcode[11];
+
+  op12 = opcode[12];
+
+  op13 = opcode[13];
+
+  op14 = opcode[14];
+
+  op15 = opcode[15];
+
+end where
+
+
+
+pusher(r0, r1, r2, r3, r4, w:[word], regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word]) = (regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word]) where
+
+  regs16 = mux_n<word>(w, regs16, (not r1) and (not r2) and (not r3) and (not r4));
+
+  regs17 = mux_n<word>(w, regs17, (not r1) and (not r2) and (not r3) and r4);
+
+  regs18 = mux_n<word>(w, regs18, (not r1) and (not r2) and r3 and (not r4));
+
+  regs19 = mux_n<word>(w, regs19, (not r1) and (not r2) and r3 and r4);
+
+  regs20 = mux_n<word>(w, regs20, (not r1) and r2 and (not r3) and (not r4));
+
+  regs21 = mux_n<word>(w, regs21, (not r1) and r2 and (not r3) and r4);
+
+  regs22 = mux_n<word>(w, regs22, (not r1) and r2 and r3 and (not r4));
+
+  regs23 = mux_n<word>(w, regs23, (not r1) and r2 and r3 and r4);
+
+  regs24 = mux_n<word>(w, regs24, r1 and (not r2) and (not r3) and (not r4));
+
+  regs25 = mux_n<word>(w, regs25, r1 and (not r2) and (not r3) and r4);
+
+  regs26 = mux_n<word>(w, regs26, r1 and (not r2) and r3 and (not r4));
+
+  regs27 = mux_n<word>(w, regs27, r1 and (not r2) and r3 and r4);
+
+  regs28 = mux_n<word>(w, regs28, r1 and r2 and (not r3) and (not r4));
+
+  regs29 = mux_n<word>(w, regs29, r1 and r2 and (not r3) and r4);
+
+  regs30 = mux_n<word>(w, regs30, r1 and r2 and r3 and (not r4));
+
+  regs31 = mux_n<word>(w, regs31, r1 and r2 and r3 and r4)
+
+end where
+
+
+
+push_register(d:[reg_addr], w:[word], regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word]) = (regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word]) where
+
+  d0 = d[0];
+
+  d1 = d[1];
+
+  d2 = d[2];
+
+  d3 = d[3];
+
+  d4 = d[4];
+
+
+
+  (regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31) = pusher(d0, d1, d2, d3, d4, w, regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31)
+
+end where
+
+
+
+poper(r0, r1, r2, r3, r4, regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word]) = (w:[word]) where
+
+  w = mux_n<word>( mux_n<word>( mux_n<word>( mux_n<word>(regs31, regs30, r4),
+
+                                             mux_n<word>(regs29, regs28, r4),
+
+					     r3),
+
+			  	mux_n<word>( mux_n<word>(regs27, regs26, r4),
+
+				             mux_n<word>(regs25, regs24, r4),
+
+					     r3),
+
+				r2),
+
+		   mux_n<word>( mux_n<word>( mux_n<word>(regs23, regs22, r4),
+
+		                             mux_n<word>(regs21, regs20, r4),
+
+					     r3),
+
+			        mux_n<word>( mux_n<word>(regs19, regs18, r4),
+
+				             mux_n<word>(regs17, regs16, r4),
+
+					     r3),
+
+                                r2),
+
+		   r1)
+
+end where
+
+
+
+pop_register(raddr:[reg_addr], regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word]) = (w:[word]) where
+
+  r0 = raddr[0];
+
+  r1 = raddr[1];
+
+  r2 = raddr[2];
+
+  r3 = raddr[3];
+
+  r4 = raddr[4];
+
+
+
+  w = poper(r0, r1, r2, r3, r4, regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31)
+
+end where
+
+
+
+increase<n>(R:[n]) = (R:[n]) where	(*  simple increase *)
+
+  o = one<n>();
+
+  (R, c) = nadder<n>(R, o, 0);
+
+end where
+
+
+
+iincrease<n>(R:[n]) = (R:[n]) where	(*  double increase *)
+
+  two = one<n-1>().0;
+
+  (R, c) = nadder<n>(R, two, 0);
+
+end where
+
+
+
+decrease<n>(R:[n]) = (R:[n]) where 	(*  simple decrease *)
+
+  o = one<n>();
+
+  (R, c) = nsubber<n>(R, o, 0);
+
+end where
+
+
+
+getBit(wire:[word], s0, s1, s2) = (r) where
+
+  r = mux( mux( mux(wire[7], wire[6], s2),
+
+                mux(wire[5], wire[4], s2),
+
+                s1),
+
+           mux( mux(wire[3], wire[2], s2),
+
+	        mux(wire[1], wire[0], s2),
+
+                s1),
+
+           s0)
+
+end where
+
+
+
+
+
+push_stack(SP:[ram_addr_size], w:[word]) = (SP:[ram_addr_size]) where
+
+  (* o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data); *)
+
+  o = ram<ram_addr_size, word>(SP, 1, SP, w);
+
+
+
+  (*  decrease SP by the right amount *)
+
+  SP = decrease<ram_addr_size>(SP);
+
+
+
+end where
+
+
+
+pop_stack(SP:[ram_addr_size]) = (SP:[ram_addr_size], o:[word]) where
+
+  (* o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data); *)
+
+  o = ram<ram_addr_size, word>(SP, 0, SP, zero<word>());
+
+
+
+  SP = increase<ram_addr_size>(SP);
+
+end where
+
+
+
+break(regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word], S:[word], PC:[word+word], SP:[word+word]) where
+
+  (*  NOT implemented on simulator, TODO *)
+
+  PC = increase<ram_addr_size>(PC);
+
+ (regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31) = regs_identity(regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31);
+
+  SP = SP;
+
+  S = S;
+
+end where
+
+
+
+nop(regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word], S:[word], PC:[word+word], SP:[word+word]) where
+
+ PC = increase<ram_addr_size>(PC);
+
+ (regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31) = regs_identity(regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31);
+
+  SP = SP;
+
+  S = S;
+
+end where
+
+
+
+sleep(regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word], S:[word], PC:[word+word], SP:[word+word]) where
+
+  (*  NOT implemented on simulator, TODO *)
+
+  PC = increase<ram_addr_size>(PC);
+
+ (regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31) = regs_identity(regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31);
+
+  SP = SP;
+
+  S = S;
+
+end where
+
+
+
+wdr(regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs16:[word], regs17:[word], regs18:[word], regs19:[word], regs20:[word], regs21:[word], regs22:[word], regs23:[word], regs24:[word], regs25:[word], regs26:[word], regs27:[word], regs28:[word], regs29:[word], regs30:[word], regs31:[word], S:[word], PC:[word+word], SP:[word+word]) where
+
+  (*  NOT implemented on simulator, TODO *)
+
+  PC = increase<ram_addr_size>(PC);
+
+ (regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31) = regs_identity(regs16, regs17, regs18, regs19, regs20, regs21, regs22, regs23, regs24, regs25, regs26, regs27, regs28, regs29, regs30, regs31);
+
+  SP = SP;
+
+  S = S;
+
+end where
+
+
+
+main() = (regsOut16:[word], regsOut17:[word], regsOut18:[word], regsOut19:[word], regsOut20:[word], regsOut21:[word], regsOut22:[word], regsOut23:[word], regsOut24:[word], regsOut25:[word], regsOut26:[word], regsOut27:[word], regsOut28:[word], regsOut29:[word], regsOut30:[word], regsOut31:[word], S:[word], PC:[word+word], SP:[word+word]) where
+
+  (*  Initialize everything to zero, except SP which is RAMEND *)
+
+  RAMEND = zero<7>().1.zero<8>(); (* RAMEND = 512 *)
+
+  z = 0;
+
+
+
+  (*  Route it to the instruction *)
+
+  (regsOut16, regsOut17, regsOut18, regsOut19, regsOut20, regsOut21, regsOut22, regsOut23, regsOut24, regsOut25, regsOut26, regsOut27, regsOut28, regsOut29, regsOut30, regsOut31, Sout, PCout, SPout) = nop(reg_n<word>(regsIn16), reg_n<word>(regsIn17), reg_n<word>(regsIn18), reg_n<word>(regsIn19), reg_n<word>(regsIn20), reg_n<word>(regsIn21), reg_n<word>(regsIn22), reg_n<word>(regsIn23), reg_n<word>(regsIn24), reg_n<word>(regsIn25), reg_n<word>(regsIn26), reg_n<word>(regsIn27), reg_n<word>(regsIn28), reg_n<word>(regsIn29), reg_n<word>(regsIn30), reg_n<word>(regsIn31), reg_n<word>(S), reg_n<word+word>(PC), reg_n<word+word>(SP));
+
+  regsOut16 = 0.0.0.0.0.0.0.0;
+
+  regsOut17 = 0.0.0.0.0.0.0.0;
+
+  regsOut18 = 0.0.0.0.0.0.0.0;
+
+  regsOut19 = 0.0.0.0.0.0.0.0;
+
+  regsOut20 = 0.0.0.0.0.0.0.0;
+
+  regsOut21 = 0.0.0.0.0.0.0.0;
+
+  regsOut22 = 0.0.0.0.0.0.0.0;
+
+  regsOut23 = 0.0.0.0.0.0.0.0;
+
+  regsOut24 = 0.0.0.0.0.0.0.0;
+
+  regsOut25 = 0.0.0.0.0.0.0.0;
+
+  regsOut26 = 0.0.0.0.0.0.0.0;
+
+  regsOut27 = 0.0.0.0.0.0.0.0;
+
+  regsOut28 = 0.0.0.0.0.0.0.0;
+
+  regsOut29 = 0.0.0.0.0.0.0.0;
+
+  regsOut30 = 0.0.0.0.0.0.0.0;
+
+  regsOut31 = 0.0.0.0.0.0.0.0;
+
+  Sout = 0.0.0.0.0.0.0.0;
+
+  PCout = 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0;
+
+  SPout = 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0;
+
+
+
+  (*  Store the registers *)
+
+  (regsIn16, regsIn17, regsIn18, regsIn19, regsIn20, regsIn21, regsIn22, regsIn23, regsIn24, regsIn25, regsIn26, regsIn27, regsIn28, regsIn29, regsIn30, regsIn31) = store_registers(regsOut16, regsOut17, regsOut18, regsOut19, regsOut20, regsOut21, regsOut22, regsOut23, regsOut24, regsOut25, regsOut26, regsOut27, regsOut28, regsOut29, regsOut30, regsOut31);
+
+  S = reg_n<word>(Sout);
+
+  PC = reg_n<word+word>(PCout);
+
+  SP = reg_n<word+word>(SPout);
+
+end where
+
