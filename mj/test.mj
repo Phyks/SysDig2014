@@ -4,7 +4,7 @@ require others.mj
 
 main() = (regsOut[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   (*  Initialize everything to zero, except SP which is RAMEND *)
-  RAMEND = zero<7>().1.zero<8>(); (* RAMEND = 512 *)
+  RAMEND = zero<8>().1.zero<7>(); (* RAMEND = 512 *)
   z = 0;
 
   (*  Route it to the instruction *)
