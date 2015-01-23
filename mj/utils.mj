@@ -24,12 +24,6 @@ reg_n<n>(a:[n]) = (o:[n]) where
   end if
 end where
 
-
-enableReg<n>(writeVal:[n], enable) = (val:[n]) where
-  newVal = mux_n<n>(writeVal, val, enable);
-  val = reg_n<n>(newVal);
-end where
-
 muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word],
       regs_2_[16-31]:[word], S2:[word], PC2:[word+word], SP2:[word+word],
       v)
@@ -121,29 +115,6 @@ one<n>() = (o:[n]) where
   end if
 end where
 
-init_register(z, SP_init:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  regs16 = z.z.z.z.z.z.z.z;
-  regs17 = z.z.z.z.z.z.z.z;
-  regs18 = z.z.z.z.z.z.z.z;
-  regs19 = z.z.z.z.z.z.z.z;
-  regs20 = z.z.z.z.z.z.z.z;
-  regs21 = z.z.z.z.z.z.z.z;
-  regs22 = z.z.z.z.z.z.z.z;
-  regs23 = z.z.z.z.z.z.z.z;
-  regs24 = z.z.z.z.z.z.z.z;
-  regs25 = z.z.z.z.z.z.z.z;
-  regs26 = z.z.z.z.z.z.z.z;
-  regs27 = z.z.z.z.z.z.z.z;
-  regs28 = z.z.z.z.z.z.z.z;
-  regs29 = z.z.z.z.z.z.z.z;
-  regs30 = z.z.z.z.z.z.z.z;
-  regs31 = z.z.z.z.z.z.z.z;
-  z2 = zero<word>();
-  S = z2;
-  PC = z2.z2;
-  SP = SP_init;
-end where
-
 op_decomposer(opcode:[instr_size]) = (op[0-15]) where
   op0 = opcode[0];
   op1 = opcode[1];
@@ -164,22 +135,22 @@ op_decomposer(opcode:[instr_size]) = (op[0-15]) where
 end where
 
 pusher(r[0-4], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
-  regsOut16 = mux_n<word>(w, regsIn16, (not r1) and (not r2) and (not r3) and (not r4));
-  regsOut17 = mux_n<word>(w, regsIn17, (not r1) and (not r2) and (not r3) and r4);
-  regsOut18 = mux_n<word>(w, regsIn18, (not r1) and (not r2) and r3 and (not r4));
-  regsOut19 = mux_n<word>(w, regsIn19, (not r1) and (not r2) and r3 and r4);
-  regsOut20 = mux_n<word>(w, regsIn20, (not r1) and r2 and (not r3) and (not r4));
-  regsOut21 = mux_n<word>(w, regsIn21, (not r1) and r2 and (not r3) and r4);
-  regsOut22 = mux_n<word>(w, regsIn22, (not r1) and r2 and r3 and (not r4));
-  regsOut23 = mux_n<word>(w, regsIn23, (not r1) and r2 and r3 and r4);
-  regsOut24 = mux_n<word>(w, regsIn24, r1 and (not r2) and (not r3) and (not r4));
-  regsOut25 = mux_n<word>(w, regsIn25, r1 and (not r2) and (not r3) and r4);
-  regsOut26 = mux_n<word>(w, regsIn26, r1 and (not r2) and r3 and (not r4));
-  regsOut27 = mux_n<word>(w, regsIn27, r1 and (not r2) and r3 and r4);
-  regsOut28 = mux_n<word>(w, regsIn28, r1 and r2 and (not r3) and (not r4));
-  regsOut29 = mux_n<word>(w, regsIn29, r1 and r2 and (not r3) and r4);
-  regsOut30 = mux_n<word>(w, regsIn30, r1 and r2 and r3 and (not r4));
-  regsOut31 = mux_n<word>(w, regsIn31, r1 and r2 and r3 and r4)
+  regsOut16 = mux_n<word>(w, regsIn16, (not r1) and (not r2) and (not r1) and (not r0));
+  regsOut17 = mux_n<word>(w, regsIn17, (not r1) and (not r2) and (not r1) and r0);
+  regsOut18 = mux_n<word>(w, regsIn18, (not r1) and (not r2) and r1 and (not r0));
+  regsOut19 = mux_n<word>(w, regsIn19, (not r1) and (not r2) and r1 and r0);
+  regsOut20 = mux_n<word>(w, regsIn20, (not r1) and r2 and (not r1) and (not r0));
+  regsOut21 = mux_n<word>(w, regsIn21, (not r1) and r2 and (not r1) and r0);
+  regsOut22 = mux_n<word>(w, regsIn22, (not r1) and r2 and r1 and (not r0));
+  regsOut23 = mux_n<word>(w, regsIn23, (not r1) and r2 and r1 and r0);
+  regsOut24 = mux_n<word>(w, regsIn24, r1 and (not r2) and (not r1) and (not r0));
+  regsOut25 = mux_n<word>(w, regsIn25, r1 and (not r2) and (not r1) and r0);
+  regsOut26 = mux_n<word>(w, regsIn26, r1 and (not r2) and r1 and (not r0));
+  regsOut27 = mux_n<word>(w, regsIn27, r1 and (not r2) and r1 and r0);
+  regsOut28 = mux_n<word>(w, regsIn28, r1 and r2 and (not r1) and (not r0));
+  regsOut29 = mux_n<word>(w, regsIn29, r1 and r2 and (not r1) and r0);
+  regsOut30 = mux_n<word>(w, regsIn30, r1 and r2 and r1 and (not r0));
+  regsOut31 = mux_n<word>(w, regsIn31, r1 and r2 and r1 and r0)
 end where
 
 push_register(d:[reg_addr], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
