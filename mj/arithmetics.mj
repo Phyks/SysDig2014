@@ -221,12 +221,12 @@ com(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
 end where
 
 sbr(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
-  (regs[16-31], S, PC, SP) = ori(d, K, regs[16-31], S, PC, SP)
+  (regsout[16-31], Sout, PCout, SPout) = ori(d, K, regs[16-31], S, PC, SP)
 end where
 
 cbr(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   a = com_n<8>(K);
-  (regs[16-31], S, PC, SP) = andi(d, a, regs[16-31], S, PC, SP)
+  (regsout[16-31], Sout, PCout, SPout) = andi(d, a, regs[16-31], S, PC, SP)
 end where
 
 inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
@@ -281,7 +281,7 @@ clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S0 = S[0]; 			(*  C *)
 
   Sout = setStatus(S[0-7]);
-  (regs[16-31], Sout, PCout, SPout) = eor(d, d, regs[16-31], S, PC, SP)
+  (regsout[16-31], Sout, PCout, SPout) = eor(d, d, regs[16-31], S, PC, SP)
 end where
 
 ser(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
