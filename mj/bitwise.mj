@@ -2,13 +2,13 @@ require utils.mj
 require gates.mj
 require arithmetics.mj
 
-lsl(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (regs[16-31], S, PC, SP) = add(d, d, regs[16-31], S, PC, SP)
+lsl(d:[reg_addr], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  (regsOut[16-31], SOut, PCOut, SPOut) = add(d, d, regsIn[16-31], SIn, PCIn, SPIn)
 
 end where
 
-lsr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  w1 = pop_register(d, regs[16-31]);
+lsr(d:[reg_addr], regsIn[16-31]:[word], S:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  w1 = pop_register(d, regsIn[16-31]);
 
   a = (w1[wordm1]);
   w = 0. w1[0..(wordm2)];
@@ -23,16 +23,16 @@ lsr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S1 = cZ(w); (* Z *)
   S0 = a; (* C *)
 
-  S = setStatus(S[0-7]);
+  SOut = setStatus(S[0-7]);
 
-  (regs[16-31]) = push_register(d, w, regs[16-31]);
+  (regsOut[16-31]) = push_register(d, w, regsIn[16-31]);
 
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-rol(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  w1 = pop_register(d, regs[16-31]);
+rol(d:[reg_addr], regsIn[16-31]:[word], S:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  w1 = pop_register(d, regsIn[16-31]);
 
   c = S[0];
   w = w1[1..].c;
@@ -46,16 +46,16 @@ rol(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S1 = cZ(w); (* Z *)
   S0 = w1[0]; (* C *)
 
-  S = setStatus(S[0-7]);
+  SOut = setStatus(S[0-7]);
 
-  (regs[16-31]) = push_register(d, w, regs[16-31]);
+  (regsOut[16-31]) = push_register(d, w, regsIn[16-31]);
 
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-ror(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  w1 = pop_register(d, regs[16-31]);
+ror(d:[reg_addr], regsIn[16-31]:[word], S:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  w1 = pop_register(d, regsIn[16-31]);
 
   c = S[0];
   w = c.w1[0..(wordm2)];
@@ -69,16 +69,16 @@ ror(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S1 = cZ(w); (* Z *)
   S0 = w1[7]; (* C *)
 
-  S = setStatus(S[0-7]);
+  SOut = setStatus(S[0-7]);
 
-  (regs[16-31]) = push_register(d, w, regs[16-31]);
+  (regsOut[16-31]) = push_register(d, w, regsIn[16-31]);
 
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-asr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  w1 = pop_register(d, regs[16-31]);
+asr(d:[reg_addr], regsIn[16-31]:[word], S:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  w1 = pop_register(d, regsIn[16-31]);
 
   w = w1[0].w1[0..(wordm2)];
 
@@ -91,16 +91,16 @@ asr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S1 = cZ(w); (* Z *)
   S0 = w1[7]; (* C *)
 
-  S = setStatus(S[0-7]);
+  SOut = setStatus(S[0-7]);
 
-  (regs[16-31]) = push_register(d, w, regs[16-31]);
+  (regsOut[16-31]) = push_register(d, w, regsIn[16-31]);
 
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-swap(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  w1 = pop_register(d, regs[16-31]);
+swap(d:[reg_addr], regsIn[16-31]:[word], S:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  w1 = pop_register(d, regsIn[16-31]);
 
   w = w1[4].w1[5].w1[6].w1[7].w1[0].w1[1].w1[2].w1[3];
 
@@ -113,28 +113,28 @@ swap(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
   S1 = S[1]; (* Z *)
   S0 = S[0]; (* C *)
 
-  S = setStatus(S[0-7]);
+  SOut = setStatus(S[0-7]);
 
 
-  (regs[16-31]) = push_register(d,w, regs[16-31]);
+  (regsOut[16-31]) = push_register(d, w, regsIn[16-31]);
 
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-bset_brancher_setter(S[0-7]) = (S[0-7]) where
-  S0 = S0;
-  S1 = S1;
-  S2 = S2;
-  S3 = S3;
-  S4 = S4;
-  S5 = S5;
-  S6 = S6;
-  S7 = S7;
+bset_brancher_setter(S[0-7]) = (SOut[0-7]) where
+  SOut0 = S0;
+  SOut1 = S1;
+  SOut2 = S2;
+  SOut3 = S3;
+  SOut4 = S4;
+  SOut5 = S5;
+  SOut6 = S6;
+  SOut7 = S7;
 end where
 
-bset_brancher(v, s[0-2], S[0-7]) = (S[0-7]) where
-  (S[0-7]) = bset_brancher_setter(S[0-7]);
+bset_brancher(v, s[0-2], S[0-7]) = (SOut[0-7]) where
+  (SOut[0-7]) = bset_brancher_setter(S[0-7]);
   S0 = mux(v, S0, (not s0) and (not s1) and (not s2));
   S1 = mux(v, S1, (not s0) and (not s1) and s2);
   S2 = mux(v, S2, (not s0) and s1 and (not s2));
@@ -145,24 +145,24 @@ bset_brancher(v, s[0-2], S[0-7]) = (S[0-7]) where
   S7 = mux(v, S7, s0 and s1 and s2)
 end where
 
-bset(s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (S[0-7]) = bset_brancher(0, s[0..2], S[0..7]);
+bset(s:[3], regsIn[16-31]:[word], S:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  (SInt[0-7]) = bset_brancher(0, s[0..2], S[0..7]);
 
-  S = setStatus(S[0-7]);
+  SOut = setStatus(SInt[0-7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-bclr(s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (S[0-7]) = bset_brancher(1, s[0..2], S[0..7]);
+bclr(s:[3], regsIn[16-31]:[word], S:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  (Sint[0-7]) = bset_brancher(1, s[0..2], S[0..7]);
 
-  S = setStatus(S[0-7]);
+  SOut = setStatus(Sint[0-7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
 sbi() = (caca) where (*  TODO *)
@@ -177,8 +177,8 @@ bst_brancher(Rd:[word], b[0-2]) = (T) where
   T = mux(mux(mux(Rd[7], Rd[6], b2), mux(Rd[5], Rd[4], b2), b1), mux(mux(Rd[3], Rd[2], b2), mux(Rd[1], Rd[0], b2), b1), b0)
 end where
 
-bst(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  Rd = pop_register(d, regs[16-31]);
+bst(d:[reg_addr], b:[3], regsIn[16-31]:[word], S:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  Rd = pop_register(d, regsIn[16-31]);
 
   S7 = S[7]; (* I *)
   S6 = bst_brancher(Rd, b[0..2]); (* T *)
@@ -189,152 +189,152 @@ bst(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+
   S1 = S[1]; (* Z *)
   S0 = S[0]; (* C *)
 
-  S = setStatus(S[0-7]);
+  SOut = setStatus(S[0-7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-bld_brancher(Rd:[word], T, b[0-2]) = (Rd:[word]) where
-  Rd = mux_n<word>(mux_n<word>(mux_n<word>(Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7].T, Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].T.Rd[7], b2), mux_n<word>(Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].T.Rd[6].Rd[7], Rd[1].Rd[2].Rd[3].Rd[4].T.Rd[5].Rd[6].Rd[7], b2), b1), mux_n<word>(mux_n<word>(Rd[1].Rd[2].Rd[3].T.Rd[4].Rd[5].Rd[6].Rd[7], Rd[1].Rd[2].T.Rd[3].Rd[4].Rd[5].Rd[6].Rd[7], b2), mux_n<word>(Rd[1].T.Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7], T.Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7], b2), b1), b0)
+bld_brancher(Rd:[word], T, b[0-2]) = (RdOut:[word]) where
+  RdOut = mux_n<word>(mux_n<word>(mux_n<word>(Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7].T, Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].T.Rd[7], b2), mux_n<word>(Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].T.Rd[6].Rd[7], Rd[1].Rd[2].Rd[3].Rd[4].T.Rd[5].Rd[6].Rd[7], b2), b1), mux_n<word>(mux_n<word>(Rd[1].Rd[2].Rd[3].T.Rd[4].Rd[5].Rd[6].Rd[7], Rd[1].Rd[2].T.Rd[3].Rd[4].Rd[5].Rd[6].Rd[7], b2), mux_n<word>(Rd[1].T.Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7], T.Rd[1].Rd[2].Rd[3].Rd[4].Rd[5].Rd[6].Rd[7], b2), b1), b0)
 end where
 
-bld(d:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  Rd = pop_register(d, regs[16-31]);
+bld(d:[reg_addr], b:[3], regsIn[16-31]:[word], S:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  Rd = pop_register(d, regsIn[16-31]);
 
   Rd = bld_brancher(Rd, getT(S), b[0..2]);
 
-  (regs[16-31]) = push_register(d, Rd, regs[16-31]);
-  S = S;
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = push_register(d, Rd, regsIn[16-31]);
+  SOut = S;
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-sec(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(1, S[1..7]);
+sec(regsIn[16-31]:[word], S:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(1, S[1..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-clc(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(0, S[1..7]);
+clc(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(0, SIn[1..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-sen(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..1], 1, S[3..7]);
+sen(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..1], 1, SIn[3..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-cln(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..1], 0, S[3..7]);
+cln(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..1], 0, SIn[3..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-sez(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0], 1, S[2..7]);
+sez(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0], 1, SIn[2..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-clz(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-   S = setStatus(S[0], 0, S[2..7]);
+clz(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+   SOut = setStatus(SIn[0], 0, SIn[2..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-sei(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..6], 1);
+sei(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..6], 1);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-cli(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..6], 0);
+cli(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..6], 0);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-ses(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..3], 1, S[5..7]);
+ses(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..3], 1, SIn[5..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-cls(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..3], 0, S[5..7]);
+cls(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..3], 0, SIn[5..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-sev(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..2], 1, S[4..7]);
+sev(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..2], 1, SIn[4..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-clv(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..2], 0, S[4..7]);
+clv(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..2], 0, SIn[4..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-set(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..5], 1, S[7]);
+set(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..5], 1, SIn[7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-clt(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-    S = setStatus(S[0..5], 0, S[7]);
+clt(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+    SOut = setStatus(SIn[0..5], 0, SIn[7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-seh(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..4], 1, S[6..7]);
+seh(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..4], 1, SIn[6..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
 
-clh(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  S = setStatus(S[0..4], 0, S[6..7]);
+clh(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SOut = setStatus(SIn[0..4], 0, SIn[6..7]);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
 end where
