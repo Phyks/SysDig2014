@@ -13,23 +13,23 @@ full_as(a, b, c, op) = (s, r) where
 end where
 
 addsuber<n>(a:[n], b:[n], r_in, op) = (o:[n], r_out) where
-  if n=0 then
+  if n = 0 then
     o = [];
     r_out = r_in
   else
-    (s, r) = full_as( a[0], b[0], r_in, op );
-    (o', r') = addsuber<n-1>( a[1..], b[1..], r, op );
-    o = o' . s;
+    (s, r) = full_as(a[n-1], b[n-1], r_in, op);
+    (o', r') = addsuber<n-1>( a[..(n-2)], b[..(n-2)], r, op );
+    o = s . o';
     r_out = r'
   end if
 end where
 
 fulladder(a, b, c) = (s, r) where
-  (s,r) = full_as(a,b,c,0);
+  (s, r) = full_as(a, b, c, 0);
 end where
 
 nadder<n>(a:[n], b:[n], r_in) = (o:[n], r_out) where
-  (o,r_out) = addsuber<n>(a, b, r_in, 0);
+  (o, r_out) = addsuber<n>(a, b, r_in, 0);
 end where
 
 add_n<n>(a:[n], b:[n]) = (o:[n], r) where
@@ -37,9 +37,9 @@ add_n<n>(a:[n], b:[n]) = (o:[n], r) where
 end where
 
 fullsubber(a, b, c) = (s, r) where
-  (s,r) = full_as(a,b,c,1)
+  (s, r) = full_as(a, b, c, 1)
 end where
 
 nsubber<n>(a:[n], b:[n], r_in) = (o:[n], r_out) where
-  (o,r_out) = addsuber<n>(a,b,r_in,1);
+  (o, r_out) = addsuber<n>(a, b, r_in, 1);
 end where
