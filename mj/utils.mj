@@ -138,20 +138,20 @@ end where
 pusher(r[0-4], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
   regsOut16 = mux_n<word>(regsIn16, w, (not r1) and (not r2) and (not r1) and (not r0));
   regsOut17 = mux_n<word>(regsIn17, w, (not r1) and (not r2) and (not r1) and r0);
-  regsOut18 = mux_n<word>(w, regsIn18, (not r1) and (not r2) and r1 and (not r0));
-  regsOut19 = mux_n<word>(w, regsIn19, (not r1) and (not r2) and r1 and r0);
-  regsOut20 = mux_n<word>(w, regsIn20, (not r1) and r2 and (not r1) and (not r0));
-  regsOut21 = mux_n<word>(w, regsIn21, (not r1) and r2 and (not r1) and r0);
-  regsOut22 = mux_n<word>(w, regsIn22, (not r1) and r2 and r1 and (not r0));
-  regsOut23 = mux_n<word>(w, regsIn23, (not r1) and r2 and r1 and r0);
-  regsOut24 = mux_n<word>(w, regsIn24, r1 and (not r2) and (not r1) and (not r0));
-  regsOut25 = mux_n<word>(w, regsIn25, r1 and (not r2) and (not r1) and r0);
-  regsOut26 = mux_n<word>(w, regsIn26, r1 and (not r2) and r1 and (not r0));
-  regsOut27 = mux_n<word>(w, regsIn27, r1 and (not r2) and r1 and r0);
-  regsOut28 = mux_n<word>(w, regsIn28, r1 and r2 and (not r1) and (not r0));
-  regsOut29 = mux_n<word>(w, regsIn29, r1 and r2 and (not r1) and r0);
-  regsOut30 = mux_n<word>(w, regsIn30, r1 and r2 and r1 and (not r0));
-  regsOut31 = mux_n<word>(w, regsIn31, r1 and r2 and r1 and r0)
+  regsOut18 = mux_n<word>(regsIn18, w, (not r1) and (not r2) and r1 and (not r0));
+  regsOut19 = mux_n<word>(regsIn19, w, (not r1) and (not r2) and r1 and r0);
+  regsOut20 = mux_n<word>(regsIn20, w, (not r1) and r2 and (not r1) and (not r0));
+  regsOut21 = mux_n<word>(regsIn21, w, (not r1) and r2 and (not r1) and r0);
+  regsOut22 = mux_n<word>(regsIn22, w, (not r1) and r2 and r1 and (not r0));
+  regsOut23 = mux_n<word>(regsIn23, w, (not r1) and r2 and r1 and r0);
+  regsOut24 = mux_n<word>(regsIn24, w, r1 and (not r2) and (not r1) and (not r0));
+  regsOut25 = mux_n<word>(regsIn25, w, r1 and (not r2) and (not r1) and r0);
+  regsOut26 = mux_n<word>(regsIn26, w, r1 and (not r2) and r1 and (not r0));
+  regsOut27 = mux_n<word>(regsIn27, w, r1 and (not r2) and r1 and r0);
+  regsOut28 = mux_n<word>(regsIn28, w, r1 and r2 and (not r1) and (not r0));
+  regsOut29 = mux_n<word>(regsIn29, w, r1 and r2 and (not r1) and r0);
+  regsOut30 = mux_n<word>(regsIn30, w, r1 and r2 and r1 and (not r0));
+  regsOut31 = mux_n<word>(regsIn31, w, r1 and r2 and r1 and r0)
 end where
 
 push_register(d:[reg_addr], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
