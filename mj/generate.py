@@ -10,7 +10,9 @@ def compute_includes(file):
     with open(file, 'r') as fh:
         generated = fh.readlines()
     # remove comments
-    # generated = [re.sub(r"(* .*", "", i) for i in generated]
+    generated = [re.sub(r"#(.*)$", lambda m: "(*" + m.group(1) + " *)", i)
+                 for i in generated]
+    #generated = [re.sub(r"(* .*", "", i) for i in generated]
 
     def subfunction(pre, i_start, i_end, suff="", sep=("", "")):
         i_start = int(i_start)
@@ -39,7 +41,7 @@ def compute_includes(file):
 
     includes = {i: generated[i].replace('require', '').strip()
                 for i in range(len(generated))
-                if 'require' in generated[i]}
+                if re.match(r'^require', generated[i])}
     for k, v in includes.items():
         if v in already_included:
             continue
