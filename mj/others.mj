@@ -1,30 +1,32 @@
-break(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+require utils.mj
+
+break(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   (*  NOT implemented on simulator, TODO *)
-  PC = increase<ram_addr_size>(PC);
- (regs[16-31]) = regs_identity(regs[16-31]);
-  SP = SP;
-  S = S;
+  PCOut = increase<ram_addr_size>(PCIn);
+ (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  SPOut = SPIn;
+  SOut = SIn;
 end where
 
-nop(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
- PC = increase<ram_addr_size>(PC);
- (regs[16-31]) = regs_identity(regs[16-31]);
-  SP = SP;
-  S = S;
+nop(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+ PCOut = increase<ram_addr_size>(PCIn);
+ (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  SPOut = SPIn;
+  SOut = SIn;
 end where
 
-sleep(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+sleep(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   (*  NOT implemented on simulator, TODO *)
-  PC = increase<ram_addr_size>(PC);
- (regs[16-31]) = regs_identity(regs[16-31]);
-  SP = SP;
-  S = S;
+  PCOut = increase<ram_addr_size>(PCIn);
+ (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  SPOut = SPIn;
+  SOut = SIn;
 end where
 
-wdr(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+wdr(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   (*  NOT implemented on simulator, TODO *)
-  PC = increase<ram_addr_size>(PC);
- (regs[16-31]) = regs_identity(regs[16-31]);
-  SP = SP;
-  S = S;
+  PCOut = increase<ram_addr_size>(PCIn);
+ (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  SPOut = SPIn;
+  SOut = SIn;
 end where

@@ -55,23 +55,23 @@ muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word],
   SP = mux_n<word+word>(SP1, SP2, v);
 end where
 
-regs_identity(regs[16-31]:[word]) = (regs[16-31]:[word]) where
-  regs16 = regs16;
-  regs17 = regs17;
-  regs18 = regs18;
-  regs19 = regs19;
-  regs20 = regs20;
-  regs21 = regs21;
-  regs22 = regs22;
-  regs23 = regs23;
-  regs24 = regs24;
-  regs25 = regs25;
-  regs26 = regs26;
-  regs27 = regs27;
-  regs28 = regs28;
-  regs29 = regs29;
-  regs30 = regs30;
-  regs31 = regs31;
+regs_identity(regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
+  regsOut16 = regsIn16;
+  regsOut17 = regsIn17;
+  regsOut18 = regsIn18;
+  regsOut19 = regsIn19;
+  regsOut20 = regsIn20;
+  regsOut21 = regsIn21;
+  regsOut22 = regsIn22;
+  regsOut23 = regsIn23;
+  regsOut24 = regsIn24;
+  regsOut25 = regsIn25;
+  regsOut26 = regsIn26;
+  regsOut27 = regsIn27;
+  regsOut28 = regsIn28;
+  regsOut29 = regsIn29;
+  regsOut30 = regsIn30;
+  regsOut31 = regsIn31;
 end where
 
 store_registers(regsOut[16-31]:[word]) = (regsIn[16-31]:[word]) where
@@ -163,33 +163,33 @@ op_decomposer(opcode:[instr_size]) = (op[0-15]) where
   op15 = opcode[15];
 end where
 
-pusher(r[0-4], w:[word], regs[16-31]:[word]) = (regs[16-31]:[word]) where
-  regs16 = mux_n<word>(w, regs16, (not r1) and (not r2) and (not r3) and (not r4));
-  regs17 = mux_n<word>(w, regs17, (not r1) and (not r2) and (not r3) and r4);
-  regs18 = mux_n<word>(w, regs18, (not r1) and (not r2) and r3 and (not r4));
-  regs19 = mux_n<word>(w, regs19, (not r1) and (not r2) and r3 and r4);
-  regs20 = mux_n<word>(w, regs20, (not r1) and r2 and (not r3) and (not r4));
-  regs21 = mux_n<word>(w, regs21, (not r1) and r2 and (not r3) and r4);
-  regs22 = mux_n<word>(w, regs22, (not r1) and r2 and r3 and (not r4));
-  regs23 = mux_n<word>(w, regs23, (not r1) and r2 and r3 and r4);
-  regs24 = mux_n<word>(w, regs24, r1 and (not r2) and (not r3) and (not r4));
-  regs25 = mux_n<word>(w, regs25, r1 and (not r2) and (not r3) and r4);
-  regs26 = mux_n<word>(w, regs26, r1 and (not r2) and r3 and (not r4));
-  regs27 = mux_n<word>(w, regs27, r1 and (not r2) and r3 and r4);
-  regs28 = mux_n<word>(w, regs28, r1 and r2 and (not r3) and (not r4));
-  regs29 = mux_n<word>(w, regs29, r1 and r2 and (not r3) and r4);
-  regs30 = mux_n<word>(w, regs30, r1 and r2 and r3 and (not r4));
-  regs31 = mux_n<word>(w, regs31, r1 and r2 and r3 and r4)
+pusher(r[0-4], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
+  regsOut16 = mux_n<word>(w, regsIn16, (not r1) and (not r2) and (not r3) and (not r4));
+  regsOut17 = mux_n<word>(w, regsIn17, (not r1) and (not r2) and (not r3) and r4);
+  regsOut18 = mux_n<word>(w, regsIn18, (not r1) and (not r2) and r3 and (not r4));
+  regsOut19 = mux_n<word>(w, regsIn19, (not r1) and (not r2) and r3 and r4);
+  regsOut20 = mux_n<word>(w, regsIn20, (not r1) and r2 and (not r3) and (not r4));
+  regsOut21 = mux_n<word>(w, regsIn21, (not r1) and r2 and (not r3) and r4);
+  regsOut22 = mux_n<word>(w, regsIn22, (not r1) and r2 and r3 and (not r4));
+  regsOut23 = mux_n<word>(w, regsIn23, (not r1) and r2 and r3 and r4);
+  regsOut24 = mux_n<word>(w, regsIn24, r1 and (not r2) and (not r3) and (not r4));
+  regsOut25 = mux_n<word>(w, regsIn25, r1 and (not r2) and (not r3) and r4);
+  regsOut26 = mux_n<word>(w, regsIn26, r1 and (not r2) and r3 and (not r4));
+  regsOut27 = mux_n<word>(w, regsIn27, r1 and (not r2) and r3 and r4);
+  regsOut28 = mux_n<word>(w, regsIn28, r1 and r2 and (not r3) and (not r4));
+  regsOut29 = mux_n<word>(w, regsIn29, r1 and r2 and (not r3) and r4);
+  regsOut30 = mux_n<word>(w, regsIn30, r1 and r2 and r3 and (not r4));
+  regsOut31 = mux_n<word>(w, regsIn31, r1 and r2 and r3 and r4)
 end where
 
-push_register(d:[reg_addr], w:[word], regs[16-31]:[word]) = (regs[16-31]:[word]) where
+push_register(d:[reg_addr], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
   d0 = d[0];
   d1 = d[1];
   d2 = d[2];
   d3 = d[3];
   d4 = d[4];
 
-  (regs[16-31]) = pusher(d[0-4], w, regs[16-31])
+  (regsOut[16-31]) = pusher(d[0-4], w, regsIn[16-31])
 end where
 
 poper(r[0-4], regs[16-31]:[word]) = (w:[word]) where
@@ -220,19 +220,19 @@ pop_register(raddr:[reg_addr], regs[16-31]:[word]) = (w:[word]) where
   w = poper(r[0-4], regs[16-31])
 end where
 
-increase<n>(R:[n]) = (R:[n]) where	(*  simple increase *)
+increase<n>(RIn:[n]) = (ROut:[n]) where	(*  simple increase *)
   o = one<n>();
-  (R, c) = nadder<n>(R, o, 0);
+  (ROut, c) = nadder<n>(RIn, o, 0);
 end where
 
-iincrease<n>(R:[n]) = (R:[n]) where	(*  double increase *)
+iincrease<n>(RIn:[n]) = (ROut:[n]) where	(*  double increase *)
   two = one<n-1>().0;
-  (R, c) = nadder<n>(R, two, 0);
+  (ROut, c) = nadder<n>(RIn, two, 0);
 end where
 
-decrease<n>(R:[n]) = (R:[n]) where 	(*  simple decrease *)
+decrease<n>(RIn:[n]) = (ROut:[n]) where 	(*  simple decrease *)
   o = one<n>();
-  (R, c) = nsubber<n>(R, o, 0);
+  (ROut, c) = nsubber<n>(RIn, o, 0);
 end where
 
 getBit(wire:[word], s0, s1, s2) = (r) where
@@ -246,18 +246,18 @@ getBit(wire:[word], s0, s1, s2) = (r) where
 end where
 
 
-push_stack(SP:[ram_addr_size], w:[word]) = (SP:[ram_addr_size]) where
+push_stack(SPIn:[ram_addr_size], w:[word]) = (SPOut:[ram_addr_size]) where
   (* o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data); *)
-  o = ram<ram_addr_size, word>(SP, 1, SP, w);
+  o = ram<ram_addr_size, word>(SPIn, 1, SPIn, w);
 
   (*  decrease SP by the right amount *)
-  SP = decrease<ram_addr_size>(SP);
+  SPOut = decrease<ram_addr_size>(SPIn);
 
 end where
 
-pop_stack(SP:[ram_addr_size]) = (SP:[ram_addr_size], o:[word]) where
+pop_stack(SPIn:[ram_addr_size]) = (SPOut:[ram_addr_size], o:[word]) where
   (* o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data); *)
-  o = ram<ram_addr_size, word>(SP, 0, SP, zero<word>());
+  o = ram<ram_addr_size, word>(SPIn, 0, SPIn, zero<word>());
 
-  SP = increase<ram_addr_size>(SP);
+  SPOut = increase<ram_addr_size>(SPIn);
 end where
