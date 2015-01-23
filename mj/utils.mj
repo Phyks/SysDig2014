@@ -189,7 +189,7 @@ push_register(d:[reg_addr], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[w
   d3 = d[3];
   d4 = d[4];
 
-  (regsout[16-31]) = pusher(d[0-4], w, regsIn[16-31])
+  (regsOut[16-31]) = pusher(d[0-4], w, regsIn[16-31])
 end where
 
 poper(r[0-4], regs[16-31]:[word]) = (w:[word]) where
@@ -248,7 +248,7 @@ end where
 
 push_stack(SPIn:[ram_addr_size], w:[word]) = (SPOut:[ram_addr_size]) where
   (* o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data); *)
-  o = ram<ram_addr_size, word>(SPIn, 1, SP, w);
+  o = ram<ram_addr_size, word>(SPIn, 1, SPIn, w);
 
   (*  decrease SP by the right amount *)
   SPOut = decrease<ram_addr_size>(SPIn);
@@ -257,7 +257,7 @@ end where
 
 pop_stack(SPIn:[ram_addr_size]) = (SPOut:[ram_addr_size], o:[word]) where
   (* o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data); *)
-  o = ram<ram_addr_size, word>(SPIn, 0, SP, zero<word>());
+  o = ram<ram_addr_size, word>(SPIn, 0, SPIn, zero<word>());
 
   SPOut = increase<ram_addr_size>(SPIn);
 end where
