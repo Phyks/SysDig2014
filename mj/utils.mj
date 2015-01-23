@@ -4,7 +4,7 @@ equals<n>(a:[n], b:[n]) = c where
   if n = 1 then
     c = a[0] xor b[0]
   else
-    c = mux(equals<n-1>(a[1..], b[1..]), 0, a[0] xor b[0])
+    c = mux(a[0] xor b[0], equals<n-1>(a[1..], b[1..]), 0)
   end if
 end where
 
@@ -136,8 +136,8 @@ op_decomposer(opcode:[instr_size]) = (op[0-15]) where
 end where
 
 pusher(r[0-4], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
-  regsOut16 = mux_n<word>(w, regsIn16, (not r1) and (not r2) and (not r1) and (not r0));
-  regsOut17 = mux_n<word>(w, regsIn17, (not r1) and (not r2) and (not r1) and r0);
+  regsOut16 = mux_n<word>(regsIn16, w, (not r1) and (not r2) and (not r1) and (not r0));
+  regsOut17 = mux_n<word>(regsIn17, w, (not r1) and (not r2) and (not r1) and r0);
   regsOut18 = mux_n<word>(w, regsIn18, (not r1) and (not r2) and r1 and (not r0));
   regsOut19 = mux_n<word>(w, regsIn19, (not r1) and (not r2) and r1 and r0);
   regsOut20 = mux_n<word>(w, regsIn20, (not r1) and r2 and (not r1) and (not r0));
@@ -159,21 +159,21 @@ push_register(d:[reg_addr], w:[word], regsIn[16-31]:[word]) = (regsOut[16-31]:[w
 end where
 
 poper(r[0-4], regs[16-31]:[word]) = (w:[word]) where
-  w = mux_n<word>( mux_n<word>( mux_n<word>( mux_n<word>(regs31, regs30, r0),
-                                             mux_n<word>(regs29, regs28, r0),
-					     r1),
-			  	mux_n<word>( mux_n<word>(regs27, regs26, r0),
-				             mux_n<word>(regs25, regs24, r0),
-					     r1),
-				r2),
-		   mux_n<word>( mux_n<word>( mux_n<word>(regs23, regs22, r0),
-		                             mux_n<word>(regs21, regs20, r0),
-					     r1),
-			        mux_n<word>( mux_n<word>(regs19, regs18, r0),
-				             mux_n<word>(regs17, regs16, r0),
-					     r1),
-                                r2),
-		   r3)
+  w = mux_n<word>( mux_n<word>( mux_n<word>( mux_n<word>(regs31, regs30, not (r0)),
+                                             mux_n<word>(regs29, regs28, not (r0)),
+					     not (r1)),
+			  	mux_n<word>( mux_n<word>(regs27, regs26, not (r0)),
+				             mux_n<word>(regs25, regs24, not (r0)),
+					     not (r1)),
+				not (r2)),
+		   mux_n<word>( mux_n<word>( mux_n<word>(regs23, regs22, not (r0)),
+		                             mux_n<word>(regs21, regs20, not (r0)),
+					     not (r1)),
+			        mux_n<word>( mux_n<word>(regs19, regs18, not (r0)),
+				             mux_n<word>(regs17, regs16, not (r0)),
+					     not (r1)),
+                                not (r2)),
+		   not (r3))
 end where
 
 pop_register(raddr:[reg_addr], regs[16-31]:[word]) = (w:[word]) where
