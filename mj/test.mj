@@ -1,4 +1,5 @@
 require constants.mj
+require arithmetics.mj
 require others.mj
 
 main() = (regsOut[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
@@ -7,8 +8,7 @@ main() = (regsOut[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
   z = 0;
 
   (*  Route it to the instruction *)
-  (*(regsOut[16-31], Sout, PCout, SPout) = nop(regsIn[16-31], S, PC, SP); *)
-  (regsOut[16-31], Sout, PCout, SPout) = nop(reg_n<word>(regsIn16), reg_n<word>(regsIn17), reg_n<word>(regsIn18), reg_n<word>(regsIn19), reg_n<word>(regsIn20), reg_n<word>(regsIn21), reg_n<word>(regsIn22), reg_n<word>(regsIn23), reg_n<word>(regsIn24), reg_n<word>(regsIn25), reg_n<word>(regsIn26), reg_n<word>(regsIn27), reg_n<word>(regsIn28), reg_n<word>(regsIn29), reg_n<word>(regsIn30), reg_n<word>(regsIn31), reg_n<word>(S), reg_n<word+word>(PC), reg_n<word+word>(SP));
+  (regsOut[16-31], Sout, PCout, SPout) = add(0.0.0.0.1, 0.0.0.0.1, regsIn[16-31], S, PC, SP);
 
   (*  Store the registers *)
   (regsIn[16-31]) = store_registers(regsOut[16-31]);
