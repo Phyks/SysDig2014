@@ -13,31 +13,40 @@ end where
 ld_st_minus(xyzIn:[word+word]) = (xyzOut:[word+word]) where
   z = zero<word>();
   o = one<word>();
-  (reg1, c) = nsubber<word>(xyzIn[word..], o, 0);
-  carry = z[0..(word-2)].c;
-  (reg2, c2) = nsubber<word>(xyzIn[..(word-1)], carry, 0);
-  xyzOut = reg2.reg1
+  xyzInPlus = xyzIn[(word)..];
+  # (reg1, c) = nsubber<word>(xyzIn[word..], o, 0);
+  # carry = z[0..(word-2)].c;
+  # (reg2, c2) = nsubber<word>(xyzIn[..(word-1)], carry, 0);
+  # xyzOut = reg2.reg1
+  xyzOut = xyzIn;
 end where
 
 ld_st_plus(xyzIn:[word+word]) = (xyzOut:[word+word]) where
   z = zero<word>();
   (reg1, c1) = nadder<word>(xyzIn[word..], z, 1);
   (reg2, c2) = nadder<word>(xyzIn[..(word-1)], z, c1);
-  xyzOut = reg2.reg1
+  xyzOut = reg2.reg1;
 end where
 
 ld(d:[reg_addr], o[0-3], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
-  xyz = mux_n<word+word>(mux_n<word+word>(regsIn27.regsIn26, regsIn29.regsIn28, o2), regsIn31.regsIn30, o3);
-  xyz2 = mux_n<word+word>(ld_st_minus(xyz), xyz, (not o0) and o1);
-  (regsOut[16-25], r26, r27, r28, r29, r30, r31, SOut, PCOut, SPOut) = ldd(d, xyz, regsIn[16-31], SIn, PCIn, SPIn);
-  xyz3 = mux_n<word+word>(ld_st_plus(xyz2), xyz2, o0);
 
-  regsOut26 = mux_n<word>(xyz3[word..], r26, o3 and o2); (* TODO *)
-  regsOut27 = mux_n<word>(xyz3[..(word-1)], r27, o3 and o2);
-  regsOut28 = mux_n<word>(xyz3[word..], r28, o3 and (not o2));
-  regsOut29 = mux_n<word>(xyz3[..(word-1)], r29, o3 and (not o2));
-  regsOut30 = mux_n<word>(xyz3[word..], r30, not o3);
-  regsOut31 = mux_n<word>(xyz3[..(word-1)], r31, not o3);
+  xyz = mux_n<word+word>(regsIn31.regsIn30,
+                         mux_n<word+word>(regsIn29.regsIn28,
+                                          regsIn27.regsIn26,
+                                          o2),
+                         o3);
+  xyz2 = mux_n<word+word>(xyz, ld_st_minus(xyz),
+                          (not o0) and o1);
+  (regsOut[16-25], r26, r27, r28, r29, r30, r31,
+        SOut, PCOut, SPOut) = ldd(d, xyz2, regsIn[16-31], SIn, PCIn, SPIn);
+  xyz3 = mux_n<word+word>(xyz2, ld_st_plus(xyz2), o0);
+
+  regsOut26 = mux_n<word>(r26, xyz3[word..],     o3 and o2); (* TODO *)
+  regsOut27 = mux_n<word>(r27, xyz3[..(word-1)], o3 and o2);
+  regsOut28 = mux_n<word>(r28, xyz3[word..],     o3 and (not o2));
+  regsOut29 = mux_n<word>(r29, xyz3[..(word-1)], o3 and (not o2));
+  regsOut30 = mux_n<word>(r30, xyz3[word..],     not o3);
+  regsOut31 = mux_n<word>(r31, xyz3[..(word-1)], not o3);
 end where
 
 lds(d:[reg_addr], k:[instr_size], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
