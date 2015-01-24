@@ -81,8 +81,9 @@ and_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word],
   SPout =  SP;
 end where
 
+(* Build and work *)
 andi(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
-  Rd = pop_register(d.1, regs[16-31]); (* TODO: change order *)
+  Rd = pop_register(0.d, regs[16-31]); (* TODO: change order *)
 
   R = and_n<word>(Rd, K);
 
@@ -97,7 +98,7 @@ andi(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:
 
   Sout = setStatus(S[0-7]);	
 
-  (regsOut[16-31]) = push_register(d.1, R, regs[16-31]);
+  (regsOut[16-31]) = push_register(0.d, R, regs[16-31]);
 
   PCout = increase<ram_addr_size>(PC);
   SPout =  SP;
@@ -137,6 +138,7 @@ or_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], 
   SPout =  SP;
 end where
 
+(* Build and work *)
 ori(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(1.d, regs[16-31]);
 
@@ -163,12 +165,11 @@ xor_n<n>(a:[n], b:[n]) = (o:[n]) where
   if n = 0 then
     o=[]
   else
-    a0 = a[0];
-    b0 = b[0];
-    o = (a0 xor b0) . xor_n<n-1>(a[1..], b[1..])
+    o = (a[0] xor b[0]) . xor_n<n-1>(a[1..], b[1..])
   end if
 end where
 
+(* Build but works weirdly *)
 eor(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
@@ -196,10 +197,11 @@ com_n<n>(a:[n]) = (o:[n]) where
   if n = 0 then
     o = []
   else
-    o = (not a[0]).com_n<n-1>(a[1..])
+    o = not(a[0]).com_n<n-1>(a[1..])
   end if
 end where
 
+(* Build but doesn't work *)
 com(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   R = com_n<word>(Rd);
@@ -230,11 +232,11 @@ cbr(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[
   (regsout[16-31], Sout, PCout, SPout) = andi(d, a, regs[16-31], S, PC, SP)
 end where
 
+(* Build but dafuk *)
 inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
-  o = one<word>();
 
-  R = increase<word>(R);
+  R = increase<word>(Rd);
 
   S7 = S[7];
   S6 = S[6];
@@ -253,6 +255,7 @@ inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   SPout =  SP;
 end where
 
+(* Build *)
 tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   R = and_n<word>(Rd, Rd);
@@ -270,7 +273,7 @@ tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   (regsout[16-31], Sout, PCout, SPout) = and_op(d, d, regs[16-31], S, PC, SP)
 
 end where
-
+(* Build *)
 clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   S7 = S[7]; 			(*  I *)
   S6 = S[6];			(*  T *)
@@ -285,6 +288,7 @@ clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   (regsout[16-31], Sout, PCout, SPout) = eor(d, d, regs[16-31], S, PC, SP)
 end where
 
+(* Build *)
 ser(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   o = allone<word>();
   
@@ -295,6 +299,7 @@ ser(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   Sout = S;
 end where
 
+(* Build *)
 sub(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
@@ -318,7 +323,8 @@ sub(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
   SPout =  SP;
 end where
 
-subi(d:[4], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+(* Build and work *)
+subi(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(1.d, regs[16-31]);
 
   (R, c) = nsubber<word>(Rd, K, 0);
@@ -340,20 +346,54 @@ subi(d:[4], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+wor
   SPout =  SP;
 end where
 
+(* Build and work? *)
 sbc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where (*  TODO *)
-  (regsout[16-31]) = regs_identity(regs[16-31]);
-  Sout = S;
-  PCout = PC;
-  SPout =  SP
+  Rd = pop_register(d, regs[16-31]);
+  Rr = pop_register(r, regs[16-31]);
+  
+  (R, c) = nsubber<word>(Rd, Rr, getC(S));
+
+  S7 = S[7];			(*  I *)
+  S6 = S[6];			(*  T *)
+  S5 = cH(not R[3], not Rd[3], Rr[3]);	(*  H *)
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = cV(R[7], Rd[7], not Rr[7]); (*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = cC(not R[7], not Rd[7], Rr[7]); (*  C *)
+
+  Sout = setStatus(S[0-7]);
+
+  (regsout[16-31]) = push_register(d, R, regs[16-31]);
+
+  PCout = increase<ram_addr_size>(PC);
+  SPout =  SP;
 end where
 
+(* Build and work*)
 sbci(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where (*  TODO *)
-  (regsout[16-31]) = regs_identity(regs[16-31]);
-  Sout = S;
-  PCout = PC;
-  SPout =  SP
+  Rd = pop_register(1.d, regs[16-31]);
+  
+  (R, c) = nsubber<word>(Rd, K, getC(S));
+
+  S7 = S[7];			(*  I *)
+  S6 = S[6];			(*  T *)
+  S5 = cH(not R[3], not Rd[3], K[3]);	(*  H *)
+  S4 = cS(S2, S3);		(*  S *)
+  S3 = cV(R[7], Rd[7], not K[7]); (*  V *)
+  S2 = R[7];			(*  N *)
+  S1 = cZ(R);			(*  Z *)
+  S0 = cC(not R[7], not Rd[7], K[7]); (*  C *)
+
+  Sout = setStatus(S[0-7]);
+
+  (regsout[16-31]) = push_register(1.d, R, regs[16-31]);
+
+  PCout = increase<ram_addr_size>(PC);
+  SPout =  SP;
 end where
 
+(* Build and work? *)
 neg(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   zero = zero<word>();
@@ -376,11 +416,12 @@ neg(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   SPout =  SP;
 end where
 
+(* Build and work? *)
 dec(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
-  one = one<word>();
+  o = one<word>();
 
-  (R, c) = nsubber<word>(one, Rd, 0);
+  (R, c) = nsubber<word>(o, Rd, 0);
 
   S7 = S[7];
   S6 = S[6];
