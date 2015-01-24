@@ -95,7 +95,7 @@ andi(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:
   S1 = cZ(R);			(*  Z *)
   S0 = S[0];			(*  C *)
 
-Sout = setStatus(S[0-7]);	
+Sout = setStatus(S[0-7]);
 
   (regsout[16-31]) = push_register(1.d, R, regs[16-31]);
 
@@ -233,7 +233,7 @@ inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   Rd = pop_register(d, regs[16-31]);
   o = one<word>();
 
-  R = increase<word>(R);
+  R = increase<word>(Rd);
 
   S7 = S[7];
   S6 = S[6];
@@ -286,7 +286,7 @@ end where
 
 ser(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   o = allone<word>();
-  
+
   (regsout[16-31]) = push_register(d, o, regs[16-31]);
 
   PCout = increase<ram_addr_size>(PC);
