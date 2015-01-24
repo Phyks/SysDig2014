@@ -1,4 +1,5 @@
 require utils.mj
+require gates.mj
 require flags.mj
 
 (* Build and work *)
@@ -47,6 +48,7 @@ adc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
 
   PCout = increase<ram_addr_size>(PC);
   SPout =  SP;
+
 end where
 
 and_n<n>(a:[n], b:[n]) = (o:[n]) where
