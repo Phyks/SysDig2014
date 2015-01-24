@@ -2,9 +2,9 @@ require gates.mj
 
 equals<n>(a:[n], b:[n]) = c where
   if n = 1 then
-    c = a[0] xor b[0]
+    c =not (a[0] xor b[0])
   else
-    c = mux(a[0] xor b[0], equals<n-1>(a[1..], b[1..]), 0)
+    c = equals<n-1>(a[1..], b[1..]) and (not (a[0] xor b[0]))
   end if
 end where
 
@@ -192,7 +192,7 @@ increase<n>(RIn:[n]) = (ROut:[n]) where	(*  simple increase *)
 end where
 
 iincrease<n>(RIn:[n]) = (ROut:[n]) where	(*  double increase *)
-  two = one<n-1>().0;
+  two = 0. one<n-1>();
   (ROut, c) = nadder<n>(RIn, two, 0);
 end where
 
@@ -202,13 +202,14 @@ decrease<n>(RIn:[n]) = (ROut:[n]) where 	(*  simple decrease *)
 end where
 
 getBit(wire:[word], s0, s1, s2) = (r) where
-  r = mux( mux( mux(wire[7], wire[6], s2),
-                mux(wire[5], wire[4], s2),
-                s1),
-           mux( mux(wire[3], wire[2], s2),
-	        mux(wire[1], wire[0], s2),
-                s1),
-           s0)
+  r = mux( s2,
+	mux(s1,  mux(s0, wire[7], wire[6]),
+                mux(s0, wire[5], wire[4])
+                )	,
+           mux( s1, mux(s0, wire[3], wire[2]),
+	        mux(s0, wire[1], wire[0])
+                )
+	)
 end where
 
 
