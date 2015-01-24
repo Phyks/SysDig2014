@@ -29,7 +29,7 @@ end where
 ld(d:[reg_addr], o[0-3], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   xyz = mux_n<word+word>(mux_n<word+word>(regsIn27.regsIn26, regsIn29.regsIn28, o2), regsIn31.regsIn30, o3);
   xyz2 = mux_n<word+word>(ld_st_minus(xyz), xyz, (not o0) and o1);
-  (regsOut[16-25], r26, r27, r28, r29, r30, r31, SOut, PCOut, SPOut) = ldd(d, xyz, regsIn[16-31], SIn, PCIn, SPIn);
+  (regsOut[16-25], r26, r27, r28, r29, r30, r31, SOut, PCOut, SPOut) = ldd(d, xyz2, regsIn[16-31], SIn, PCIn, SPIn);
   xyz3 = mux_n<word+word>(ld_st_plus(xyz2), xyz2, o0);
 
   regsOut26 = mux_n<word>(xyz3[word..], r26, o3 and o2); (* TODO *)
