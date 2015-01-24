@@ -1,135 +1,135 @@
 require utils.mj
 
-ldd(d:[reg_addr], address:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+ldd(d:[reg_addr], address:[ram_addr_size], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   z = zero<word>();
   out = ram<ram_addr_size, word>(address, 0, z.z, z);
 
-  (regs[16-31]) = push_register(d, out, regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
-  S = S;
+  (regsOut[16-31]) = push_register(d, out, regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
+  SOut = SIn;
 end where
 
-ld_st_minus(xyz:[word+word]) = (xyz:[word+word]) where
+ld_st_minus(xyzIn:[word+word]) = (xyzOut:[word+word]) where
   z = zero<word>();
   o = one<word>();
-  (reg1, c) = nsubber<word>(xyz[word..], o, 0);
+  (reg1, c) = nsubber<word>(xyzIn[word..], o, 0);
   carry = z[0..(word-2)].c;
-  (reg2, c2) = nsubber<word>(xyz[..(word-1)], carry, 0);
-  xyz = reg2.reg1
+  (reg2, c2) = nsubber<word>(xyzIn[..(word-1)], carry, 0);
+  xyzOut = reg2.reg1
 end where
 
-ld_st_plus(xyz:[word+word]) = (xyz:[word+word]) where
+ld_st_plus(xyzIn:[word+word]) = (xyzOut:[word+word]) where
   z = zero<word>();
-  (reg1, c1) = nadder<word>(xyz[word..], z, 1);
-  (reg2, c2) = nadder<word>(xyz[..(word-1)], z, c1);
-  xyz = reg2.reg1
+  (reg1, c1) = nadder<word>(xyzIn[word..], z, 1);
+  (reg2, c2) = nadder<word>(xyzIn[..(word-1)], z, c1);
+  xyzOut = reg2.reg1
 end where
 
-ld(d:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  xyz = mux_n<word+word>(mux_n<word+word>(regs27.regs26, regs29.regs28, o2), regs31.regs30, o3);
-  xyz = mux_n<word+word>(ld_st_minus(xyz), xyz, (not o0) and o1);
-  (regs[16-31], S, PC, SP) = ldd(d, xyz, regs[16-31], S, PC, SP);
-  xyz = mux_n<word+word>(ld_st_plus(xyz), xyz, o0);
+ld(d:[reg_addr], o[0-3], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  xyz = mux_n<word+word>(mux_n<word+word>(regsIn27.regsIn26, regsIn29.regsIn28, o2), regsIn31.regsIn30, o3);
+  xyz2 = mux_n<word+word>(ld_st_minus(xyz), xyz, (not o0) and o1);
+  (regsOut[16-25], r26, r27, r28, r29, r30, r31, SOut, PCOut, SPOut) = ldd(d, xyz, regsIn[16-31], SIn, PCIn, SPIn);
+  xyz3 = mux_n<word+word>(ld_st_plus(xyz2), xyz2, o0);
 
-  regs26 = mux_n<word>(xyz[word..], regs26, o3 and o2);
-  regs27 = mux_n<word>(xyz[..(word-1)], regs27, o3 and o2);
-  regs28 = mux_n<word>(xyz[word..], regs28, o3 and (not o2));
-  regs29 = mux_n<word>(xyz[..(word-1)], regs29, o3 and (not o2));
-  regs30 = mux_n<word>(xyz[word..], regs30, not o3);
-  regs31 = mux_n<word>(xyz[..(word-1)], regs31, not o3);
+  regsOut26 = mux_n<word>(xyz3[word..], r26, o3 and o2); (* TODO *)
+  regsOut27 = mux_n<word>(xyz3[..(word-1)], r27, o3 and o2);
+  regsOut28 = mux_n<word>(xyz3[word..], r28, o3 and (not o2));
+  regsOut29 = mux_n<word>(xyz3[..(word-1)], r29, o3 and (not o2));
+  regsOut30 = mux_n<word>(xyz3[word..], r30, not o3);
+  regsOut31 = mux_n<word>(xyz3[..(word-1)], r31, not o3);
 end where
 
-lds(d:[reg_addr], k:[instr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+lds(d:[reg_addr], k:[instr_size], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   w = ram<ram_addr_size, word>(k, 0, k, zero<word>());
 
-  (regs[16-31]) = push_register(d, w, regs[16-31]);
-  SP = SP;
-  S = S;
-  PC = iincrease<ram_addr_size>(PC)
+  (regsOut[16-31]) = push_register(d, w, regsIn[16-31]);
+  SPOut = SPIn;
+  SOut = SIn;
+  PCOut = iincrease<ram_addr_size>(PCIn)
 
 end where
 
-std(w:[word], address:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+std(w:[word], address:[ram_addr_size], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   z = zero<word>();
   out = ram<ram_addr_size, word>(address, 1, address, w);
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  PC = increase<ram_addr_size>(PC);
-  SP = SP;
-  S = S;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SPOut = SPIn;
+  SOut = SIn;
 end where
 
-st_annex(w:[word], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  xyz = mux_n<word+word>(mux_n<word+word>(regs27.regs26, regs29.regs28, o2), regs31.regs30, o3);
-  xyz = mux_n<word+word>(ld_st_minus(xyz), xyz, (not o0) and o1);
-  (regs[16-31], S, PC, SP) = std(w, xyz, regs[16-31], S, PC, SP);
-  xyz = mux_n<word+word>(ld_st_plus(xyz), xyz, o0);
+st_annex(w:[word], o[0-3], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  xyz = mux_n<word+word>(mux_n<word+word>(regsIn27.regsIn26, regsIn29.regsIn28, o2), regsIn31.regsIn30, o3);
+  xyz2 = mux_n<word+word>(ld_st_minus(xyz), xyz, (not o0) and o1);
+  (regsOut[16-25], r26, r27, r28, r29, r30, r31, SOut, PCOut, SPOut) = std(w, xyz2, regsIn[16-31], SIn, PCIn, SPIn);
+  xyz3 = mux_n<word+word>(ld_st_plus(xyz2), xyz2, o0);
 
-  regs26 = mux_n<word>(xyz[word..], regs26, o3 and o2);
-  regs27 = mux_n<word>(xyz[..(word-1)], regs27, o3 and o2);
-  regs28 = mux_n<word>(xyz[word..], regs28, o3 and (not o2));
-  regs29 = mux_n<word>(xyz[..(word-1)], regs29, o3 and (not o2));
-  regs30 = mux_n<word>(xyz[word..], regs30, not o3);
-  regs31 = mux_n<word>(xyz[..(word-1)], regs31, not o3);
+  regsOut26 = mux_n<word>(xyz3[word..], r26, o3 and o2); (* TODO *)
+  regsOut27 = mux_n<word>(xyz3[..(word-1)], r27, o3 and o2);
+  regsOut28 = mux_n<word>(xyz3[word..], r28, o3 and (not o2));
+  regsOut29 = mux_n<word>(xyz3[..(word-1)], r29, o3 and (not o2));
+  regsOut30 = mux_n<word>(xyz3[word..], r30, not o3);
+  regsOut31 = mux_n<word>(xyz3[..(word-1)], r31, not o3);
 end where
 
-st(r:[reg_addr], o[0-3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  w = pop_register(r, regs[16-31]);
-  (regs[16-31], S, PC, SP) = st_annex(w, o[0-3], regs[16-31], S, PC, SP);
+st(r:[reg_addr], o[0-3], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  w = pop_register(r, regsIn[16-31]);
+  (regsOut[16-31], SOut, PCOut, SPOut) = st_annex(w, o[0-3], regsIn[16-31], SIn, PCIn, SPIn);
 end where
 
-sts(r:[reg_addr], k:[ram_addr_size], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  Rr = pop_register(r, regs[16-31]);
+sts(r:[reg_addr], k:[ram_addr_size], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  Rr = pop_register(r, regsIn[16-31]);
   out = ram<ram_addr_size, word>(k, 1, k, Rr);
 
-  PC = iincrease<ram_addr_size>(PC);
-  S = S;
-  SP = SP;
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  PCOut = iincrease<ram_addr_size>(PCIn);
+  SOut = SIn;
+  SPOut = SPIn;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
 end where
 
-in(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+in(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   (*  Not implemented *)
-  PC = increase<ram_addr_size>(PC);
-  S = S;
-  SP = SP;
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SOut = SIn;
+  SPOut = SPIn;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
 
 end where
 
-out(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+out(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   (*  Not implemented *)
-  PC = increase<ram_addr_size>(PC);
-  S = S;
-  SP = SP;
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  SOut = SIn;
+  SPOut = SPIn;
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
 end where
 
-push(r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  Rr = pop_register(r, regs[16-31]);
+push(r:[reg_addr], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  Rr = pop_register(r, regsIn[16-31]);
 
-  out = ram<instr_size, word>(SP, 1, SP, Rr);
+  out = ram<instr_size, word>(SPIn, 1, SPIn, Rr);
 
-  SP = decrease<ram_addr_size>(SP);
-  S = S;
-  PC = increase<ram_addr_size>(PC);
-  (regs[16-31]) = regs_identity(regs[16-31]);
+  SPOut = decrease<ram_addr_size>(SPIn);
+  SOut = SIn;
+  PCOut = increase<ram_addr_size>(PCIn);
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
 end where
 
-pop(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  SP = increase<ram_addr_size>(SP);
+pop(d:[reg_addr], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  SPOut = increase<ram_addr_size>(SPIn);
 
-  out = ram<instr_size, word>(SP, 0, SP, one<word>()); (*  le one ne sert à rien à part à compléter la ram *)
+  out = ram<instr_size, word>(SPIn, 0, SPIn, one<word>()); (*  le one ne sert à rien à part à compléter la ram *)
 
-  (regs[16-31]) = push_register(d, out, regs[16-31]);
-  S = S;
-  PC = increase<ram_addr_size>(PC);
+  (regsOut[16-31]) = push_register(d, out, regsIn[16-31]);
+  SOut = SIn;
+  PCOut = increase<ram_addr_size>(PCIn);
 end where
 
-mov(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where (*  TODO *)
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  S = S;
-  SP = SP;
-  PC = PC;
+mov(d:[reg_addr], r:[reg_addr], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where (*  TODO *)
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  SOut = SIn;
+  SPOut = SPIn;
+  PCOut = increase<ram_addr_size>(PCIn);
 end where
