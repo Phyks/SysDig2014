@@ -13,12 +13,10 @@ end where
 ld_st_minus(xyzIn:[word+word]) = (xyzOut:[word+word]) where
   z = zero<word>();
   o = one<word>();
-  xyzInPlus = xyzIn[(word)..];
-  # (reg1, c) = nsubber<word>(xyzIn[word..], o, 0);
-  # carry = z[0..(word-2)].c;
-  # (reg2, c2) = nsubber<word>(xyzIn[..(word-1)], carry, 0);
-  # xyzOut = reg2.reg1
-  xyzOut = xyzIn;
+  (reg1, c) = nsubber<word>(xyzIn[word..], o, 0);
+  carry = z[0..(word-2)].c;
+  (reg2, c2) = nsubber<word>(xyzIn[..(word-1)], carry, 0);
+  xyzOut = reg2.reg1
 end where
 
 ld_st_plus(xyzIn:[word+word]) = (xyzOut:[word+word]) where
