@@ -69,7 +69,7 @@ getZ(S:[word]) = (Z) where
 end where
 
 getC(S:[word]) = (C) where
-  C = S[0]
+  C = S[0];
 end where
 
 setStatus(S[0-7]) = (S:[word]) where

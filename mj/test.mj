@@ -1,18 +1,9 @@
 require constants.mj
-require arithmetics.mj
-require others.mj
+require utils.mj
+require flags.mj
 
-main() = (regsOut[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (*  Initialize everything to zero, except SP which is RAMEND *)
-  RAMEND = zero<8>().1.zero<7>(); (* RAMEND = 512 *)
-  z = 0;
-
-  (*  Route it to the instruction *)
-  (regsOut[16-31], Sout, PCout, SPout) = add(0.0.0.0.1, 0.0.0.0.1, regsIn[16-31], S, PC, SP);
-
-  (*  Store the registers *)
-  (regsIn[16-31]) = store_registers(regsOut[16-31]);
-  S = reg_n<word>(Sout);
-  PC = reg_n<word+word>(PCout);
-  SP = reg_n<word+word>(SPout);
+main() = (o1:[4], o2:[4]) where
+  S = 0.1.0.1.0.0.1.1;
+  o1 = S[0].S[1].S[2].S[3];
+  o2 = o1;
 end where
