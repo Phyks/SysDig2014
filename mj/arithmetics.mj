@@ -2,6 +2,7 @@ require utils.mj
 require gates.mj
 require flags.mj
 
+(* Build and work *)
 add(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
@@ -25,25 +26,25 @@ add(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP
   SPout =  SP;
 end where
 
-adc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+(* Build and work *)
+adc(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
-
-  c = getC(S);
-  (R, c) = nadder<word>(Rd, Rr, c);
+  
+  (R, c) = nadder<word>(Rd, Rr, getC(S));
 
   S7 = S[7];
   S6 = S[6];
-  S5 = cH(R[3], Rd[3], Rr[3]);	(*  H *)
-  S4 = cS(S2, S3);	(*  S *)
-  S3 = cV(R[7], Rd[7], Rr[7]); (*  V *)
-  S2 = R[7];			(*  N *)
-  S1 = cZ(R);			(*  Z *)
-  S0 = cC(R[7], Rd[7], Rr[7]);	(*  C *)
+  S5 = cH(R[3], Rd[3], Rr[3]);
+  S3 = cV(R[7], Rd[7], Rr[7]);
+  S4 = cS(S2, S3);
+  S2 = R[7];
+  S1 = cZ(R);
+  S0 = cC(R[7], Rd[7], Rr[7]);
 
   Sout = setStatus(S[0-7]);
 
-  (regsout[16-31]) = push_register(d, R, regs[16-31]);
+  (regsOut[16-31]) = push_register(d, R, regs[16-31]);
 
   PCout = increase<ram_addr_size>(PC);
   SPout =  SP;
@@ -58,6 +59,7 @@ and_n<n>(a:[n], b:[n]) = (o:[n]) where
   end if
 end where
 
+(* Build and work *)
 and_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
@@ -81,8 +83,8 @@ and_op(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word],
   SPout =  SP;
 end where
 
-andi(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
-  Rd = pop_register(1.d, regs[16-31]);
+andi(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
+  Rd = pop_register(d.1, regs[16-31]); (* TODO: change order *)
 
   R = and_n<word>(Rd, K);
 
@@ -95,9 +97,9 @@ andi(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:
   S1 = cZ(R);			(*  Z *)
   S0 = S[0];			(*  C *)
 
-Sout = setStatus(S[0-7]);
+  Sout = setStatus(S[0-7]);	
 
-  (regsout[16-31]) = push_register(1.d, R, regs[16-31]);
+  (regsOut[16-31]) = push_register(d.1, R, regs[16-31]);
 
   PCout = increase<ram_addr_size>(PC);
   SPout =  SP;
@@ -233,7 +235,7 @@ inc(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   Rd = pop_register(d, regs[16-31]);
   o = one<word>();
 
-  R = increase<word>(Rd);
+  R = increase<word>(R);
 
   S7 = S[7];
   S6 = S[6];
@@ -286,7 +288,7 @@ end where
 
 ser(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsout[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
   o = allone<word>();
-
+  
   (regsout[16-31]) = push_register(d, o, regs[16-31]);
 
   PCout = increase<ram_addr_size>(PC);
