@@ -1,5 +1,6 @@
 MJS=arithmetics.mj bitwise.mj branching.mj constants.mj flags.mj gates.mj main.mj others.mj transfer.mj utils.mj
 MJC=../minijazz/minijazz/mjc.native
+SIMULATOR=../simulateur/main.native
 
 all: compile
 
@@ -8,3 +9,6 @@ core.mj: $(MJS)
 
 compile: core.mj
 	$(MJC) core.mj
+
+test: all
+	$(SIMULATOR) -n 10 core.net

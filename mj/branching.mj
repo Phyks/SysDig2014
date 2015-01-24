@@ -1,9 +1,13 @@
-rjmp(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (PC, c) = nadder<word+word>(PC, 0.0.0.0.k, 1);
+require gates.mj
+require utils.mj
+require flags.mj
 
-  (regs[16-31]) = regs_identity(regs[16-31]);
-  S = S;
-  SP = SP;
+rjmp(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regso[16-31]:[word], So:[word], PCo:[word+word], SPo:[word+word]) where
+  (PCo, c) = nadder<word+word>(PC, 0.0.0.0.k, 1);
+
+  (regso[16-31]) = regs_identity(regs[16-31]);
+  So = S;
+  SPo = SP;
 end where
 
 ijmp(regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
