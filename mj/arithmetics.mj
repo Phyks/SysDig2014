@@ -270,7 +270,7 @@ tst(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S0 = S[0]; 			(*  C *)
 
   Sout = setStatus(S[0-7]);
-  (regsout[16-31], Sout, PCout, SPout) = and_op(d, d, regs[16-31], S, PC, SP)
+  (regsout[16-31], Strash, PCout, SPout) = and_op(d, d, regs[16-31], S, PC, SP)
 
 end where
 (* Build *)
@@ -285,7 +285,7 @@ clr(d:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) 
   S0 = S[0]; 			(*  C *)
 
   Sout = setStatus(S[0-7]);
-  (regsout[16-31], Sout, PCout, SPout) = eor(d, d, regs[16-31], S, PC, SP)
+  (regsout[16-31], Strash, PCout, SPout) = eor(d, d, regs[16-31], S, PC, SP)
 end where
 
 (* Build *)
