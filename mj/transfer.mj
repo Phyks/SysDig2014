@@ -27,7 +27,6 @@ ld_st_plus(xyzIn:[word+word]) = (xyzOut:[word+word]) where
 end where
 
 ld(d:[reg_addr], o[0-3], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
-
   xyz = mux_n<word+word>(regsIn31.regsIn30,
                          mux_n<word+word>(regsIn29.regsIn28,
                                           regsIn27.regsIn26,
