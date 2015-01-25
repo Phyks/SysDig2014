@@ -110,7 +110,7 @@ or_n<n>(a:[n], b:[n]) = (o:[n]) where
   else
     a0 = a[0];
     b0 = b[0];
-    o = (a0 or b0) . (or_n<n-1>(a[1..], b[1..]))
+    o = (or_n<n-1>(a[1..], b[1..])) . (a0 or b0)
   end if
 end where
 
