@@ -32,6 +32,8 @@ let bit = function
 	|"7" -> "111"
 	| _ -> failwith "Les bits sont de 0 à 7"
 
+let ins2 = [("cp", 0); ("ld", 1); ("or", 2); ("st", 3)]
+
 let ins3 = [("adc", 0); ("add", 1); ("and", 2); ("asr", 3); ("bld", 4); ("bst", 5); ("cbi", 6); ("cbr", 7); ("clc", 8); ("clh", 9); ("cli", 10); ("cln", 11); ("clr", 12); ("cls", 13); ("clt", 14); ("clv", 15); ("clz", 16); ("com", 17); ("cpc", 18); ("cpi", 19); ("dec", 20); ("des", 21); ("eor", 22); ("inc", 23); ("jmp", 24); ("lac", 25); ("las", 26); ("lat", 27); ("ldi", 28); ("lds", 29); ("lpm", 30); ("lsl", 31); ("lsr", 32); ("mov", 33); ("mul", 34); ("neg", 35); ("nop", 36); ("ori", 37); ("out", 38); ("pop", 39); ("ret", 40); ("rol", 41); ("ror", 42); ("sbc", 43); ("sbi", 44); ("sbr", 45); ("sec",46); ("seh", 47); ("sei", 48); ("sen", 49); ("ser", 50); ("ses", 51); ("set", 52); ("sev", 53); ("sez", 54); ("spm", 55); ("sts", 56); ("sub", 57); ("tst", 58); ("wdr", 59); ("xch", 60)]
 
 let ins4 = [("andi", 1); ("bclr", 2); ("brbc", 3); ("brbs", 4);
@@ -40,9 +42,12 @@ let ins4 = [("andi", 1); ("bclr", 2); ("brbc", 3); ("brbs", 4);
 16); ("brne", 17); ("brpl", 18); ("brsh", 19); ("brtc", 20); ("brts", 21);
 ("brvc", 22); ("brvs", 23); ("bset", 24); ("cpse", 26); ("ijmp", 28); ("push", 29); ("sbrc", 30); ("sbrs", 31); ("swap", 32)]
 
+let xyz = [("X ", ("1001000", "1100")); ("X+", ("1001000", "1101")); ("-X",("1001000", "1110")); ("Y ", ("1000000","1000")); ("Y+", ("1001000", "1001")); ("-Y", ("1001000","1010")); ("Z ", ("1000000","0000")); ("Z+", ("1001000","0001")); ("-Z", ("1001000","0010"))]
 
+let xyzst = [("X ", ("1001001", "1100")); ("X+", ("1001001", "1101")); ("-X",("1001001", "1110")); ("Y ", ("1000001","1000")); ("Y+", ("1001001", "1001")); ("-Y", ("1001001","1010")); ("Z ", ("1000001","0000")); ("Z+", ("1001001","0001")); ("-Z", ("1001001","0010"))]
+  
 let tobin = function
-	| s ->  try let a = List.assoc (sub s 0 3) ins3 in
+	| s ->  (try let a = List.assoc (sub s 0 3) ins3 in
 		(match a with
 		| 0 -> let rd = read_reg (sub s 4 3) and rr = read_reg (sub s 8 3) in
 		"000111"^(sub rd 0 1)^rr^(sub rd 1 4)
@@ -140,38 +145,57 @@ let tobin = function
 		) 
 		with Not_found -> (try let a = List.assoc (sub s 0 4) ins4 in
 		(match a with
-        |1-> "0111"^^
-		|2-> "100101001"^(bit (sub s 5 1))^"1000"
-        |3-> "111101"^^
-        |4-> "111100"^^
-        |5-> "111101"^^
-        |6-> "111100"^^"000"
-        |8-> "111100"^^"000"
-        |9-> "111101"^^"001"
-        |10->"111101"^^"101"
-        |11->"111100"^^"101"
-        |12->"111101"^^"111"
-        |13->"111100"^^"111"
-        |14->"111100"^^"000"
-        |15->"111100"^^"100"
-        |16->"111100"^^"010"
-        |17->"111101"^^"001"
-        |18->"111101"^^"010"
-        |19->"111101"^^"000"
-        |20->"111101"^^"110"
-        |21->"111100"^^"110"
-        |22->"111101"^^"011"
-        |23->"111100"^^"011"
-        |24->"100101000"^^"1000"
-        |26->"000100"^^^
+	| 0 -> failwith "adiw not implemented"
+        |1-> let rd = read_reg (sub s 5 3) in
+		"0111"^(sub s 9 4)^(sub rd 1 4)^(sub s 13 4)
+	|2-> "100101001"^(bit (sub s 5 1))^"1000"
+        |3-> "111101"^(sub s 5 7)^(bit (sub s 13 1))
+        |4-> "111100"^(sub s 5 7)^(bit (sub s 13 1))
+        |5-> "111101"^(sub s 5 7)^"000"
+        |6-> "111100"^(sub s 5 7)^"000"
+        |8-> "111100"^(sub s 5 7)^"001"
+        |9-> "111101"^(sub s 5 7)^"100"
+        |10->"111101"^(sub s 5 7)^"101"
+        |11->"111100"^(sub s 5 7)^"101"
+        |12->"111101"^(sub s 5 7)^"111"
+        |13->"111100"^(sub s 5 7)^"111"
+        |14->"111100"^(sub s 5 7)^"000"
+        |15->"111100"^(sub s 5 7)^"100"
+        |16->"111100"^(sub s 5 7)^"010"
+        |17->"111101"^(sub s 5 7)^"001"
+        |18->"111101"^(sub s 5 7)^"010"
+        |19->"111101"^(sub s 5 7)^"000"
+        |20->"111101"^(sub s 5 7)^"110"
+        |21->"111100"^(sub s 5 7)^"110"
+        |22->"111101"^(sub s 5 7)^"011"
+        |23->"111100"^(sub s 5 7)^"011"
+        |24->let s = bit (sub s 5 1) in "100101000"^s^"1000"
+        |26->let rd = read_reg (sub s 5 3) and rr = read_reg (sub s 9 3) in
+	"000100"^(sub rr 0 1)^rd^(sub rr 1 4)
         |28->"1001010000001001"
-        |29->"1001001"^^"1111"
-        |30->"1111110"^^"0"^
-        |31->"1111111"^^"0"^
-        |32->"1001010"^^"0010"
-    | n -> failwith "Not Implemented")
- 		with Not_found -> failwith "asshole")
-	|_ -> failwith "Instruction inconnue. Pas d'espaces devant les instructions, pas de ligne vide."
+        |29->let rd = read_reg (sub s 5 3) in
+	"1001001"^rd^"1111"
+        |30->let rr = read_reg (sub s 5 3) and b = bit (sub s 9 1) in
+	"1111110"^rr^"0"^b
+        |31->let rr = read_reg (sub s 5 3) and b = bit (sub s 9 1) in
+	"1111111"^rr^"0"^b
+        |32->let rd = read_reg (sub s 5 3) in "1001010"^rd^"0010"
+    | n -> failwith "cette instruction n'existe pas")
+ 		with Not_found -> try let a = List.assoc (sub s 0 2) ins2 in
+		(match a with
+		|0 -> let rd = read_reg (sub s 3 3) and rr = read_reg (sub s 7 3) in
+		"000101"^(sub rr 0 1)^rd^(sub rr 1 4)
+		|1 -> let rd = read_reg (sub s 3 3) and (fs, sn) = List.assoc (sub s 7 2) xyz in
+		fs^rd^sn
+		|2 -> let rd = read_reg (sub s 3 3) and rr = read_reg (sub s 7 3) in
+		"001010"^(sub rr 0 1)^rd^(sub rr 1 4)
+		|3 -> (try let (fs, sn) = List.assoc (sub s 3 2) xyzst and rr = read_reg (sub s 5 3) in
+		fs^rr^sn with |Not_found -> failwith "Syntaxe de st : st X R31 par exemple")
+		|n -> failwith "Cette instruction n'existe pas"
+		)
+		with Not_found -> "Instruction de 2 char inconnue. Pas d'espaces devant les instructions, pas de ligne vide")) 
+
+|_ -> failwith "Instruction inconnue. Pas d'espaces devant les instructions, pas de ligne vide."
 
 let filename = ref ""
 
@@ -183,6 +207,8 @@ let usage = "usage: asm [options] file"
 
 let isneof = ref true
 
+let basename = ref !filename
+
 let () =
   Arg.parse options (set_var filename) usage;
 
@@ -190,8 +216,12 @@ let () =
     (eprintf "Pas de fichier d'entrée\n@?";
      exit 2);
 
+  if (Filename.check_suffix !filename ".s") then
+  (basename:= Filename.chop_suffix (!filename) ".s");
+  
+
   let f = open_in !filename in
-  let c = open_out (!filename^".rom") in
+  let c = open_out (!basename^".rom") in
   while !isneof do
   try
   let line = input_line f in
