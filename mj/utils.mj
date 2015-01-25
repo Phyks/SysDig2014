@@ -13,7 +13,7 @@ mux_n<n>(a:[n], b:[n], v) = (c:[n]) where
   if n = 0 then
     c = []
   else
-    c = mux(v, b[0], a[0]).mux_n<n-1>(a[1..], b[1..], v);
+    c = mux_n<n-1>(a[1..], b[1..], v).mux(v, b[0], a[0]);
   end if
 end where
 
