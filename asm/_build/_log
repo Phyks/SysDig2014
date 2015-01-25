@@ -1,10 +1,8 @@
 ### Starting build.
 # Target: asm.ml.depends, tags: { extension:ml, file:asm.ml, ocaml, ocamldep, quiet }
 /usr/bin/ocamldep -modules asm.ml > asm.ml.depends
-# Target: asm.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:asm.cmo, file:asm.ml, implem, ocaml, quiet }
-/usr/bin/ocamlc -c -o asm.cmo asm.ml
-# Target: asm.cmx, tags: { compile, extension:cmx, extension:ml, file:asm.cmx, file:asm.ml, implem, native, ocaml, quiet }
-/usr/bin/ocamlopt -c -o asm.cmx asm.ml
-# Target: asm.native, tags: { dont_link_with, extension:native, file:asm.native, link, native, ocaml, program, quiet }
-/usr/bin/ocamlopt asm.cmx -o asm.native
-# Compilation successful.
++ /usr/bin/ocamldep -modules asm.ml > asm.ml.depends
+File "asm.ml", line 144, characters 2-3:
+Error: Syntax error: operator expected.
+Command exited with code 2.
+# Compilation unsuccessful.
