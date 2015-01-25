@@ -12,3 +12,6 @@ compile: core.mj
 
 test: all
 	$(SIMULATOR) -n 10 core.net
+
+clock: all
+	$(SIMULATOR) core.net
