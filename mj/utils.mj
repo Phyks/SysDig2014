@@ -45,9 +45,9 @@ muxer(regs_1_[16-31]:[word], S1:[word], PC1:[word+word], SP1:[word+word],
   regs29 = mux_n<word>(regs_1_29, regs_2_29, v);
   regs30 = mux_n<word>(regs_1_30, regs_2_30, v);
   regs31 = mux_n<word>(regs_1_31, regs_2_31, v);
-  S = mux_n<word>(S2, S1, v);
-  PC = mux_n<word+word>(PC2, PC1, v);
-  SP = mux_n<word+word>(SP2, SP1, v);
+  S = mux_n<word>(S1, S2, v);
+  PC = mux_n<word+word>(PC1, PC2, v);
+  SP = mux_n<word+word>(SP1, SP2, v);
 end where
 
 regs_identity(regsIn[16-31]:[word]) = (regsOut[16-31]:[word]) where
