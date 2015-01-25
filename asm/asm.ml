@@ -61,11 +61,11 @@ let tobin = function
 	| s ->  (try let a = List.assoc (sub s 0 3) ins3 in
 		(match a with
 		| 0 -> let rd = read_reg (sub s 4 3) and rr = read_reg (sub s 8 3) in
-		"000111"^(sub rd 0 1)^rr^(sub rd 1 4)
+		"000111"^(sub rr 0 1)^rd^(sub rr 1 4)
 		| 1 -> let rd = read_reg (sub s 4 3) and rr = read_reg (sub s 8 3) in
-		"000011"^(sub rd 0 1)^rr^(sub rd 1 4)
+		"000011"^(sub rr 0 1)^rd^(sub rr 1 4)
 		| 2 -> let rd = read_reg (sub s 4 3) and rr = read_reg (sub s 8 3) in
-		"001000"^(sub rd 0 1)^rr^(sub rd 1 4)
+		"001000"^(sub rr 0 1)^rd^(sub rr 1 4)
 		| 3 -> let rd = read_reg (sub s 4 3) in
 		"1001010"^rd^"0101"
 		| 4 -> let rd = read_reg (sub s 4 3) and b = bit (sub s 8 1) in
