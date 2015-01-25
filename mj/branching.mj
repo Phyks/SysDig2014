@@ -177,7 +177,7 @@ end where
 brb_annex(PC:[word+word], k:[7], cond, val) = (PCo:[word+word]) where
     (*  rewrite k in two complement's form on 16 bits *)
     (*k16 = k[1].1.1.1.1.1.1.1.1.1.1.k[1].k[2].k[3].k[4].k[5];*)
-    k16 = k[0].k[1].k[2].k[3].k[4].k[5].0.0.0.0.0.0.0.0.0.k[6];
+    k16 = mux_n<word+word> (k[0].0.0.0.0.0.0.0.0.0.k[1].k[2].k[3].k[4].k[5].k[6], k[0].1.1.1.1.1.1.1.1.1.(not k[1]).(not k[2]).(not k[3]).(not k[4]).(not k[5]).(not k[6]), k[0]);
     (PC1, c1) = nadder<word+word>(PC, k16, 1); (*  TODO: check little/big endian *)
     PCo = mux_n<word+word>(increase<ram_addr_size>(PC), PC1, not (cond xor val))
 end where
