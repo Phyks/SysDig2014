@@ -16,4 +16,4 @@ brmi 00000001        # goto RESET
 inc R18              # increase hours
 st0 R25              # RESET ($0x0005 ← R25 = $00), reset the tick
 st1 0000000000000101
-rjmp 11110100        # go back to START POINT
+rjmp 111111110100        # go back to START POINT
