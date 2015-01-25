@@ -11,19 +11,15 @@ ldd(d:[reg_addr], address:[ram_addr_size], regsIn[16-31]:[word], SIn:[word], PCI
 end where
 
 ld_st_minus(xyzIn:[word+word]) = (xyzOut:[word+word]) where
-  z = zero<word>();
   o = one<word>();
-  (reg1, c) = nsubber<word>(xyzIn[word..], o, 0);
+  (* (reg1, c) = nsubber<word>(xyzIn[word..], o, 0);
   carry = z[0..(word-2)].c;
-  (reg2, c2) = nsubber<word>(xyzIn[..(word-1)], carry, 0);
-  xyzOut = reg2.reg1
+  (reg2, c2) = nsubber<word>(xyzIn[..(word-1)], carry, 0); *)
+  xyzOut = decrease<word+word>(xyzIn);
 end where
 
 ld_st_plus(xyzIn:[word+word]) = (xyzOut:[word+word]) where
-  z = zero<word>();
-  (reg1, c1) = nadder<word>(xyzIn[word..], z, 1);
-  (reg2, c2) = nadder<word>(xyzIn[..(word-1)], z, c1);
-  xyzOut = reg2.reg1;
+  xyzOut = increase<word+word>(xyzIn);
 end where
 
 ld(d:[reg_addr], o[0-3], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
@@ -50,7 +46,7 @@ ldi(d:[reg_addr-1], K:[word], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word]
    (regsOut[16-31]) = push_register(1.d, K, regsIn[16-31]);
   SPOut = SPIn;
   SOut = SIn;
-  PCOut = increase<ram_addr_size>(PCIn)
+  PCOut = increase<ram_addr_size>(PCIn);
 end where
 
 lds(d:[reg_addr], k:[instr_size], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
