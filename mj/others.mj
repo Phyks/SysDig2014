@@ -37,3 +37,18 @@ debug(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (r
   SPOut = SPIn;
   SOut = SIn;
 end where
+
+
+debug2(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  PCOut = increase<ram_addr_size>(PCIn);
+  (regsOut[16-31]) = regs_identity(0.allone<word-1>(), regsIn[17-31]);
+  SPOut = SPIn;
+  SOut = SIn;
+end where
+
+debug3(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  PCOut = increase<ram_addr_size>(PCIn);
+  (regsOut[16-31]) = regs_identity(0.0.allone<word-2>(), regsIn[17-31]);
+  SPOut = SPIn;
+  SOut = SIn;
+end where

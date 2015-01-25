@@ -201,15 +201,14 @@ decrease<n>(RIn:[n]) = (ROut:[n]) where 	(*  simple decrease *)
   (ROut, c) = nsubber<n>(RIn, o, 0);
 end where
 
-getBit(wire:[word], s0, s1, s2) = (r) where
-  r = mux( s2,
-	mux(s1,  mux(s0, wire[7], wire[6]),
-                mux(s0, wire[5], wire[4])
-                )	,
-           mux( s1, mux(s0, wire[3], wire[2]),
-	        mux(s0, wire[1], wire[0])
-                )
-	)
+getBit(wire:[word], s:[3]) = (r) where
+  r = mux(s[2],
+         mux(s[1], 
+	    mux(s[0], wire[7], wire[6]),
+	    mux(s[0], wire[5], wire[4])),
+	 mux(s[1],
+	    mux(s[0], wire[3], wire[2]),
+	    mux(s[0], wire[1], wire[0])))
 end where
 
 

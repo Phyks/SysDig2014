@@ -148,7 +148,7 @@ sbrc(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word
 
   Rr = pop_register(r, regs[16-31]);
 
-  r2 = getBit(Rr, b[0..2]);
+  r2 = getBit(Rr, b);
 
   PCo = sbr_comparator(r2, PC, 0);
 
@@ -160,7 +160,7 @@ end where
 sbrs(r:[reg_addr], b:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regso[16-31]:[word], So:[word], PCo:[word+word], SPo:[word+word]) where
 
   Rr = pop_register(r, regs[16-31]);
-  r2 = getBit(Rr, b[0..2]);
+  r2 = getBit(Rr, b);
 
   PCo = sbr_comparator(r2, PC, 1);
  (regso[16-31]) = regs_identity(regs[16-31]);
@@ -175,15 +175,15 @@ end where
 (*  end where *)
 
 brb_annex(PC:[word+word], k:[7], cond, val) = (PCo:[word+word]) where
-    (*  rewrite k in two complement's form on 16 bits *)
-    (*k16 = k[1].1.1.1.1.1.1.1.1.1.1.k[1].k[2].k[3].k[4].k[5];*)
-    k16 = mux_n<word+word> (k[0].0.0.0.0.0.0.0.0.0.k[1].k[2].k[3].k[4].k[5].k[6], k[0].1.1.1.1.1.1.1.1.1.(not k[1]).(not k[2]).(not k[3]).(not k[4]).(not k[5]).(not k[6]), k[0]);
-    (PC1, c1) = nadder<word+word>(PC, k16, 1); (*  TODO: check little/big endian *)
-    PCo = mux_n<word+word>(increase<ram_addr_size>(PC), PC1, not (cond xor val))
+  (*  rewrite k in two complement's form on 16 bits *)
+  k16 = mux_n<word+word> (k[6].0.0.0.0.0.0.0.0.0.k[5].k[4].k[3].k[2].k[1].k[0],
+                          k[6].1.1.1.1.1.1.1.1.1.k[5].k[4].k[3].k[2].k[1].k[0], k[6]);
+  (PC1, c1) = nadder<word+word>(PC, k16, 1); 
+  PCo = mux_n<word+word>(increase<word+word>(PC), PC1, not (cond xor val))
 end where
 
 brbs(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regso[16-31]:[word], So:[word], PCo:[word+word], SPo:[word+word]) where
-  r = getBit(S, s[0..2]);
+  r = getBit(S, s);
   PCo = brb_annex(PC, k, r, 1);
 
   (regso[16-31]) = regs_identity(regs[16-31]);
@@ -192,7 +192,7 @@ brbs(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
 end where
 
 brbc(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regso[16-31]:[word], So:[word], PCo:[word+word], SPo:[word+word]) where
-  r = getBit(S, s[0], s[1], s[2]);
+  r = getBit(S, s);
   PCo = brb_annex(PC, k, r, 0);
 
   (regso[16-31]) = regs_identity(regs[16-31]);
@@ -203,7 +203,7 @@ end where
 breq(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regso[16-31]:[word], So:[word], PCo:[word+word], SPo:[word+word]) where
 
   (*  S[0] = S[110] = Z *)
-  (regso[16-31], So, PCo, SPo) = brbs(k, 1.0.0, regs[16-31], S, PC, SP)
+  (regso[16-31], So, PCo, SPo) = brbs(k, 0.0.1, regs[16-31], S, PC, SP)
 
 end where
 
