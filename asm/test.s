@@ -8,19 +8,24 @@ ldi R30 00000110
 ld R17 Y # tic
 add R18 R17 # add a second if tic
 mov R16 R18 # Test if 60 seconds have elapsed
-subi R16 00111100
+ldi R22 00111100
+sub R16 R22
 tst R16
 breq 00001101
-addi R19 00000001
+ldi R22 00000001
+add R19 R22
 ldi R18 00000000
 mov R16 R19 # Test if 60 minutes have elapsed
-subi R19 00111100
+ldi R22 00111100
+sub R19 R22
 tst R19
 breq 00000111
-addi R20 00000001
+ldi R22 00000001
+add R20 R22
 ldi R19 00000000
 mov R16 R19 # Test if 24 hours have elapsed
-subi R16 00011000
+ldi R22 00011000
+sub R16 R22
 tst R16
 breq 00000001
 ldi R16 00000000

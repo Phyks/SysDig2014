@@ -136,8 +136,11 @@ pop(d:[reg_addr], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word
   PCOut = increase<ram_addr_size>(PCIn);
 end where
 
-mov(d:[reg_addr], r:[reg_addr], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where (*  TODO *)
-  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+mov(d:[reg_addr], r:[reg_addr], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  w = pop_register(r, regsIn[16-31]);
+
+  
+  (regsOut[16-31]) = push_register(d, w, regsIn[16-31]);
   SOut = SIn;
   SPOut = SPIn;
   PCOut = increase<ram_addr_size>(PCIn);
