@@ -2,6 +2,15 @@ open String
 open Format
 open Printf
 
+let rec bin_of_int i =
+  let high_byte = i lsr 1 in
+  let low_byte = ( i mod 2) in
+
+  if high_byte > 0 then
+    low_byte+10*(bin_of_int high_byte)
+  else
+    low_byte
+
 let read_reg = function
 	|"R16" -> "10000"
 	|"R17" -> "10001"
@@ -41,6 +50,8 @@ let ins4 = [("andi", 1); ("bclr", 2); ("brbc", 3); ("brbs", 4);
 ("brhs", 11); ("brid", 12); ("brie", 13); ("brlo", 14); ("brlt", 15); ("brmi",
 16); ("brne", 17); ("brpl", 18); ("brsh", 19); ("brtc", 20); ("brts", 21);
 ("brvc", 22); ("brvs", 23); ("bset", 24); ("cpse", 26); ("ijmp", 28); ("push", 29); ("sbrc", 30); ("sbrs", 31); ("swap", 32)]
+
+let errbr = "Syntaxe : br** et constante de 7 bits, bits de poids fort à gauche"
 
 let xyz = [("X ", ("1001000", "1100")); ("X+", ("1001000", "1101")); ("-X",("1001000", "1110")); ("Y ", ("1000000","1000")); ("Y+", ("1001000", "1001")); ("-Y", ("1001000","1010")); ("Z ", ("1000000","0000")); ("Z+", ("1001000","0001")); ("-Z", ("1001000","0010"))]
 
@@ -149,26 +160,26 @@ let tobin = function
         |1-> let rd = read_reg (sub s 5 3) in
 		"0111"^(sub s 9 4)^(sub rd 1 4)^(sub s 13 4)
 	|2-> "100101001"^(bit (sub s 5 1))^"1000"
-        |3-> "111101"^(sub s 5 7)^(bit (sub s 13 1))
-        |4-> "111100"^(sub s 5 7)^(bit (sub s 13 1))
-        |5-> "111101"^(sub s 5 7)^"000"
-        |6-> "111100"^(sub s 5 7)^"000"
-        |8-> "111100"^(sub s 5 7)^"001"
-        |9-> "111101"^(sub s 5 7)^"100"
-        |10->"111101"^(sub s 5 7)^"101"
-        |11->"111100"^(sub s 5 7)^"101"
-        |12->"111101"^(sub s 5 7)^"111"
-        |13->"111100"^(sub s 5 7)^"111"
-        |14->"111100"^(sub s 5 7)^"000"
-        |15->"111100"^(sub s 5 7)^"100"
-        |16->"111100"^(sub s 5 7)^"010"
-        |17->"111101"^(sub s 5 7)^"001"
-        |18->"111101"^(sub s 5 7)^"010"
-        |19->"111101"^(sub s 5 7)^"000"
-        |20->"111101"^(sub s 5 7)^"110"
-        |21->"111100"^(sub s 5 7)^"110"
-        |22->"111101"^(sub s 5 7)^"011"
-        |23->"111100"^(sub s 5 7)^"011"
+        |3->  (try "111101"^(sub s 5 7)^(bit (sub s 13 1)) with |_ -> failwith errbr)  
+        |4->  (try "111100"^(sub s 5 7)^(bit (sub s 13 1)) with |_ -> failwith errbr) 
+        |5->  (try "111101"^(sub s 5 7)^"000" with |_ -> failwith errbr) 
+        |6->  (try "111100"^(sub s 5 7)^"000" with |_ -> failwith errbr)
+        |8->  (try "111100"^(sub s 5 7)^"001" with |_ -> failwith errbr)
+        |9->  (try "111101"^(sub s 5 7)^"100" with |_ -> failwith errbr)
+        |10-> (try "111101"^(sub s 5 7)^"101" with |_ -> failwith errbr)
+        |11-> (try "111100"^(sub s 5 7)^"101" with |_ -> failwith errbr)
+        |12-> (try "111101"^(sub s 5 7)^"111" with |_ -> failwith errbr)
+        |13-> (try "111100"^(sub s 5 7)^"111" with |_ -> failwith errbr)
+        |14-> (try "111100"^(sub s 5 7)^"000" with |_ -> failwith errbr)
+        |15-> (try "111100"^(sub s 5 7)^"100" with |_ -> failwith errbr)
+        |16-> (try "111100"^(sub s 5 7)^"010" with |_ -> failwith errbr)
+        |17-> (try "111101"^(sub s 5 7)^"001" with |_ -> failwith errbr)
+        |18-> (try "111101"^(sub s 5 7)^"010" with |_ -> failwith errbr)
+        |19-> (try "111101"^(sub s 5 7)^"000" with |_ -> failwith errbr)
+        |20-> (try "111101"^(sub s 5 7)^"110" with |_ -> failwith errbr)
+        |21-> (try "111100"^(sub s 5 7)^"110" with |_ -> failwith errbr)
+        |22-> (try "111101"^(sub s 5 7)^"011" with |_ -> failwith errbr)
+        |23-> (try "111100"^(sub s 5 7)^"011" with |_ -> failwith errbr)
         |24->let s = bit (sub s 5 1) in "100101000"^s^"1000"
         |26->let rd = read_reg (sub s 5 3) and rr = read_reg (sub s 9 3) in
 	"000100"^(sub rr 0 1)^rd^(sub rr 1 4)
@@ -207,7 +218,18 @@ let usage = "usage: asm [options] file"
 
 let isneof = ref true
 
-let basename = ref !filename
+let basename = ref ""
+
+let comp = ref 0
+
+let addrofstring s =
+    let st = ref (string_of_int s) in
+    let n = ref (length (!st)) in
+    while ((!n) < 16) do
+    st:="0"^(!st);
+    n:= (!n) +1
+    done;
+    !st
 
 let () =
   Arg.parse options (set_var filename) usage;
@@ -216,18 +238,25 @@ let () =
     (eprintf "Pas de fichier d'entrée\n@?";
      exit 2);
 
+  basename:= !filename;
+
   if (Filename.check_suffix !filename ".s") then
   (basename:= Filename.chop_suffix (!filename) ".s");
-  
+   
 
   let f = open_in !filename in
   let c = open_out (!basename^".rom") in
+  fprintf c "WORD SIZE\t10000\n";
+  fprintf c "ADDRESS SIZE\t10000\n\n";
+
   while !isneof do
   try
   let line = input_line f in
   let rep = tobin line in
-  printf "%s\n" rep;
-  fprintf c "%s\n" rep
+  let rebis = (addrofstring (bin_of_int !comp))^"\t"^rep in
+  printf "%s\n" rebis;
+  fprintf c "%s\n" rebis;
+  comp:= (!comp) +1
   with
   End_of_file -> isneof := false
   done;
