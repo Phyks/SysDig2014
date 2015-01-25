@@ -148,7 +148,7 @@ let tobin = function
 		|54 ->"1001010000011000"
 		|55 ->failwith "spm not implemented"
 		|56 -> let rd = read_reg (sub s 4 3) in
-		"1010001"^rd^"0000"
+		"1010101"^rd^"0000"
 		|62 -> (sub s 4 16)
 		|57 -> let rd = read_reg (sub s 4 3) and rr = read_reg (sub s 8 3) in
 		"000110"^(sub rr 0 1)^rd^(sub rr 1 4)
