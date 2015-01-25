@@ -176,9 +176,10 @@ end where
 
 brb_annex(PC:[word+word], k:[7], cond, val) = (PCo:[word+word]) where
     (*  rewrite k in two complement's form on 16 bits *)
-    k16 = k[0].0.0.0.0.0.0.0.0.0.0.k[1].k[2].k[3].k[4].k[5];
+    (*k16 = k[1].1.1.1.1.1.1.1.1.1.1.k[1].k[2].k[3].k[4].k[5];*)
+    k16 = k[0].k[1].k[2].k[3].k[4].k[5].0.0.0.0.0.0.0.0.0.k[6];
     (PC1, c1) = nadder<word+word>(PC, k16, 1); (*  TODO: check little/big endian *)
-    PCo = mux_n<word+word>(PC1, increase<ram_addr_size>(PC), not (cond xor val))
+    PCo = mux_n<word+word>(increase<ram_addr_size>(PC), PC1, not (cond xor val))
 end where
 
 brbs(k:[7], s:[3], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regso[16-31]:[word], So:[word], PCo:[word+word], SPo:[word+word]) where
@@ -202,7 +203,7 @@ end where
 breq(k:[7], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regso[16-31]:[word], So:[word], PCo:[word+word], SPo:[word+word]) where
 
   (*  S[0] = S[110] = Z *)
-  (regso[16-31], So, PCo, SPo) = brbs(k, 0.0.1, regs[16-31], S, PC, SP)
+  (regso[16-31], So, PCo, SPo) = brbs(k, 1.0.0, regs[16-31], S, PC, SP)
 
 end where
 

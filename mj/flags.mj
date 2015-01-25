@@ -1,8 +1,8 @@
 check_zero<n>(w:[n]) = (b) where
   if n = 0 then
-     b = 0
+     b = 1
   else
-    b = (w[0] and 0) and check_zero<n-1>(w[1..])
+    b = ((not w[0]) and 1) and check_zero<n-1>(w[1..])
   end if
 end where
 
