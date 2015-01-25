@@ -112,7 +112,7 @@ one<n>() = (o:[n]) where
   else if n = 1 then
     o = 1
   else
-    o = one<n-1>().0
+    o = 0.one<n-1>()
   end if
   end if
 end where
