@@ -193,7 +193,7 @@ increase<n>(RIn:[n]) = (ROut:[n]) where	(*  simple increase *)
 end where
 
 iincrease<n>(RIn:[n]) = (ROut:[n]) where	(*  double increase *)
-  two = 0. one<n-1>();
+  two = one<n-1>().0;
   (ROut, c) = nadder<n>(RIn, two, 0);
 end where
 
