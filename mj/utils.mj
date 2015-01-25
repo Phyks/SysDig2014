@@ -21,7 +21,7 @@ reg_n<n>(a:[n]) = (o:[n]) where
   if n = 0 then
     o = []
   else
-    o = (reg a[0]).reg_n<n-1>(a[1..])
+    o = reg_n<n-1>(a[1..]).(reg a[0])
   end if
 end where
 

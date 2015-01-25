@@ -374,7 +374,7 @@ route(o[0-15], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (
     (regsOut[16-31], Sout, PCout, SPout) = muxer(regs2[16-31], S2, PC2, SP2, regs1[16-31], S1, PC1, SP1, o15);
 end where
 
-main() = (regsOut[16-31]:[word]) where
+main() = (op[0-15], PC:[word+word]) where
   (*  Initialize everything to zero, except SP which is RAMEND *)
   RAMEND = zero<7>().1.zero<8>(); (* RAMEND = 512 *)
   z = 0;
@@ -389,6 +389,6 @@ main() = (regsOut[16-31]:[word]) where
   (*  Store the registers *)
   (regsIn[16-31]) = store_registers(regsOut[16-31]);
   S = reg_n<word>(Sout);
-  PC = reg_n<word+word>(PCout);
+  PC = reg_n<word+word>(increase<word+word>(PCout));
   SP = reg_n<word+word>(SPout);
 end where
