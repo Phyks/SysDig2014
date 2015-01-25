@@ -108,7 +108,7 @@ let tobin = function
 		|28 -> let rd = read_reg (sub s 4 3) in
 		"1110"^(sub s 8 4)^(sub rd 1 4)^(sub s 12 4)
 		|29 -> let rd = read_reg (sub s 4 3) in
-		"1001000"^rd^"0000"
+		"1010000"^rd^"0000"
 		|61 -> (sub s 4 16)
 		|30 -> failwith "lpm not implemented"
 		|31 -> let rd = read_reg (sub s 4 3) in
@@ -148,7 +148,7 @@ let tobin = function
 		|54 ->"1001010000011000"
 		|55 ->failwith "spm not implemented"
 		|56 -> let rd = read_reg (sub s 4 3) in
-		"1001001"^rd^"0000"
+		"1010101"^rd^"0000"
 		|62 -> (sub s 4 16)
 		|57 -> let rd = read_reg (sub s 4 3) and rr = read_reg (sub s 8 3) in
 		"000110"^(sub rr 0 1)^rd^(sub rr 1 4)
