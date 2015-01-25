@@ -1,38 +1,18 @@
 require constants.mj
-# require transfer.mj
-require utils.mj
-# require flags.mj
+require transfer.mj
+require others.mj
 
-main() =  (PC:[16], opcode:[16]) where #(regsOut[16-31]:[word], So:[word], PCo:[word+word], SPo:[word+word]) where
+main() = (regsOut[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
+  (*  Initialize everything to zero, except SP which is RAMEND *)
+  RAMEND = zero<7>().1.zero<8>(); (* RAMEND = 512 *)
+  z = 0;
 
-(*  regs16 = 0.0.0.0.0.0.0.1 ;
-  regs17 = 0.0.0.0.0.0.1.0 ;
-  regs18 = 0.0.0.0.0.0.1.1 ;
-  regs19 = 0.0.0.0.0.1.0.0 ;
-  regs20 = 0.0.0.0.0.1.0.1 ;
-  regs21 = 0.0.0.0.0.1.1.0 ;
-  regs22 = 0.0.0.0.0.1.1.1 ;
-  regs23 = 0.0.0.0.1.0.0.0 ;
-  regs24 = 0.0.0.0.1.0.0.1 ;
-  regs25 = 0.0.0.0.1.0.1.0 ;
-  regs26 = 0.0.0.0.1.0.1.1 ;
-  regs27 = 0.0.0.0.1.1.0.0 ;
-  regs28 = 0.0.0.0.1.1.0.1 ;
-  regs29 = 0.0.0.0.1.1.1.0 ;
-  regs30 = 0.0.0.0.1.1.1.1 ;
-  regs31 = 0.0.0.1.0.0.0.0 ;
-  PC = 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0;
-  SP = 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0;
-  S = 1.0.0.0.0.0.0.0;
-  aone = allone<word>();
-  azero = zero<word>();
-  (regsOut[16-31], So, PCo, SPo) = ld(0.0.0.0.0, 0,0,0,0,
-  regs[16-31], S, PC, SP); 
-  *)
-  PC = PCin;
-  opcode = rom<instr_addr_size, instr_size>(PC);
-  PCin = reg_n<word+word>(increase<word+word>(PC));
+  (*  Route it to the instruction *)
+  (regsOut[16-31], Sout, PCout, SPout) = nop(regsIn[16-31], S, PC, SP);
 
-  
+  (*  Store the registers *)
+  (regsIn[16-31]) = store_registers(regsOut[16-31]);
+  S = reg_n<word>(Sout);
+  PC = reg_n<word+word>(PCout);
+  SP = reg_n<word+word>(SPout);
 end where
-
