@@ -30,3 +30,20 @@ tst R16
 breq 00000001
 ldi R16 00000000
 breq 11100001 # go back to start (-30)
+
+	ld0 R16
+	ld1 0000000000000010 # seconds
+	ld0 R17	
+	ld1 0000000000000011 # min
+	ld0 R18
+	ld1 0000000000000100 # hour
+	ld0 R19
+	ld1 0000000000000101 # tic
+	add R16 R19 # R20 is current seconds
+	cpi R16 00111100 # R20, 60
+	brmi DEBUT # branch if R20 - 60 < 0
+	inc R17
+	cpi R17 00111100 # R17, 60
+	brmi DEBUT
+	inc R18
+	rjmp DEBUT
