@@ -216,9 +216,18 @@ let usage = "usage: asm [options] file"
 
 let isneof = ref true
 
-let basename = ref !filename
+let basename = ref ""
 
 let comp = ref 0
+
+let addrofstring s =
+    let st = ref (string_of_int s) in
+    let n = ref (length (!st)) in
+    while ((!n) < 16) do
+    st:="0"^(!st);
+    n:= (!n) +1
+    done;
+    !st
 
 let () =
   Arg.parse options (set_var filename) usage;
@@ -227,17 +236,22 @@ let () =
     (eprintf "Pas de fichier d'entrée\n@?";
      exit 2);
 
+  basename:= !filename;
+
   if (Filename.check_suffix !filename ".s") then
   (basename:= Filename.chop_suffix (!filename) ".s");
-  
+   
 
   let f = open_in !filename in
   let c = open_out (!basename^".rom") in
+  fprintf c "WORD SIZE\t10000\n";
+  fprintf c "ADDRESS SIZE\t10000\n\n";
+
   while !isneof do
   try
   let line = input_line f in
   let rep = tobin line in
-  let rebis = (string_of_int (bin_of_int !comp))^"\t"^rep in
+  let rebis = (addrofstring (bin_of_int !comp))^"\t"^rep in
   printf "%s\n" rebis;
   fprintf c "%s\n" rebis;
   comp:= (!comp) +1

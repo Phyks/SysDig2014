@@ -2,6 +2,15 @@ open String
 open Format
 open Printf
 
+let rec bin_of_int i =
+  let high_byte = i lsr 1 in
+  let low_byte = ( i mod 2) in
+
+  if high_byte > 0 then
+    low_byte+10*(bin_of_int high_byte)
+  else
+    low_byte
+
 let read_reg = function
 	|"R16" -> "10000"
 	|"R17" -> "10001"
@@ -207,7 +216,18 @@ let usage = "usage: asm [options] file"
 
 let isneof = ref true
 
-let basename = ref !filename
+let basename = ref ""
+
+let comp = ref 0
+
+let addrofstring s =
+    let st = ref (string_of_int s) in
+    let n = ref (length (!st)) in
+    while ((!n) < 16) do
+    st:="0"^(!st);
+    n:= (!n) +1
+    done;
+    !st
 
 let () =
   Arg.parse options (set_var filename) usage;
@@ -216,18 +236,25 @@ let () =
     (eprintf "Pas de fichier d'entrée\n@?";
      exit 2);
 
+  basename:= !filename;
+
   if (Filename.check_suffix !filename ".s") then
   (basename:= Filename.chop_suffix (!filename) ".s");
-  
+   
 
   let f = open_in !filename in
   let c = open_out (!basename^".rom") in
+  fprintf c "WORD SIZE\t10000\n";
+  fprintf c "ADDRESS SIZE\t10000\n\n";
+
   while !isneof do
   try
   let line = input_line f in
   let rep = tobin line in
-  printf "%s\n" rep;
-  fprintf c "%s\n" rep
+  let rebis = (addrofstring (bin_of_int !comp))^"\t"^rep in
+  printf "%s\n" rebis;
+  fprintf c "%s\n" rebis;
+  comp:= (!comp) +1
   with
   End_of_file -> isneof := false
   done;
