@@ -29,4 +29,4 @@ sub R16 R22
 tst R16
 breq 00000001
 ldi R16 00000000
-breq 11100100 # go back to start (-27)
+breq 11100001 # go back to start (-30)
