@@ -43,7 +43,7 @@ let bit = function
 
 let ins2 = [("cp", 0); ("ld", 1); ("or", 2); ("st", 3)]
 
-let ins3 = [("adc", 0); ("add", 1); ("and", 2); ("asr", 3); ("bld", 4); ("bst", 5); ("cbi", 6); ("cbr", 7); ("clc", 8); ("clh", 9); ("cli", 10); ("cln", 11); ("clr", 12); ("cls", 13); ("clt", 14); ("clv", 15); ("clz", 16); ("com", 17); ("cpc", 18); ("cpi", 19); ("dec", 20); ("des", 21); ("eor", 22); ("inc", 23); ("jmp", 24); ("lac", 25); ("las", 26); ("lat", 27); ("ldi", 28); ("lds", 29); ("lpm", 30); ("lsl", 31); ("lsr", 32); ("mov", 33); ("mul", 34); ("neg", 35); ("nop", 36); ("ori", 37); ("out", 38); ("pop", 39); ("ret", 40); ("rol", 41); ("ror", 42); ("sbc", 43); ("sbi", 44); ("sbr", 45); ("sec",46); ("seh", 47); ("sei", 48); ("sen", 49); ("ser", 50); ("ses", 51); ("set", 52); ("sev", 53); ("sez", 54); ("spm", 55); ("sts", 56); ("sub", 57); ("tst", 58); ("wdr", 59); ("xch", 60)]
+let ins3 = [("adc", 0); ("add", 1); ("and", 2); ("asr", 3); ("bld", 4); ("bst", 5); ("cbi", 6); ("cbr", 7); ("clc", 8); ("clh", 9); ("cli", 10); ("cln", 11); ("clr", 12); ("cls", 13); ("clt", 14); ("clv", 15); ("clz", 16); ("com", 17); ("cpc", 18); ("cpi", 19); ("dec", 20); ("des", 21); ("eor", 22); ("inc", 23); ("jmp", 24); ("lac", 25); ("las", 26); ("lat", 27); ("ldi", 28); ("ld0", 29); ("lpm", 30); ("lsl", 31); ("lsr", 32); ("mov", 33); ("mul", 34); ("neg", 35); ("nop", 36); ("ori", 37); ("out", 38); ("pop", 39); ("ret", 40); ("rol", 41); ("ror", 42); ("sbc", 43); ("sbi", 44); ("sbr", 45); ("sec",46); ("seh", 47); ("sei", 48); ("sen", 49); ("ser", 50); ("ses", 51); ("set", 52); ("sev", 53); ("sez", 54); ("spm", 55); ("sts", 56); ("sub", 57); ("tst", 58); ("wdr", 59); ("xch", 60); ("ld1", 61)]
 
 let ins4 = [("andi", 1); ("bclr", 2); ("brbc", 3); ("brbs", 4);
 ("brcc", 5); ("brcs", 6); ("breq", 8); ("brge", 9); ("brhc", 10);
@@ -107,7 +107,9 @@ let tobin = function
 		"1001001"^rr^"0111"
 		|28 -> let rd = read_reg (sub s 4 3) in
 		"1110"^(sub s 8 4)^(sub rd 1 4)^(sub s 12 4)
-		|29 -> failwith "lds not implemented"
+		|29 -> let rd = read_reg (sub s 4 3) in
+		"1001000"^rd^"0000"
+		|61 -> (sub s 4 16)
 		|30 -> failwith "lpm not implemented"
 		|31 -> let rd = read_reg (sub s 4 3) in
 		"000011"^(sub rd 0 1)^rd^(sub rd 1 4)
