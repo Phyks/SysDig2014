@@ -3,7 +3,7 @@ require utils.mj
 require flags.mj
 
 rjmp(k:[12], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regso[16-31]:[word], So:[word], PCo:[word+word], SPo:[word+word]) where
-  (PCo, c) = nadder<word+word>(PC, k.0.0.0.0, 1);
+  (PCo, c) = nadder<word+word>(PC, k[11].k[11].k[11].k[11].k[11].k[10].k[9].k[8].k[7].k[6].k[5].k[4].k[3].k[2].k[1].k[0], 1);
 
   (regso[16-31]) = regs_identity(regs[16-31]);
   So = S;
@@ -125,7 +125,7 @@ cpi(d:[reg_addr-1], K:[8], regs[16-31]:[word], S:[word], PC:[word+word], SP:[wor
 
   Rd = pop_register(1.d, regs[16-31]);
 
-  (R, c) = nsubber<word>(K, Rd, 0);
+  (R, c) = nsubber<word>(Rd, K, 0);
 
   S5 = cH(R[3], (not Rd[3]), K[3]);
   S4 = cS(S2, S3);
