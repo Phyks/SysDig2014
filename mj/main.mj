@@ -305,7 +305,8 @@ route1011(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
 end where
 
 route1110(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
-  (regsOut[16-31], Sout, PCout, SPout) = ldi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP)
+  (* (regsOut[16-31], Sout, PCout, SPout) = ldi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP) *)
+  (regsOut[16-31], Sout, PCout, SPout) = debug(regs[16-31], S, PC, SP)
 end where
 
 route1101(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
@@ -375,7 +376,6 @@ end where
 
 main() = (op[0-15], PC:[word+word]) where
   (*  Initialize everything to zero, except SP which is RAMEND *)
-  RAMEND = zero<7>().1.zero<8>(); (* RAMEND = 512 *)
   z = 0;
 
   (*  Get the opcode of the instruction *)
@@ -388,6 +388,6 @@ main() = (op[0-15], PC:[word+word]) where
   (*  Store the registers *)
   (regsIn[16-31]) = store_registers(regsOut[16-31]);
   S = reg_n<word>(Sout);
-  PC = reg_n<word+word>(increase<word+word>(PCout));
+  PC = reg_n<word+word>(PCout);
   SP = reg_n<word+word>(SPout);
 end where

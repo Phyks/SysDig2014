@@ -3,14 +3,14 @@ require utils.mj
 break(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   (*  NOT implemented on simulator, TODO *)
   PCOut = increase<ram_addr_size>(PCIn);
- (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
   SPOut = SPIn;
   SOut = SIn;
 end where
 
 nop(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
- PCOut = increase<ram_addr_size>(PCIn);
- (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  PCOut = increase<ram_addr_size>(PCIn);
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
   SPOut = SPIn;
   SOut = SIn;
 end where
@@ -18,7 +18,7 @@ end where
 sleep(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   (*  NOT implemented on simulator, TODO *)
   PCOut = increase<ram_addr_size>(PCIn);
- (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
   SPOut = SPIn;
   SOut = SIn;
 end where
@@ -26,7 +26,14 @@ end where
 wdr(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   (*  NOT implemented on simulator, TODO *)
   PCOut = increase<ram_addr_size>(PCIn);
- (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
+  SPOut = SPIn;
+  SOut = SIn;
+end where
+
+debug(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+  PCOut = increase<ram_addr_size>(PCIn);
+  (regsOut[16-31]) = regs_identity(allone<word>(), regsIn[17-31]);
   SPOut = SPIn;
   SOut = SIn;
 end where
