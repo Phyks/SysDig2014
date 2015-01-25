@@ -305,8 +305,7 @@ route1011(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word])
 end where
 
 route1110(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
-  (*  (regsOut[16-31], Sout, PCout, SPout) = ldi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP) *)
-  (regsOut[16-31], Sout, PCout, SPout) = nop(regs[16-31], S, PC, SP); (*  TODO : This should be ldi *)
+  (regsOut[16-31], Sout, PCout, SPout) = ldi(o7.o6.o5.o4, o11.o10.o9.o8.o3.o2.o1.o0, regs[16-31], S, PC, SP)
 end where
 
 route1101(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where

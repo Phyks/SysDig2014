@@ -46,6 +46,13 @@ ld(d:[reg_addr], o[0-3], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPI
   regsOut31 = mux_n<word>(r31, xyz3[..(word-1)], not o3);
 end where
 
+ldi(d:[reg_addr-1], K:[word], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+   (regsOut[16-31]) = push_register(1.d, K, regsIn[16-31]);
+  SPOut = SPIn;
+  SOut = SIn;
+  PCOut = increase<ram_addr_size>(PCIn)
+end where
+
 lds(d:[reg_addr], k:[instr_size], regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   w = ram<ram_addr_size, word>(k, 0, k, zero<word>());
 
