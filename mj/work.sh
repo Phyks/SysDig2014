@@ -24,3 +24,13 @@ function build {
      	simul -n $args tmp.net
 }
 
+function rebuild {
+    [ $1 ] && args=$1 || args=1
+    echo $args" steps"
+    rm tmp_sch.net
+    python3 generate.py test.mj > tmp.mj &&
+     	minijazz tmp.mj &&
+     	simul -n $args tmp.net
+}
+
+PS1="$FG[100]~SysDig $PS1"
