@@ -19,7 +19,7 @@ addsuber<n>(a:[n], b:[n], r_in, op) = (o:[n], r_out) where
   else
     (s, r) = full_as(a[0], b[0], r_in, op);
     (o', r') = addsuber<n-1>( a[1..], b[1..], r, op );
-    o = s . o';
+    o = o' . s;
     r_out = r'
   end if
 end where

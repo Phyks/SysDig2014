@@ -21,7 +21,7 @@ reg_n<n>(a:[n]) = (o:[n]) where
   if n = 0 then
     o = []
   else
-    o = (reg a[0]).reg_n<n-1>(a[1..])
+    o = reg_n<n-1>(a[1..]).(reg a[0])
   end if
 end where
 
@@ -112,7 +112,7 @@ one<n>() = (o:[n]) where
   else if n = 1 then
     o = 1
   else
-    o = one<n-1>().0
+    o = 0.one<n-1>()
   end if
   end if
 end where
@@ -193,7 +193,7 @@ increase<n>(RIn:[n]) = (ROut:[n]) where	(*  simple increase *)
 end where
 
 iincrease<n>(RIn:[n]) = (ROut:[n]) where	(*  double increase *)
-  two = 0. one<n-1>();
+  two = one<n-1>().0;
   (ROut, c) = nadder<n>(RIn, two, 0);
 end where
 
