@@ -2,6 +2,15 @@ open String
 open Format
 open Printf
 
+let rec bin_of_int i =
+  let high_byte = i lsr 1 in
+  let low_byte = ( i mod 2) in
+
+  if high_byte > 0 then
+    low_byte+10*(bin_of_int high_byte)
+  else
+    low_byte
+
 let read_reg = function
 	|"R16" -> "10000"
 	|"R17" -> "10001"
@@ -209,6 +218,8 @@ let isneof = ref true
 
 let basename = ref !filename
 
+let comp = ref 0
+
 let () =
   Arg.parse options (set_var filename) usage;
 
@@ -226,8 +237,10 @@ let () =
   try
   let line = input_line f in
   let rep = tobin line in
-  printf "%s\n" rep;
-  fprintf c "%s\n" rep
+  let rebis = (string_of_int (bin_of_int !comp))^"\t"^rep in
+  printf "%s\n" rebis;
+  fprintf c "%s\n" rebis;
+  comp:= (!comp) +1
   with
   End_of_file -> isneof := false
   done;
