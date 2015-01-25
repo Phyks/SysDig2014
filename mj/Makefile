@@ -11,7 +11,7 @@ compile: core.mj
 	$(MJC) core.mj
 
 test: all
-	$(SIMULATOR) -n 10 core.net
+	$(SIMULATOR) core.net
 
 clock: all
 	$(SIMULATOR) core.net
