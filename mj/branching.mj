@@ -87,7 +87,7 @@ cp(d:[reg_addr], r:[reg_addr], regs[16-31]:[word], S:[word], PC:[word+word], SP:
   Rd = pop_register(d, regs[16-31]);
   Rr = pop_register(r, regs[16-31]);
 
-  (R, c) = nsubber<word>(Rr, Rd, 0);
+  (R, c) = nsubber<word>(Rd, Rr, 0);
 
   S5 = cH(R[3], (not Rd[3]), Rr[3]);
   S4 = cS(S2, S3);
