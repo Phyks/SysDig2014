@@ -98,7 +98,7 @@ andi(d:[reg_addr-1], K:[word], regs[16-31]:[word], S:[word], PC:[word+word], SP:
 
   Sout = setStatus(S[0-7]);	
 
-  (regsOut[16-31]) = push_register(0.d, R, regs[16-31]);
+  (regsOut[16-31]) = push_register(1.d, R, regs[16-31]);
 
   PCout = increase<ram_addr_size>(PC);
   SPout =  SP;
