@@ -14,4 +14,4 @@ test: all
 	$(SIMULATOR) core.net
 
 clock: all
-	$(SIMULATOR) core.net
+

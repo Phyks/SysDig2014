@@ -17,4 +17,4 @@ clock: simulateur netlist
 	cd mj; make clock
 
 run: clock
-	./simulateur/main.mjc mj/core.net | ./clock/clock.py
+	cd clock && sh clock.sh
