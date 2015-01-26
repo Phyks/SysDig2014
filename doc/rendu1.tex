@@ -357,7 +357,7 @@ où \texttt{WORD SIZE} et \texttt{ADDRESS SIZE} sont les tailles des mots et des
 
 \subsection{Fonctionnement}
 
-Le simulateur commence par \emph{parser} la \texttt{netlist} et l'ordonnancer. Nous avons essentiellement repris le code réalisé pendant les premiers TPs de l'année, et présentés lors du premier rendu. Cette phase est très longue (principalement à cause de la taille des graphes résultant du chargement du fichier de \texttt{netlist}, qui fait plusieurs centaines de millier de lignes), et nous n'avons pas pu consacrer beaucoup de temps à l'optimiser.
+Le simulateur commence par \emph{parser} la \texttt{netlist} et l'ordonnancer. Nous avons essentiellement repris le code réalisé pendant les premiers TPs de l'année, et présenté lors du premier rendu. Cette phase est très longue (principalement à cause de la taille des graphes résultant du chargement du fichier de \texttt{netlist}, qui fait plusieurs centaines de milliers de lignes), et nous n'avons pas pu consacrer beaucoup de temps à l'optimiser.
 
 Le simulateur simule ensuite le circuit, étape par étape, en chargeant un éventuel fichier ROM. Si le circuit attend des entrées, le simulateur propose de les entrer à la main à chaque étape (à noter que par convention on écrit toutes les entrées et sorties du simulateur avec la convention que les poids faibles sont le plus à droite). Si le circuit a des sorties, le simulateur les affiche à chaque étape.
 
@@ -369,7 +369,7 @@ Le code du microprocesseur est situé dans le dossier \texttt{mj}. Pour facilite
 Les règles de réécriture suivantes sont appliquées:
 \begin{itemize}
     \item \texttt{require fichier.mj} est remplacé par le contenu du fichier \texttt{fichier.mj}
-    \item \texttt{foo[0-n]} est remplacé par \texttt{foo[0], \dots, foo[n]}
+    \item \texttt{foo[0-n]:[bar]} est remplacé par \texttt{foo0:[bar], \dots, foon:[bar]}
     \item \texttt{foo[0-n]} est remplacé par \texttt{foo0, \dots, foon}
     \item \texttt{foo[0..n]} est remplacé par \texttt{foo[0], \dots, foo[n]}
 \end{itemize}
@@ -395,7 +395,7 @@ où \texttt{instruction} est un nom d'instruction valide, écrit en minuscule, \
 
 \subsection{Stockage de l'heure et fonctionnement de l'horloge}
 
-Le microcontrôleur reçoit une entrée d'horloge, qui vaut alternativement 1 et 0 à chaque seconde. Ceci reproduit le comportement d'un circuit RC habituellement utilisé comme référence d'horloge sur un tel microcontrôleur.
+Le microcontrôleur reçoit une entrée d'horloge, qui compte le nombre de secondes écoulées depuis sa dernière remise à zéro.
 
 Afin d'avoir une vraie horloge et non un simple chronomètre, nous devons avoir un moyen d'initialiser le temps au démarrage du microcontrôleur. Avec un vrai micro-contrôleur, il faudrait utiliser une mémoire et un module d'horloge matériel pour stocker cette information. Nous avons décidé d'émuler des \emph{pins} d'entrée sur notre microcontrôleur et de lui envoyer l'heure actuelle au démarrage de la simulation, sur ses pins d'entrée. Cela revient à stocker à un emplacement prédéfini dans la RAM cette information, car les \emph{pins} d'entrée / sortie sont \emph{mappés} dans le \emph{data space}.
 
