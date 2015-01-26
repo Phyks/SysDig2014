@@ -54,7 +54,7 @@ std(w:[word], address:[ram_addr_size], o:[word+word], regsIn[16-31]:[word], SIn:
   (* (1001001.. and not ..0100) or 1000001.. *)
   w_flag = o[15] and not (o[14] or o[13] or o[11] or o[10]) and o[9] and
            ((o[12] and not(o[3] or o[1] or o[0]) and o[2]) or not(o[12]));
-  out = ram<ram_addr_size, word>(address, 1, address, w);
+  out = ram<ram_addr_size, word>(address, w_flag, address, w);
 
   (regsOut[16-31]) = regs_identity(regsIn[16-31]);
   PCOut = increase<ram_addr_size>(PCIn);
