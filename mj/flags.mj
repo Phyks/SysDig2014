@@ -73,5 +73,5 @@ getC(S:[word]) = (C) where
 end where
 
 setStatus(S[0-7]) = (S:[word]) where
-  S = S0.S1.S2.S3.S4.S5.S6.S7
+  S = S7.S6.S5.S4.S3.S2.S1.S0;
 end where

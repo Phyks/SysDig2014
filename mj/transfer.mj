@@ -78,14 +78,16 @@ st(r:[reg_addr], o3, o2, o1, o0, regsIn[16-31]:[word], SIn:[word], PCIn:[word+wo
   (regsOut[16-31], SOut, PCOut, SPOut) = st_annex(w, o3, o2, o1, o0, regsIn[16-31], SIn, PCIn, SPIn);
 end where
 
-lds_or_sts(r:[reg_addr], k:[ram_addr_size], w_flag regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
+lds_or_sts(r:[reg_addr], k:[ram_addr_size], w_flag, regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where
   Rr = pop_register(r, regsIn[16-31]);
-  out = ram<ram_addr_size, word>(k, w, k, Rr);
+  out = ram<ram_addr_size, word>(k, w_flag, k, Rr);
+  w = mux_n<word>(out, Rr, w_flag);
 
+  (regsOut[16-31]) = push_register(r, w, regsIn[16-31]);
+  
   PCOut = iincrease<ram_addr_size>(PCIn);
   SOut = SIn;
   SPOut = SPIn;
-  (regsOut[16-31]) = regs_identity(regsIn[16-31]);
 end where
 
 in(regsIn[16-31]:[word], SIn:[word], PCIn:[word+word], SPIn:[word+word]) = (regsOut[16-31]:[word], SOut:[word], PCOut:[word+word], SPOut:[word+word]) where

@@ -1,18 +1,22 @@
 require constants.mj
+require arithmetics.mj
+require utils.mj
 require transfer.mj
-require others.mj
+require branching.mj
 
-main() = (regsOut[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) where
-  (*  Initialize everything to zero, except SP which is RAMEND *)
-  RAMEND = zero<7>().1.zero<8>(); (* RAMEND = 512 *)
-  z = 0;
+main() = (regsOut[16-31]:[word], So:[word], PCo:[word+word], SPo:[word+word], o:[word], s2) where
+  PC = reg_n<word+word>(PCo);
+  SP = reg_n<word+word>(SPo);
+  S = reg_n<word>(So);
 
-  (*  Route it to the instruction *)
-  (regsOut[16-31], Sout, PCout, SPout) = nop(regsIn[16-31], S, PC, SP);
+  opcode = rom<instr_addr_size, instr_size>(PC);
+  (op[0-15]) = op_decomposer(opcode);
 
-  (*  Store the registers *)
-  (regsIn[16-31]) = store_registers(regsOut[16-31]);
-  S = reg_n<word>(Sout);
-  PC = reg_n<word+word>(PCout);
-  SP = reg_n<word+word>(SPout);
+  (regsi[16-31], Si, PCi, SPi) = cpi(0.0.0.0, 0.0.1.1.1.1.0.0,
+                                     0.0.0.1.1.1.1.0, regs[17-31], S, PC, SP);
+  (regsOut[16-31], So, PCo, SPo) = brmi(0.0.1.0.0.0.1, regsi[16-31], Si, PCi, SPi);
+  (o, c) = nsubber<word>(0.0.0.1.1.1.1.0, 0.0.1.1.1.1.0.0, 0);
+  s2 = Si[2];
+  (regs[16-31]) = store_registers(regsOut[16-31]);
 end where
+

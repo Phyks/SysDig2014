@@ -292,7 +292,7 @@ end where
 route1010(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where
 
   next = rom<instr_addr_size, instr_size>(increase<word+word>(PC));
-  (regsOut[16-31], Sout, PCout, SPout) = lds_or_sts(o8.o7.o6.o5.o4, o11, next, regs[16-31], S, PC, SP);
+  (regsOut[16-31], Sout, PCout, SPout) = lds_or_sts(o8.o7.o6.o5.o4, next, o11, regs[16-31], S, PC, SP);
 end where
 
 route1011(o[0-11], regs[16-31]:[word], S:[word], PC:[word+word], SP:[word+word]) = (regsOut[16-31]:[word], Sout:[word], PCout:[word+word], SPout:[word+word]) where

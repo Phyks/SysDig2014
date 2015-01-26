@@ -1,16 +1,16 @@
 ### Starting build.
 # Target: asm.ml.depends, tags: { extension:ml, file:asm.ml, ocaml, ocamldep, quiet }
-/usr/bin/ocamldep -modules asm.ml > asm.ml.depends
+/usr/bin/ocamldep.opt -modules asm.ml > asm.ml.depends
 # Target: asm.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:asm.cmo, file:asm.ml, implem, ocaml, quiet }
-/usr/bin/ocamlc -c -o asm.cmo asm.ml
-+ /usr/bin/ocamlc -c -o asm.cmo asm.ml
-File "asm.ml", line 209, characters 1-2:
+/usr/bin/ocamlc.opt -c -o asm.cmo asm.ml
++ /usr/bin/ocamlc.opt -c -o asm.cmo asm.ml
+File "asm.ml", line 214, characters 1-2:
 Warning 11: this match case is unused.
 # Target: asm.cmx, tags: { compile, extension:cmx, extension:ml, file:asm.cmx, file:asm.ml, implem, native, ocaml, quiet }
-/usr/bin/ocamlopt -c -o asm.cmx asm.ml
-+ /usr/bin/ocamlopt -c -o asm.cmx asm.ml
-File "asm.ml", line 209, characters 1-2:
+/usr/bin/ocamlopt.opt -c -o asm.cmx asm.ml
++ /usr/bin/ocamlopt.opt -c -o asm.cmx asm.ml
+File "asm.ml", line 214, characters 1-2:
 Warning 11: this match case is unused.
 # Target: asm.native, tags: { dont_link_with, extension:native, file:asm.native, link, native, ocaml, program, quiet }
-/usr/bin/ocamlopt asm.cmx -o asm.native
+/usr/bin/ocamlopt.opt asm.cmx -o asm.native
 # Compilation successful.
