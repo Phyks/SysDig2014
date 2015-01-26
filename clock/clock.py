@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 from bottle import *
-import datetime
+import sys
 
 FIFO_FILE = '/tmp/fifo'
+now = {"hours": 0, "minutes": 0, "seconds": 0}
 
 
 @route('/')
@@ -23,15 +24,19 @@ def server_static_img(filepath):
 
 @route('/ajax/time')
 def api_time():
-    with open(FIFO_FILE, 'r') as fh:
-        time = fh.readline().strip()
-    now = datetime.datetime.now()
-    return {
-        "hours": now.hour,
-        "minutes": now.minute,
-        "seconds": now.second,
-    }
+    global now
+    fifo = ""
+    while not fifo.startswith("FIFO!!!!!!"):
+        fifo = sys.stdin.readline()
+    fifo = int(fifo.strip().split("!")[-1])
+    if fifo & 0x40 == 0x40:  # minutes
+        now['minutes'] = fifo & 0x3F
+    elif fifo & 0x80 == 0x80:  # heures
+        now['hours'] = fifo & 0x3F
+    else:  # secondes
+        now['seconds'] = fifo & 0x3F
+    return now
 
 
 if __name__ == "__main__":
-    run(host='localhost', port=8080, debug=True)
+    run(host='localhost', port=8080, debug=False, reloader=False)
