@@ -15,3 +15,6 @@ mjc: minijazz/minijazz/main/mjc.ml
 clock: simulateur netlist
 	@echo "## Running the clock ##"
 	cd mj; make clock
+
+run: clock
+	./simulateur/main.mjc mj/core.net | ./clock/clock.py
