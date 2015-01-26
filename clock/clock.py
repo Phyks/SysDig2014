@@ -3,7 +3,6 @@
 from bottle import *
 import sys
 
-FIFO_FILE = '/tmp/fifo'
 now = {"hours": 0, "minutes": 0, "seconds": 0}
 
 
@@ -26,9 +25,9 @@ def server_static_img(filepath):
 def api_time():
     global now
     fifo = ""
-    while not fifo.startswith("FIFO!!!!!!"):
+    while not fifo.startswith("=> regsOut23"):
         fifo = sys.stdin.readline()
-    fifo = int(fifo.strip().split("!")[-1])
+    fifo = int(fifo.strip().split("=")[-1], 2)
     if fifo & 0x40 == 0x40:  # minutes
         now['minutes'] = fifo & 0x3F
     elif fifo & 0x80 == 0x80:  # heures
