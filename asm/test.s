@@ -10,6 +10,7 @@ ldi R25 00000000     # masks
 ldi R26 01000000     
 ldi R27 10000000
 ldi R28 00000001
+rjmp 000000010001
 ld0 R19 	     # read tic
 ld1 0000000000000101
 st0 R25
@@ -28,12 +29,12 @@ brmi 0000001 # +1
 ldi R18 00000000     # else reset hours 	
 mov R20 R18 # HOUR OUTPUT
 or R20 R27
-st0 R20              
-st1 0000000000000110
+mov R23 R20              
+nop #st1 0000000000000110
 mov R20 R17 # MIN OUTPUT
 or R20 R26 # apply mask
-st0 R20              
-st1 0000000000000110
-st0 R16  # SEC OUTPUT              
-st1 0000000000000110
+mov R23 R20              
+nop # st1 0000000000000110
+mov R23 R16  # SEC OUTPUT              
+nop # st1 0000000000000110
 rjmp 111111100101 # go back and read tic -27 # TODO
