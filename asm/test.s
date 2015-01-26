@@ -1,3 +1,5 @@
+ldi R31 00000000
+ldi R30 00000101
 ld0 R16              # Read from 3 first bytes of RAM initial s, min, h
 ld1 0000000000000010 # seconds
 ld0 R17	
@@ -8,7 +10,8 @@ ldi R25 00000000     # masks
 ldi R26 01000000     
 ldi R27 10000000    
 ld0 R19 	     # read tic
-ld1 0000000000000101 
+ld1 0000000000000101
+st Z R25
 add R16 R19          # add tic to current seconds
 cpi R16 00111100     # if not more than 60, output seconds
 brmi 0010001 # +17  
@@ -31,4 +34,4 @@ st0 R20
 st1 0000000000000110
 st0 R16  # SEC OUTPUT              
 st1 0000000000000110
-rjmp 111111100111 # go back and read tic -27 # TODO
+rjmp 111111100100 # go back and read tic -27 # TODO
