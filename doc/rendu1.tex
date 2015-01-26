@@ -327,7 +327,7 @@ WDR &  & Watchdog reset (not implemented) & 1 & 1 & None & \texttt{1001 0101 101
 \normalsize
 \section{Implémentation}
 
-Nous avons implémenté les instructions et le microcontrôleur en utilisant le langage \texttt{minijazz}.
+Nous avons implémenté les instructions et le microcontrôleur en utilisant le langage \texttt{minijazz}. Un ensemble de \texttt{Makefiles} est disponible pour compiler et lancer la simulation. \texttt{make clock} permet de compiler tout le nécessaire pour lancer l'horloge. \texttt{make run} permet de lancer la simulation d'horloge.
 
 \subsection{Simulateur}
 
@@ -400,5 +400,7 @@ Le microcontrôleur reçoit une entrée d'horloge, qui compte le nombre de secon
 Afin d'avoir une vraie horloge et non un simple chronomètre, nous devons avoir un moyen d'initialiser le temps au démarrage du microcontrôleur. Avec un vrai micro-contrôleur, il faudrait utiliser une mémoire et un module d'horloge matériel pour stocker cette information. Nous avons décidé d'émuler des \emph{pins} d'entrée sur notre microcontrôleur et de lui envoyer l'heure actuelle au démarrage de la simulation, sur ses pins d'entrée. Cela revient à stocker à un emplacement prédéfini dans la RAM cette information, car les \emph{pins} d'entrée / sortie sont \emph{mappés} dans le \emph{data space}.
 
 Sur une autre entrée, le microcontrôleur reçoit un signal d'horloge. Il se charge alors de compter le temps qui passe et d'incrémenter les valeurs stockées dans la RAM en fonction.
+
+Nous avons opté pour une visualisation web simple à mettre en œuvre pour simuler la présence d'un afficheur sept segments. Une page web affiche un afficheur sept segments. Elle récupère la sortie directement depuis la sortie du simulateur, comme si elle était branchée sur des sorties numériques du microcontrôleur, par un \emph{pipe} Unix standard.
 
 \end{document}
