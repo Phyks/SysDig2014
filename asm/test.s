@@ -13,8 +13,8 @@ ldi R28 00000001
 rjmp 000000010000
 ld0 R19 	     # read tic
 ld1 0000000000000101
-st0 R25
-st1 0000000000000101
+mov R24 R19 # save current tic
+sub R19 R31          # get difference with previous tic, store in R19
 add R16 R19          # add tic to current seconds
 cpi R16 00111100     # if not more than 60, output seconds
 brmi 0010001 # +17  
@@ -37,4 +37,5 @@ mov R23 R20
 nop # st1 0000000000000110
 mov R23 R16  # SEC OUTPUT              
 nop # st1 0000000000000110
-rjmp 111111100101 # go back and read tic -27 # TODO
+mov R31 R24 # move cur tic in prev tic
+rjmp 111111100100 # go back and read tic -27 # TODO
