@@ -214,7 +214,8 @@ end where
 
 push_stack(SPIn:[ram_addr_size], w:[word]) = (SPOut:[ram_addr_size]) where
   (* o = ram<addr_size, word_size>(read_addr, write_enable, write_addr, write_data); *)
-  o = ram<ram_addr_size, word>(SPIn, 1, SPIn, w);
+  w_flag = 0; (* TODO *)
+  o = ram<ram_addr_size, word>(SPIn, w_flag, SPIn, w);
 
   (*  decrease SP by the right amount *)
   SPOut = decrease<ram_addr_size>(SPIn);
